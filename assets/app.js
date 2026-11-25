@@ -25,6 +25,7 @@ const paths = {
   plane:'M21 5c0-1.5-1.5-2-2.5-1L13 9.5 5 8l-2 2 6 3.5-2 2H4l-1 1 4 2 2 3 1-1v-3l2-2 3.5 6 2-2-1.5-8L21 5Z',
   food:'M4 3v6c0 2 1 3 3 3s3-1 3-3V3m-3 0v18m12-18c-3 1-5 5-5 9h5m0-9v18',
   down:'m6 9 6 6 6-6', left:'m15 6-6 6 6 6', right:'m9 6 6 6-6 6',
+  forward:'M4 12h15m-6-6 6 6-6 6',
   close:'m6 6 12 12M18 6 6 18', copy:'M8 8h12v12H8zM16 4H4v12',
   expand:'M14 4h6v6m0-6-6 6M4 14v6h6m-6 0 6-6',
   search:'M10.5 3a7.5 7.5 0 1 0 0 15 7.5 7.5 0 1 0 0-15Zm5.3 12.8L21 21',
@@ -81,7 +82,8 @@ function sectionHeading(english, title, description = '') {
 }
 
 function siteFooter() {
-  return `<footer class="footer"><a class="wordmark" href="#home" aria-label="${t('brand')} · ${t('home')}">${brandMark}</a><p>${t('addresses')}</p><p>${t('stayBrand')}</p></footer>`;
+  const credits = route === 'home' ? `<details class="photo-credits"><summary>${t('photoSources')}</summary><ul>${places.filter(({ query }) => neighborhoodPhotos[query]).map((place) => `<li>${localize(place.name)} · ${photoAttribution(neighborhoodPhotos[place.query])}</li>`).join('')}</ul></details>` : '';
+  return `<footer class="footer"><a class="wordmark" href="#home" aria-label="${t('brand')} · ${t('home')}">${brandMark}</a><p>${t('addresses')}</p><p>${t('stayBrand')}</p>${credits}</footer>`;
 }
 
 function bookingBlock(isPage = false) {
@@ -130,13 +132,15 @@ function propertyPhoto(id) {
 }
 
 function roomsEditorial() {
-  const spread = [['dining','room-spread-lead'],['room-401','room-spread-bedroom'],['bathroom','room-spread-detail']];
-  return `<section class="section home-rooms">
-    <header class="editorial-heading">${sectionHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}</header>
+  const spread = ['dining','room-401','bathroom'];
+  return `<section class="section home-rooms" aria-labelledby="home-room-title">
+    <header class="room-preview-heading">
+      <div><p class="room-preview-headline" lang="en">A warm stay<br>in Seogyo.</p><p class="eyebrow">ROOM PHOTOS</p><h2 id="home-room-title">${t('roomTitle')}</h2></div>
+      <a href="#rooms" aria-label="${t('galleryLink')}" class="room-preview-all"><span lang="en">VIEW ALL ↗</span></a>
+    </header>
     <div class="room-preview">
-      ${spread.map(([id,layout]) => `<a class="${layout}" href="#rooms" aria-label="${caption(id)} · ${t('galleryLink')}">${propertyPhoto(id)}</a>`).join('')}
+      ${spread.map((id) => `<a href="#rooms">${image(id)}</a>`).join('')}
     </div>
-    ${link('#rooms',`${t('galleryLink')}${icon('right')}`,'editorial-link editorial-action')}
   </section>`;
 }
 
@@ -171,12 +175,10 @@ function home() {
   <section class="section essentials">${sectionHeading('STAY ESSENTIALS',t('essentials'))}${quickLinks()}</section>
   <section class="section intro" id="intro">
     <header class="editorial-heading">${sectionHeading('ABODE JOURNAL',t('introTitle'),t('introText'))}</header>
-    ${propertyPhoto('room-201')}
   </section>
   ${roomsEditorial()}
   ${arrivalEditorial()}
-  ${nearbyPreview('food',t('food'),t('localFoodIntro'))}
-  ${nearbyPreview('tours',t('tours'),t('toursIntro'))}
+  <div class="home-neighborhood">${nearbyPreview('food')}${nearbyPreview('tours')}</div>
   ${faqBlock()}
   <section class="section guide-teaser">${sectionHeading('GUEST GUIDE',t('know'))}${guideLinks()}</section>
   ${bookingBlock()}`;
@@ -297,30 +299,34 @@ function placesFor(detail) {
   return places;
 }
 
+function photoAttribution({ credit,author,source,license,terms,adapted }) {
+  return `${external(source,author ?? t(credit),'photo-credit-link')} · ${external(terms,license,'photo-credit-link')}${adapted ? ` · ${t('photoAdapted')}` : ''}`;
+}
+
+function neighborhoodImage({ id,width,height }) {
+  return `<img src="${imagePath(id)}" width="${width}" height="${height}" alt="" loading="lazy" decoding="async">`;
+}
+
 function neighborhoodPhoto(place) {
-  const { id,width,height,credit,author,source,license,terms,adapted } = neighborhoodPhotos[place.query];
-  return `<figure class="neighborhood-photo">
-    <img src="${imagePath(id)}" width="${width}" height="${height}" alt="" loading="lazy" decoding="async">
-    <figcaption>${t('photoCredit')} ${external(source,author ?? t(credit),'photo-credit-link')} · ${external(terms,license,'photo-credit-link')}${adapted ? ` · ${t('photoAdapted')}` : ''}</figcaption>
-  </figure>`;
+  const photo = neighborhoodPhotos[place.query];
+  return `<figure class="neighborhood-photo">${neighborhoodImage(photo)}<figcaption>${t('photoCredit')} ${photoAttribution(photo)}</figcaption></figure>`;
 }
 
-function placeMap(place) {
-  return external(naver(place.query),`<span class="visually-hidden">${localize(place.name)} · </span>${t('viewMap')}${icon('right')}`,'editorial-link place-map');
-}
-
-function nearbyPreview(detail, title, intro) {
+function nearbyPreview(detail) {
+  const tours = detail === 'tours';
   const inSection = placesFor(detail);
-  const stories = inSection.filter(({ query }) => neighborhoodPhotos[query]);
-  const cafe = detail === 'food' && inSection.find(({ category,featured,query }) => category === 'cafes' && featured && !neighborhoodPhotos[query]);
-  return `<section class="section local-teaser neighborhood-${detail}">
-    <header class="editorial-heading">${sectionHeading(detail === 'food' ? 'NEARBY FOOD & CAFÉS' : 'NEARBY TOURS',title,intro)}</header>
-    <div class="place-spread">${stories.map((place) => `<article class="editorial-place">
-      ${neighborhoodPhoto(place)}
-      <div class="editorial-place-copy"><p class="editorial-category">${t(place.category)}</p><h3>${localize(place.name)}</h3><p class="body-copy">${localize(place.about)}</p>${placeMap(place)}</div>
-    </article>`).join('')}</div>
-    ${cafe ? `<article class="neighborhood-cafe"><div><p class="editorial-category">${t(cafe.category)}</p><h3>${localize(cafe.name)}</h3><p class="body-copy">${localize(cafe.about)}</p></div>${placeMap(cafe)}</article>` : ''}
-    ${link(`#local/${detail}`,`${t('allPlaces')}${icon('right')}`,'editorial-link editorial-action')}
+  const picks = inSection.filter(({ featured,query }) => featured && neighborhoodPhotos[query]).slice(0,2);
+  const href = `#local/${detail}`;
+  const title = t(tours ? 'homeTours' : 'food');
+  const more = t(tours ? 'homeToursMore' : 'homeFoodMore').replace('{n}',inSection.length);
+  return `<section class="nearby-preview neighborhood-${detail}" aria-labelledby="home-nearby-${detail}">
+    <p class="eyebrow" lang="en">${tours ? 'NEARBY TOURS' : 'NEARBY PICKS'}</p><h2 id="home-nearby-${detail}">${title}</h2>
+    <div class="nearby-list">${picks.map((place,i) => `<a class="nearby-card" href="${href}">
+      <span class="nearby-card-media">${neighborhoodImage(neighborhoodPhotos[place.query])}${tours ? `<span class="nearby-card-number" aria-hidden="true">${formatNumber(i+1)}</span>` : ''}</span>
+      <span class="nearby-card-copy"><small>${tours && place.area ? localize(place.area) : t(place.category)}</small><strong>${localize(place.name)}</strong><span class="nearby-card-description">${tours ? t(place.category) : localize(place.about)}</span></span>
+      ${icon('forward')}
+    </a>`).join('')}</div>
+    ${link(href,`<span>${more}</span>${icon('forward')}`,'nearby-all')}
   </section>`;
 }
 

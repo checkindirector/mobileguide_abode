@@ -19,7 +19,7 @@ npm start
 
 ### 주변 사진
 
-사진 출처와 이용 조건은 `assets/content.js`의 `neighborhoodPhotos` 및 화면 속 사진 아래에 표시합니다. 저장본은 모바일 표시용 WebP입니다.
+사진 출처와 이용 조건은 `assets/content.js`의 `neighborhoodPhotos`, 홈 하단의 주변 사진 출처, 각 장소 상세 사진 아래에서 확인할 수 있습니다. 저장본은 모바일 표시용 WebP입니다.
 
 - 망원시장, 망리단길, 망원한강공원은 서울관광재단의 [공공누리 제1유형](https://www.kogl.or.kr/info/licenseType1.do) 자료입니다.
 - 경의선숲길은 한국관광공사 이범수의 [공공누리 제1유형 사진](https://commons.wikimedia.org/wiki/File:Yeonnam-dong_Gyeongui_Line_Forest_Park_(1).jpg)입니다.
