@@ -6,12 +6,16 @@ import { buildingMaps, faq, guides, wifiNetworks } from './operations.js';
 const paths = {
   home:'M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z',
   room:'M3 17v3m18-3v3M3 17h18v-5H3zM5 12V6h14v6M8 12V9h8v3',
+  photos:'M6 17H3V6m3-3h15v15H6zM6 15l4-4 3 3 2-2 6 5m-5-10h.01',
+  map:'m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16',
   pin:'M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0ZM12 10m-2.5 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0-5 0',
   guide:'M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14',
   compass:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm4 5-2 6-6 2 2-6 6-2Z',
   calendar:'M4 5h16v15H4zM4 9h16M8 3v4m8-4v4m-7 8 2 2 4-4',
   clock:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 4v5l3 2',
   key:'M12 10a4.5 4.5 0 1 1 3 3l-6 6H5v-4l2-2h3l2-3Z',
+  entry:'M11 4h8v16h-8M3 12h11m-4-4 4 4-4 4',
+  appliances:'M3 17h18M5 14a7 7 0 0 1 14 0H5Zm7-7V5',
   wifi:'M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0m-11 4a6 6 0 0 1 8 0m-4 4h.01',
   list:'M5 3h14v18H5zM8 8h8m-8 4h8m-8 4h5',
   bag:'M6 7h12a2 2 0 0 1 2 2v10H4V9a2 2 0 0 1 2-2Zm3 0V4h6v3m-7 3v7m8-7v7',
@@ -295,23 +299,23 @@ function getRoute() {
 }
 
 function menuLinks() {
-  const toGuideEntry = (id) => {
-    const item = guides.find((guide) => guide.id === id);
-    return [`guide/${id}`,item.icon,id === 'facilities' ? t('applianceTitle') : localize(item.title),localize(item.hint)];
-  };
+  const tourCount = placesFor('tours').length;
   const entries = [
-    ['home','home',t('home'),t('tagline')],
-    ['rooms','room',t('roomTitle'),localize(['침실·다이닝·라운지·욕실 사진','Bedroom, dining, lounge and bathroom photos','寝室・ダイニング・ラウンジ・浴室の写真','卧室、用餐区、休息室和浴室照片','臥室、用餐區、休息區及浴室照片'])],
-    ['location','pin',t('location'),t('addressShort')],
-    ['location/airport','plane',t('airportReturn'),localize(['인천·김포공항 방면','Incheon and Gimpo airports','仁川・金浦空港方面','前往仁川或金浦机场','前往仁川或金浦機場'])],
-    ...['check-in','wifi','facilities','laundry','waste','rules'].map(toGuideEntry),
-    ['local/food','food',t('food'),localize(['망원시장과 망리단길','Mangwon Market and Mangridan-gil','望遠市場とマンリダンギル','望远市场和望理团路','望遠市場和望理團路'])],
-    ['local/tours','compass',t('tours'),localize(['망원·한강·홍대 산책','Walks in Mangwon, by the river and in Hongdae','望遠・漢江・弘大の散歩','望远、汉江和弘大散步','望遠、漢江和弘大散步'])],
-    ...['luggage','parking'].map(toGuideEntry),
-    ['booking','calendar',t('booking'),'Booking.com'],
+    ['home','home',t('home'),localize(['어보드 처음 화면','ABODE home page','ABODEのホーム画面','ABODE 首页','ABODE 首頁'])],
+    ['rooms','photos',localize(['객실 둘러보기','Room gallery','客室ギャラリー','浏览客房','瀏覽客房']),localize(['공용 공간·객실·욕실 사진','Shared areas, rooms and bathrooms','共用スペース・客室・浴室の写真','公共空间、客房与浴室照片','公共空間、客房與浴室照片'])],
+    ['location','map',t('location'),localize(['공항과 역에서 숙소까지','From the airports and stations','空港・駅から宿まで','从机场及车站前往住宿','從機場及車站前往住宿'])],
+    ['location/airport','plane',t('airportReturn'),localize(['숙소에서 인천·김포공항까지','From ABODE to Incheon or Gimpo','宿から仁川・金浦空港まで','从住宿前往仁川或金浦机场','從住宿前往仁川或金浦機場'])],
+    ['guide/check-in','entry',localize(['체크인 · 체크아웃 안내','Check-in and check-out','チェックイン・チェックアウト','入住与退房指南','入住與退房指南']),localize(['입실·퇴실 방법과 이용 안내','Arrival and departure instructions','入室・退室の手続きとご案内','入住、退房方式及使用指南','入住、退房方式及使用指南'])],
+    ['guide/wifi','wifi','Wi-Fi',localize(['네트워크 정보와 연결 방법','Network details and how to connect','ネットワーク情報と接続方法','网络信息与连接方法','網路資訊與連線方法'])],
+    ['guide/facilities','appliances',localize(['냉난방 · 주방기기 · 비품 안내','Appliances and supplies','冷暖房・キッチン家電・備品','冷暖设备、厨房电器与备品','冷暖設備、廚房家電與備品']),localize(['냉난방·주방기기·객실 비품 안내','Heating, kitchen appliances and room supplies','冷暖房・キッチン家電・客室備品のご案内','冷暖设备、厨房电器与客房备品','冷暖設備、廚房家電與客房備品'])],
+    ['guide/laundry','laundry',localize(['세탁 안내','Laundry guide','ランドリー案内','洗衣指南','洗衣指南']),localize(['세탁기·건조기 사용법','How to use the washer and dryer','洗濯機・乾燥機の使い方','洗衣机与烘干机用法','洗衣機與烘乾機用法'])],
+    ['guide/waste','waste',localize(['쓰레기 배출','Waste disposal','ごみの出し方','垃圾投放','垃圾投放']),localize(['분리수거와 배출 안내','Sorting and disposal instructions','分別とごみ出しのご案内','垃圾分类与投放指南','垃圾分類與投放指南'])],
+    ['guide/rules','list',localize(['숙소 이용 규칙','House rules','宿泊ルール','住宿规则','住宿規則']),localize(['함께 지키는 숙소 이용 규칙','House rules for all guests','皆さまにお守りいただくルール','全体住客须遵守的规则','全體住客須遵守的規則'])],
+    ['local/food','food',localize(['주변 맛집','Nearby restaurants','周辺の飲食店','周边美食','周邊美食']),localize(['어보드가 고른 주변 맛집','Local dining picked by ABODE','ABODEが選んだ周辺の飲食店','ABODE 精选周边餐厅','ABODE 精選周邊餐廳'])],
+    ['local/tours','compass',localize(['추천 근교 투어','Recommended local tours','おすすめ近郊ツアー','推荐周边游','推薦周邊遊']),localize([`서울에서 만나는 추천 ${tourCount}곳`,`${tourCount} places to explore in Seoul`,`ソウルのおすすめ ${tourCount} か所`,`首尔 ${tourCount} 个推荐去处`,`首爾 ${tourCount} 個推薦去處`])],
   ];
   const active = route.split('/').slice(0,2).join('/');
-  return entries.map(([href,symbol,title,hint]) => `<a href="#${href}"${active === href ? ' aria-current="page"' : ''}><span class="drawer-icon">${icon(symbol)}</span><span class="item-copy"><strong>${title}</strong><small>${hint}</small></span>${icon('right')}</a>`).join('');
+  return entries.map(([href,symbol,title,hint]) => `<a href="#${href}"${active === href ? ' aria-current="page"' : ''}><span class="drawer-icon">${icon(symbol)}</span><span class="drawer-copy"><strong>${title}</strong><small>${hint}</small></span>${icon('right')}</a>`).join('');
 }
 
 function renderChrome() {
@@ -327,7 +331,7 @@ function renderChrome() {
   bottom.setAttribute('aria-label',t('quick'));
   bottom.innerHTML = navigation.filter(([name]) => name !== 'location').map(([name, symbol]) => `<a href="#${name}"${active === name ? ' aria-current="page"' : ''}>${icon(symbol)}<span>${t(name)}</span></a>`).join('');
   bottom.hidden = false;
-  menu.innerHTML = `<div class="drawer-inner"><div class="drawer-header"><h2 id="menu-label" class="visually-hidden">${t('menu')}</h2><div class="drawer-brand">${brandMark}</div>${iconAction('close-menu','close',t('menuClose'),'icon-button drawer-close')}</div><nav aria-label="${t('menu')}">${menuLinks()}</nav></div>`;
+  menu.innerHTML = `<div class="drawer-inner"><div class="drawer-header"><h2 id="menu-label" class="visually-hidden">${t('menu')}</h2><div class="drawer-brand">${brandMark}</div>${iconAction('close-menu','close',t('menuClose'),'icon-button drawer-close')}</div><nav aria-label="${t('menu')}">${menuLinks()}</nav><div class="drawer-footer"><strong>STAY ABODE</strong><small>SEOUL · SEOGYO</small></div></div>`;
   helpTrigger.innerHTML = `${icon('message')}<span>${t('helpTitle')}</span>`;
   helpTrigger.hidden = false;
   helpPanel.innerHTML = `<div class="help-panel-inner"><div class="help-panel-head"><h2 id="help-title">${t('helpTitle')}</h2>${iconAction('close-help','close',t('close'),'icon-button')}</div>${helpForm('dialog-help-query')}</div>`;
