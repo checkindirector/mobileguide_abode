@@ -194,6 +194,8 @@ main:focus { outline: 0; }
 .content-section > .map-actions:first-child { margin-top: 0; }
 .information, .place { margin-top: 26px; padding-top: 23px; border-top: 1px solid var(--line); }
 .information h2, .place h2 { font-size: 25px; }
+.parking-info { padding: 17px; border: 1px solid var(--line); background: var(--sand); scroll-margin-top: calc(var(--topbar) + env(safe-area-inset-top, 0px) + 12px); }
+.parking-info h2 { display: flex; align-items: center; gap: 9px; }
 .guide-detail:first-child, .place:first-child { margin-top: 0; padding-top: 19px; }
 .content-section > .guide-rows { margin-top: 0; }
 .guide-disclosure { margin-top: 12px; border: 1px solid var(--line); background: var(--paper); }

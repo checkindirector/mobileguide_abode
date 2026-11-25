@@ -1,7 +1,7 @@
 import { airportBus, arrival, address, booking, cover, courses, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
-import { buildingMaps, faq, guides, wifiNetworks } from './operations.js';
+import { buildingMaps, faq, guides, parking, wifiNetworks } from './operations.js';
 
 const paths = {
   home:'M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z',
@@ -32,7 +32,7 @@ const paths = {
 };
 
 const navigation = [['home','home'], ['rooms','room'], ['location','pin'], ['guide','guide'], ['local','compass'], ['booking','calendar']];
-const extraRoutes = ['location/airport', 'local/food', 'local/tours', 'guide/check-in/checkout'];
+const extraRoutes = ['location/airport', 'location/parking', 'local/food', 'local/tours', 'guide/check-in/checkout'];
 const main = document.querySelector('#main');
 const menu = document.querySelector('#menu');
 const lightbox = document.querySelector('#lightbox');
@@ -98,7 +98,7 @@ function quickLinks() {
     ['guide/luggage','bag',t('luggage'),t('luggageShort')],
     ['guide/wifi','wifi',t('wifi'),t('wifiShort')],
     ['location','pin',t('location'),t('addressShort')],
-    ['guide/parking','car',t('parking'),t('parkingShort')],
+    ['location/parking','car',t('parking'),t('parkingShort')],
   ];
   return `<div class="quick-grid">${items.map(([href, symbol, title, detail]) => `<a href="#${href}" class="quick-card">${icon(symbol)}<strong>${title}</strong><span>${detail}</span></a>`).join('')}</div>`;
 }
@@ -108,9 +108,8 @@ function guideLinks() {
 }
 
 function faqBlock() {
-  return `<section class="section faq" aria-labelledby="faq-title"><p class="eyebrow">BEFORE YOUR STAY</p><h2 id="faq-title">${t('faq')}</h2><div class="faq-items">${faq.map(({ question,guide,answer }) => {
-    const item = guides.find(({ id }) => id === guide);
-    return `<details><summary>${localize(question)}${icon('down')}</summary><p class="body-copy">${localize(answer ?? item.lead)}</p>${link(`#guide/${guide}`,t('guideMore'),'text-link')}</details>`;
+  return `<section class="section faq" aria-labelledby="faq-title"><p class="eyebrow">BEFORE YOUR STAY</p><h2 id="faq-title">${t('faq')}</h2><div class="faq-items">${faq.map(({ question,route,answer }) => {
+    return `<details><summary>${localize(question)}${icon('down')}</summary><p class="body-copy">${localize(answer)}</p>${link(`#${route}`,t('guideMore'),'text-link')}</details>`;
   }).join('')}</div></section>`;
 }
 
@@ -211,11 +210,15 @@ function locationPage(detail) {
   return `${pageHeading('GETTING HERE',t('locationHeading'),t('addresses'))}
   <section class="section content-section">
     <div class="map-actions">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}${action('copy-address',`${icon('copy')}${t('copy')}`,'button button-cream')}</div>
+    <article class="information parking-info" id="parking" aria-labelledby="parking-title" tabindex="-1">
+      <h2 id="parking-title">${icon('car')}${t('parkingHeading')}</h2>
+      <p class="body-copy">${localize(parking)}</p>
+    </article>
     <article class="information">${sectionHeading('ENTRANCE',t('entrance'),localize(arrival.entrance))}${image('entrance','feature-photo')}${link('#guide/check-in',t('checkin'),'text-link')}</article>
     ${disclosure(t('subway'),localize(['망원역 약 5분 · 합정역 약 8분','Mangwon about 5 min · Hapjeong about 8 min','望遠駅から約5分・合井駅から約8分','望远站约 5 分钟、合井站约 8 分钟','望遠站約 5 分鐘、合井站約 8 分鐘']),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
     ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon)}
     ${disclosure(t('gimpo'),'AREX all-stop',transportBody(arrival.airport,trainLink))}
-    <div class="map-actions">${link('#location/airport',t('airportReturn'),'button button-outline')}${link('#guide/parking',t('parking'),'button button-outline')}</div>
+    <div class="map-actions">${link('#location/airport',t('airportReturn'),'button button-outline')}</div>
   </section>`;
 }
 
@@ -248,7 +251,7 @@ function guidePage(detail) {
   return `${pageHeading('GUEST GUIDE',localize(item.title),localize(item.lead))}<section class="section content-section">
     ${item.id === 'check-in' ? quickTimes : ''}${item.id === 'wifi' ? networks : ''}
     ${item.items.map((entry,i) => guideArticle(entry,item.id === 'check-in',i === (areaId === 'checkout' ? 1 : 0))).join('')}
-    ${item.id === 'check-in' ? `<div class="map-actions">${link('#guide/parking',t('parking'),'button button-outline')}${link('#location',t('location'),'button button-outline')}</div>` : ''}
+    ${item.id === 'check-in' ? `<div class="map-actions">${link('#location/parking',t('parking'),'button button-outline')}${link('#location',t('location'),'button button-outline')}</div>` : ''}
     ${link('#guide',t('backToGuide'),'button button-outline')}
   </section>`;
 }
@@ -293,6 +296,7 @@ function localPage(detail) {
 
 function getRoute() {
   const fragment = location.hash.slice(1);
+  if (fragment === 'guide/parking') return 'location/parking';
   if (extraRoutes.includes(fragment) || navigation.some(([name]) => name === fragment) || guides.some(({ id }) => `guide/${id}` === fragment)) return fragment;
   if (applianceAreas.some(({ id }) => fragment === `guide/facilities/${id}`)) return fragment;
   return 'home';
@@ -361,8 +365,10 @@ function render({ resetScroll = false, focus = false } = {}) {
   const search = document.querySelector('#place-query');
   if (search) search.value = placeQuery;
   main.classList.toggle('internal', key !== 'home');
-  if (resetScroll) window.scrollTo({ top:0, behavior:'instant' });
-  if (focus) main.focus({ preventScroll:true });
+  const target = route === 'location/parking' ? document.querySelector('#parking') : null;
+  if (target) target.scrollIntoView({ block:'start', behavior:'instant' });
+  else if (resetScroll) window.scrollTo({ top:0, behavior:'instant' });
+  if (focus) (target ?? main).focus({ preventScroll:true });
   updateTopbar();
 }
 
@@ -429,10 +435,16 @@ document.addEventListener('click', (event) => {
     main.focus();
     return;
   }
-  if (event.target.closest('a[href^="#"]')) {
+  const anchor = event.target.closest('a[href^="#"]');
+  if (anchor) {
     if (menu.open) menu.close();
     if (helpPanel.open) helpPanel.close();
-    if (event.target.closest('a').hash === location.hash && event.target.closest('a').hash === '#home') window.scrollTo({ top:0 });
+    if (anchor.hash === location.hash && anchor.hash === '#home') window.scrollTo({ top:0 });
+    if (anchor.hash === location.hash && anchor.hash === '#location/parking') {
+      const target = document.querySelector('#parking');
+      target.scrollIntoView({ block:'start', behavior:'instant' });
+      target.focus({ preventScroll:true });
+    }
   }
   if (event.target === menu) menu.close();
   if (event.target === lightbox) lightbox.close();

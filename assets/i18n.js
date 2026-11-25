@@ -76,6 +76,7 @@ const strings = {
   luggage:['짐 보관','Luggage storage','荷物預かり','行李寄存','行李寄存'],
   luggageShort:['입실 전·퇴실 후','Before and after your stay','入室前・退室後','入住前和退房后','入住前與退房後'],
   parking:['주차 안내','Parking','駐車場','停车指南','停車指南'],
+  parkingHeading:['차량·주차','Driving & parking','車でお越しの方・駐車場','自驾与停车','自駕與停車'],
   parkingShort:['숙소 최대 3대','Up to 3 vehicles','最大3台','最多 3 辆车','最多 3 輛車'],
   copyNetwork:['네트워크 이름 복사','Copy network name','ネットワーク名をコピー','复制网络名称','複製網路名稱'],
   networkCopied:['네트워크 이름을 복사했어요.','Network name copied.','ネットワーク名をコピーしました。','网络名称已复制。','網路名稱已複製。'],

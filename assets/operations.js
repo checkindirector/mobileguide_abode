@@ -5,7 +5,7 @@ export const buildingMaps = {
 export const wifiNetworks = ['ABODE1', 'ABODE2', 'ABODE3', 'ABODE4'];
 
 const luggage = ['입실 전과 퇴실 후에는 지하 1층 계단 아래 짐 보관소를 이용할 수 있습니다. 얼리 체크인과 레이트 체크아웃은 운영하지 않습니다.', 'You may leave bags beneath the stairs on level B1 before check-in or after check-out. Early check-in and late check-out are unavailable.', '入室前と退室後は、地下1階の階段下にある荷物置き場をご利用いただけます。アーリーチェックインとレイトチェックアウトはできません。', '入住前和退房后均可使用地下一层楼梯下方的行李寄存处。不提供提前入住和延迟退房。', '入住前與退房後皆可使用地下一層樓梯下的行李寄存處。無法提前入住或延後退房。'];
-const parking = ['숙소 무료 주차는 최대 3대까지 선착순으로 이용할 수 있으며, 이중 주차가 필요할 수 있습니다. 만차 시 건물 앞 노상 공영주차장의 현장 요금과 운영 시간을 확인해 주세요.', 'Free on-site parking is first come, first served for up to three vehicles. Double parking may be needed. If full, check the posted rates and hours for the public street parking in front.', '宿の無料駐車場は先着3台までで、縦列駐車になる場合があります。満車の場合は、建物前の公営路上駐車場で料金と営業時間をご確認ください。', '住宿提供最多 3 个免费车位，先到先得，可能需要双排停车。车位已满时，请查看楼前市政路边停车位的现场价格和开放时间。', '住宿提供最多 3 個免費車位，先到先得，可能需要併排停車。車位已滿時，請查看樓前公有路邊停車位的現場費率與開放時間。'];
+export const parking = ['숙소 무료 주차는 최대 3대까지 선착순으로 이용할 수 있으며, 이중 주차가 필요할 수 있습니다. 만차 시 건물 앞 노상 공영주차장의 현장 요금과 운영 시간을 확인해 주세요.', 'Free on-site parking is first come, first served for up to three vehicles. Double parking may be needed. If full, check the posted rates and hours for the public street parking in front.', '宿の無料駐車場は先着3台までで、縦列駐車になる場合があります。満車の場合は、建物前の公営路上駐車場で料金と営業時間をご確認ください。', '住宿提供最多 3 个免费车位，先到先得，可能需要双排停车。车位已满时，请查看楼前市政路边停车位的现场价格和开放时间。', '住宿提供最多 3 個免費車位，先到先得，可能需要併排停車。車位已滿時，請查看樓前公有路邊停車位的現場費率與開放時間。'];
 
 export const guides = [
   {
@@ -89,11 +89,10 @@ export const guides = [
       { title:['예약 변경·취소','Reservation changes and cancellation','予約の変更・キャンセル','更改或取消预订','更改或取消預訂'], text:['일정 변경과 취소·환불은 예약 내역에 표시된 조건을 확인해 주세요. 연박 시 같은 객실 사용이 필요하면 객실을 추가 예약하기 전에 호스트에게 확인해 주세요.','For changes, cancellation or refunds, check the conditions in your reservation. If you want the same room for consecutive nights, confirm with the host before making an additional booking.','日程変更・キャンセル・返金は予約内容の条件をご確認ください。連泊で同じ客室をご希望の場合は追加予約前にホストへご確認ください。','更改日期、取消和退款请查看订单条件。如续住需要同一间房，请在加订前向房东确认。','變更日期、取消與退款請查看訂單條款。若續住希望使用同一客房，請在加訂前向房東確認。'] },
     ],
   },
-  { id:'parking', icon:'car', title:['주차 안내','Parking','駐車場','停车指南','停車指南'], hint:['무료 주차와 만차 시 대안','On-site and public parking','無料駐車場と満車時の案内','免费车位与备选停车方案','免費車位與備用停車方案'], lead:parking, items:[] },
 ];
 
 export const faq = [
-  { question:['일찍 도착하면 짐을 맡길 수 있나요?','Can I leave bags if I arrive early?','早く着いたら荷物を預けられますか？','提前抵达可以寄存行李吗？','提早抵達可以寄存行李嗎？'], guide:'luggage' },
-  { question:['체크인은 어떻게 하나요?','How do I check in?','チェックインはどうしますか？','如何办理入住？','如何辦理入住？'], guide:'check-in', answer:guides[0].items[0].steps[1] },
-  { question:['주차할 수 있나요?','Is parking available?','駐車できますか？','可以停车吗？','可以停車嗎？'], guide:'parking' },
+  { question:['일찍 도착하면 짐을 맡길 수 있나요?','Can I leave bags if I arrive early?','早く着いたら荷物を預けられますか？','提前抵达可以寄存行李吗？','提早抵達可以寄存行李嗎？'], route:'guide/luggage', answer:luggage },
+  { question:['체크인은 어떻게 하나요?','How do I check in?','チェックインはどうしますか？','如何办理入住？','如何辦理入住？'], route:'guide/check-in', answer:guides[0].items[0].steps[1] },
+  { question:['주차할 수 있나요?','Is parking available?','駐車できますか？','可以停车吗？','可以停車嗎？'], route:'location/parking', answer:parking },
 ];
