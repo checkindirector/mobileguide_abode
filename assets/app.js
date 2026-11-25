@@ -129,7 +129,7 @@ function home() {
   const first = cover[slideIndex];
   return `<section class="hero" aria-labelledby="home-title" data-swipe="hero">
     <img id="hero-image" class="hero-photo" src="${imagePath(first.id)}" alt="${caption(first.id)}" style="--position:${first.position}" fetchpriority="high">
-    <div class="hero-copy"><p class="eyebrow">SEOUL · SEOGYO</p><h1 id="home-title" class="hero-title"><span>STAY</span>${brandMark}</h1><p class="hero-tagline">${t('tagline')}</p></div>
+    <div class="hero-copy"><p class="eyebrow">SEOUL · SEOGYO</p><h1 id="home-title" class="hero-title"><span>STAY</span> <span>ABODE</span></h1><p class="hero-tagline">${t('tagline')}</p></div>
     <div class="slide-buttons">${iconAction('slide','left',t('prev'),'slide-button','-1')}${iconAction('slide','right',t('next'),'slide-button','1')}</div>
     <div class="hero-controls">
       <button type="button" class="discover" data-action="discover" aria-label="${t('scroll')}">SCROLL${icon('down')}</button>
@@ -360,6 +360,7 @@ function render({ resetScroll = false, focus = false } = {}) {
   renderChrome();
   const pages = { home, rooms:roomsPage, location:locationPage, guide:guidePage, local:localPage, booking:() => bookingBlock(true) + faqBlock() };
   const [key,...segments] = route.split('/');
+  main.dataset.page = route;
   main.innerHTML = pages[key](segments.join('/')) + siteFooter();
   document.title = route === 'home' ? homeTitle : `${main.querySelector('h1').textContent.replace(/\s+/g,' ')} · STAY ABODE`;
   const search = document.querySelector('#place-query');
