@@ -1,4 +1,5 @@
-import { airportBus, arrival, address, booking, cover, courses, photos, places, rooms, timetable } from './content.js';
+import { airportBus, arrival, address, booking, cover, courses, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
+import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
 import { buildingMaps, faq, guides, wifiNetworks } from './operations.js';
 
@@ -22,17 +23,20 @@ const paths = {
   down:'m6 9 6 6 6-6', left:'m15 6-6 6 6 6', right:'m9 6 6 6-6 6',
   close:'m6 6 12 12M18 6 6 18', copy:'M8 8h12v12H8zM16 4H4v12',
   expand:'M14 4h6v6m0-6-6 6M4 14v6h6m-6 0 6-6',
+  search:'M10.5 3a7.5 7.5 0 1 0 0 15 7.5 7.5 0 1 0 0-15Zm5.3 12.8L21 21',
+  message:'M4 4h16v12h-9l-5 4v-4H4Zm4 5h8m-8 3h5',
 };
 
 const navigation = [['home','home'], ['rooms','room'], ['location','pin'], ['guide','guide'], ['local','compass'], ['booking','calendar']];
-const extraRoutes = ['location/airport', 'local/food', 'local/tours'];
+const extraRoutes = ['location/airport', 'local/food', 'local/tours', 'guide/check-in/checkout'];
 const main = document.querySelector('#main');
 const menu = document.querySelector('#menu');
 const lightbox = document.querySelector('#lightbox');
+const helpPanel = document.querySelector('#help-panel');
+const helpTrigger = document.querySelector('#help-trigger');
 const languagePicker = document.querySelector('#language');
 const photoById = new Map(photos.map((photo) => [photo.id, photo]));
 const filters = ['all','bedroom','living','bath','exterior'];
-const localFilters = ['all','food','walk'];
 const formatNumber = (number) => String(number).padStart(2, '0');
 
 let storedLanguage;
@@ -41,7 +45,9 @@ let language = languages.some(({ code }) => code === storedLanguage) ? storedLan
 let route = 'home';
 let slideIndex = 0;
 let galleryFilter = 'all';
-let localFilter = 'all';
+let galleryRoom = 'all';
+let placeFilter = 'all';
+let placeQuery = '';
 let lightboxIndex = 0;
 let lightboxPhotos = [];
 let toastTimeout;
@@ -59,6 +65,7 @@ const action = (name, text, className = '', value = '') => `<button type="button
 const iconAction = (name, iconName, accessible, className, value = '') => `<button type="button" class="${className}" data-action="${name}" data-value="${value}" aria-label="${accessible}">${icon(iconName)}</button>`;
 const walking = (origin, destination) => `https://www.google.com/maps/dir/?api=1&amp;origin=${encodeURIComponent(origin)}&amp;destination=${encodeURIComponent(destination)}&amp;travelmode=walking`;
 const naver = (query) => `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
+const google = (query) => `https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(query)}`;
 const bookingLink = () => `${booking}.${({ ko:'ko', en:'en-gb', ja:'ja', 'zh-Hans':'zh-cn', 'zh-Hant':'zh-tw' })[language]}.html`;
 
 function pageHeading(english, title, description = '') {
@@ -83,7 +90,7 @@ function bookingBlock(isPage = false) {
 function quickLinks() {
   const items = [
     ['guide/check-in','key',t('checkin'),'16:00'],
-    ['guide/check-in','clock',t('checkout'),'11:00'],
+    ['guide/check-in/checkout','clock',t('checkout'),'11:00'],
     ['guide/luggage','bag',t('luggage'),t('luggageShort')],
     ['guide/wifi','wifi',t('wifi'),t('wifiShort')],
     ['location','pin',t('location'),t('addressShort')],
@@ -103,6 +110,18 @@ function faqBlock() {
   }).join('')}</div></section>`;
 }
 
+function helpForm(id) {
+  return `<div class="help-widget"><p class="body-copy">${t('helpHint')}</p><form class="search-field" data-help-form role="search" aria-label="${t('helpTitle')}">
+    <label class="visually-hidden" for="${id}">${t('helpTitle')}</label><input id="${id}" name="query" type="search" maxlength="110" placeholder="${t('helpPlaceholder')}"><button type="submit" aria-label="${t('search')}">${icon('search')}</button></form>
+    <div class="help-chips">${helpTopics.slice(0,6).map(({ id:topic,title }) => action('help-topic',localize(title),'',topic)).join('')}</div>
+    <div class="help-results" aria-live="polite"></div></div>`;
+}
+
+function showHelp(widget, matches) {
+  const results = widget.querySelector('.help-results');
+  results.innerHTML = matches.map(({ route:href,title,answer }) => `<article><strong>${localize(title)}</strong><p class="body-copy">${localize(answer)}</p>${link(`#${href}`,t('guideMore'),'text-link')}</article>`).join('') || `<p class="body-copy">${t('helpNoResult')}</p>`;
+}
+
 function home() {
   const first = cover[slideIndex];
   return `<section class="hero" aria-labelledby="home-title" data-swipe="hero">
@@ -114,14 +133,16 @@ function home() {
       <div class="slide-indicators">${cover.map((_,i) => `<button type="button" data-action="select-slide" data-value="${i}" aria-label="${formatNumber(i+1)} / ${formatNumber(cover.length)}" aria-pressed="${slideIndex === i}"></button>`).join('')}<span id="slide-count" class="visually-hidden" aria-live="polite">${formatNumber(slideIndex + 1)} / ${formatNumber(cover.length)}</span></div>
     </div>
   </section>
-  <section class="section intro" id="intro">${sectionHeading('STAY ABODE',t('introTitle'),t('introText'))}</section>
+  <section class="section quick-help" id="quick-help">${sectionHeading('STAY HELP',t('quickHelp'))}${helpForm('home-help-query')}</section>
   <section class="section essentials">${sectionHeading('STAY ESSENTIALS',t('essentials'))}${quickLinks()}</section>
+  <section class="section intro" id="intro">${sectionHeading('STAY ABODE',t('introTitle'),t('introText'))}</section>
   <section class="section home-rooms">${sectionHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}
     <div class="room-preview">${link('#rooms', image('triple-beds'))}${link('#rooms', image('dining'))}</div>
     ${link('#rooms', t('galleryLink'), 'button button-outline')}
   </section>
-  <section class="section location-teaser">${sectionHeading('GETTING HERE',t('location'),t('addresses'))}${image('entrance','feature-photo')}${link('#location', t('location'), 'button button-outline')}</section>
-  <section class="section local-teaser">${sectionHeading('LOCAL NOTES',t('localTitle'),t('localIntro'))}<div class="map-actions">${link('#local/food',t('food'),'button button-outline')}${link('#local/tours',t('tours'),'button button-outline')}</div></section>
+  <section class="section location-teaser">${sectionHeading('GETTING HERE',t('location'),t('addresses'))}${image('entrance','feature-photo')}<div class="map-actions">${link('#location',t('location'),'button button-outline')}${link('#location/airport',t('airportReturn'),'button button-outline')}</div></section>
+  ${nearbyPreview('food',t('food'),t('localFoodIntro'))}
+  ${nearbyPreview('tours',t('tours'),t('toursIntro'))}
   ${faqBlock()}
   <section class="section guide-teaser">${sectionHeading('GUEST GUIDE',t('know'))}${guideLinks()}</section>
   ${bookingBlock()}`;
@@ -132,102 +153,165 @@ function filterButtons(keys, selected, operation) {
 }
 
 function visiblePhotos() {
-  return photos.filter((photo) => galleryFilter === 'all' || photo.group === galleryFilter);
+  return photos.filter(({ id,group }) => (galleryRoom === 'all' || photoRooms[id] === galleryRoom) && (galleryFilter === 'all' || group === galleryFilter));
 }
 
 function photoCards() {
   return visiblePhotos().map(({ id }) => `<button type="button" class="photo-card" data-action="photo" data-value="${id}" aria-label="${t('enlarge')} · ${caption(id)}"><span class="photo-thumbnail">${image(id)}<span class="photo-expand">${icon('expand')}</span></span><span class="photo-caption">${caption(id)}</span></button>`).join('');
 }
 
+function galleryFilters() {
+  const units = [...new Set(Object.values(photoRooms))].sort();
+  const categories = filters.filter((filter) => filter === 'all' || photos.some(({ id,group }) => group === filter && (galleryRoom === 'all' || photoRooms[id] === galleryRoom)));
+  return `<label class="room-filter">${t('roomFilter')}<select id="room-filter"><option value="all">${t('allRooms')}</option>${units.map((room) => `<option value="${room}"${room === galleryRoom ? ' selected' : ''}>${room}</option>`).join('')}</select></label>${filterButtons(categories,galleryFilter,'gallery-filter')}`;
+}
+
 function roomsPage() {
   return `${pageHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}
-  <section class="section content-section">${filterButtons(filters,galleryFilter,'gallery-filter')}<div class="gallery-grid" id="photo-cards">${photoCards()}</div></section>
+  <section class="section content-section">
+    <div class="gallery-feature">${image('bedroom-dining')}</div>
+    <div class="gallery-filters">${galleryFilters()}</div><div class="gallery-grid" id="photo-cards">${photoCards()}</div></section>
   <section class="section room-types">${sectionHeading('ROOM TYPES',t('roomTypes'),t('roomNote'))}
     <ul>${rooms.map(({ count,name,layout }) => `<li><span class="item-copy">${localize(name)}${layout ? `<small>${localize(layout)}</small>` : ''}</span><strong>${t('guests').replace('{n}',count)}</strong></li>`).join('')}</ul>${link('#booking',t('booking'),'button')}
   </section>`;
 }
 
-function busLink() {
-  const title = localize(['6002번 공항리무진 시간표','Bus 6002 timetable','空港バス6002番の時刻表','6002 路机场巴士时刻表','6002 路機場巴士時刻表']);
-  return external(airportBus,title);
+function busLink(night = false) {
+  const number = night ? 'N6002' : '6002';
+  const title = localize([`${number}번 리무진 시간표`, `Bus ${number} timetable`, `空港バス${number}番の時刻表`,`${number} 路机场巴士时刻表`,`${number} 路機場巴士時刻表`]);
+  return external(night ? nightBus : airportBus,title);
+}
+
+function disclosure(title, hint, body, open = false) {
+  return `<details class="guide-disclosure"${open ? ' open' : ''}><summary><span class="item-copy"><strong>${title}</strong>${hint ? `<small>${hint}</small>` : ''}</span>${icon('down')}</summary><div class="disclosure-body">${body}</div></details>`;
+}
+
+function transportBody(text, links) {
+  return `<p class="body-copy">${localize(text)}</p><div class="map-actions">${links}</div>`;
 }
 
 function locationPage(detail) {
+  const station = (name) => external(walking(name,address),name === '망원역' ? localize(['망원역 도보 경로','Walk from Mangwon','望遠駅からの徒歩ルート','从望远站步行','從望遠站步行']) : localize(['합정역 도보 경로','Walk from Hapjeong','合井駅からの徒歩ルート','从合井站步行','從合井站步行']));
+  const trainLink = external(timetable,t('train'));
+  const busStop = (name) => external(naver(name),t('naver')) + external(google(name),t('google'));
   if (detail === 'airport') {
+    const toHapjeong = external(walking(address,'합정역'),localize(['합정역까지 도보 경로','Walk to Hapjeong Station','合井駅までの徒歩ルート','步行至合井站','步行至合井站']));
+    const incheon = transportBody(arrival.returnTrain,trainLink + toHapjeong) + transportBody(arrival.returnBus,busLink() + busStop('합정역 공항버스 정류장 6002 인천공항 방면')) + transportBody(arrival.nightDeparture,busLink(true) + busStop('홍대입구 공항버스 정류장 인천공항 방면'));
     return `${pageHeading('TO THE AIRPORT',t('airportReturn'))}<section class="section content-section">
-      <article class="information guide-detail">${sectionHeading('AREX',localize(['공항철도 일반열차','AREX all-stop train','空港鉄道の一般列車','机场铁路普通列车','機場鐵路普通列車']),localize(arrival.returnTrain))}<div class="map-actions">${external(timetable,t('train'))}${external(walking(address,'합정역'),t('route'))}</div></article>
-      <article class="information">${sectionHeading('BUS 6002',localize(['인천공항 리무진','Incheon Airport limousine bus','仁川空港リムジンバス','仁川机场巴士','仁川機場巴士']),localize(arrival.returnBus))}<div class="map-actions">${busLink()}</div></article>
+      ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon,true)}
+      ${disclosure(t('gimpo'),'Metro Line 2 · AREX',transportBody(arrival.gimpoReturn,trainLink + toHapjeong))}
       ${link('#location',t('location'),'button button-outline')}
     </section>`;
   }
+  const incheon = transportBody(arrival.airport,trainLink) + transportBody(arrival.bus,busLink()) + transportBody(arrival.nightArrival,busLink(true));
   return `${pageHeading('GETTING HERE',t('locationHeading'),t('addresses'))}
   <section class="section content-section">
     <div class="map-actions">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}${action('copy-address',`${icon('copy')}${t('copy')}`,'button button-cream')}</div>
-    <article class="information">${sectionHeading('ENTRANCE',t('entrance'),localize(arrival.entrance))}${image('entrance','feature-photo')}</article>
-    <article class="information">${sectionHeading('SUBWAY',t('subway'),localize(arrival.subway))}
-    <div class="map-actions">${external(walking('망원역',address),localize(['망원역에서 출발','From Mangwon','望遠駅から','从望远站出发','從望遠站出發']))}${external(walking('합정역',address),localize(['합정역에서 출발','From Hapjeong','合井駅から','从合井站出发','從合井站出發']))}</div></article>
-    <article class="information">${sectionHeading('AIRPORT',t('airport'),localize(arrival.airport))}<p class="body-copy">${localize(arrival.bus)}</p><div class="map-actions">${external(timetable,t('train'))}${busLink()}</div></article>
+    <article class="information">${sectionHeading('ENTRANCE',t('entrance'),localize(arrival.entrance))}${image('entrance','feature-photo')}${link('#guide/check-in',t('checkin'),'text-link')}</article>
+    ${disclosure(t('subway'),localize(['망원역 약 5분 · 합정역 약 8분','Mangwon about 5 min · Hapjeong about 8 min','望遠駅から約5分・合井駅から約8分','望远站约 5 分钟、合井站约 8 分钟','望遠站約 5 分鐘、合井站約 8 分鐘']),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
+    ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon)}
+    ${disclosure(t('gimpo'),'AREX all-stop',transportBody(arrival.airport,trainLink))}
     <div class="map-actions">${link('#location/airport',t('airportReturn'),'button button-outline')}${link('#guide/parking',t('parking'),'button button-outline')}</div>
   </section>`;
 }
 
-function guideArticle({ title,text,steps,model,image: id,manuals }) {
+function guideArticle({ title,text,steps,model,image: id,manuals }, fold = false, open = false) {
   const heading = localize(title);
-  return `<article class="information guide-detail"><h2>${heading}</h2>
-    ${model ? `<p class="device-model">${model}</p>` : ''}
+  const body = `${model && !fold ? `<p class="device-model">${model}</p>` : ''}
     ${id ? `<img class="guide-photo" src="${imagePath(id)}" alt="${heading}" loading="lazy" decoding="async">` : ''}
     ${text ? `<p class="body-copy">${localize(text)}</p>` : ''}
     ${steps ? `<ol class="steps">${steps.map((step) => `<li>${localize(step)}</li>`).join('')}</ol>` : ''}
-    ${manuals ? `<div class="map-actions">${manuals.map(([brand,url]) => external(url,`${brand} · ${t('manual')}`)).join('')}</div>` : ''}
-  </article>`;
+    ${manuals ? `<div class="map-actions">${manuals.map(([brand,url]) => external(url,`${brand} · ${t('manual')}`)).join('')}</div>` : ''}`;
+  return fold ? disclosure(heading,model,body,open) : `<article class="information guide-detail"><h2>${heading}</h2>${body}</article>`;
+}
+
+function appliancePage(guide, areaId) {
+  const area = applianceAreas.find(({ id }) => id === areaId);
+  const list = `<div class="guide-rows">${applianceAreas.map(({ id,icon:symbol,title,hint }) => `<a class="guide-row" href="#guide/facilities/${id}"><span class="guide-icon">${icon(symbol)}</span><span class="item-copy"><strong>${localize(title)}</strong><small>${localize(hint)}</small></span>${icon('right')}</a>`).join('')}</div>`;
+  const visible = area ? guide.items.filter((item) => item.area === area.id) : [];
+  return `${pageHeading('APPLIANCE GUIDE',area ? localize(area.title) : t('applianceTitle'),area ? localize(area.hint) : localize(guide.lead))}<section class="section content-section">${area ? visible.map((item,i) => guideArticle(item,true,i === 0)).join('') + link('#guide/facilities',t('areaGuides'),'button button-outline') : list}</section>`;
 }
 
 function guidePage(detail) {
-  const item = guides.find(({ id }) => id === detail);
+  const [guideId,areaId] = detail.split('/');
+  const item = guides.find(({ id }) => id === guideId);
   if (!item) {
     return `${pageHeading('GUEST GUIDE',t('guide'),t('guideIntro'))}<section class="section content-section">${guideLinks()}<article class="information"><h2>${t('help')}</h2><p class="body-copy">${localize(arrival.help)}</p></article></section>`;
   }
+  if (item.id === 'facilities') return appliancePage(item,areaId);
   const quickTimes = `<div class="guide-timing"><div><span>${t('checkin')}</span><strong>16:00</strong></div><div><span>${t('checkout')}</span><strong>11:00</strong></div></div>`;
   const networks = `<ul class="networks">${wifiNetworks.map((name) => `<li><strong>${name}</strong><button class="button button-cream" type="button" data-action="copy-network" data-value="${name}" aria-label="${t('copyNetwork')} · ${name}">${icon('copy')}${t('copyNetwork')}</button></li>`).join('')}</ul>`;
   return `${pageHeading('GUEST GUIDE',localize(item.title),localize(item.lead))}<section class="section content-section">
     ${item.id === 'check-in' ? quickTimes : ''}${item.id === 'wifi' ? networks : ''}
-    ${item.items.map(guideArticle).join('')}
-    ${link('#guide',t('guide'),'button button-outline')}
+    ${item.items.map((entry,i) => guideArticle(entry,item.id === 'check-in',i === (areaId === 'checkout' ? 1 : 0))).join('')}
+    ${item.id === 'check-in' ? `<div class="map-actions">${link('#guide/parking',t('parking'),'button button-outline')}${link('#location',t('location'),'button button-outline')}</div>` : ''}
+    ${link('#guide',t('backToGuide'),'button button-outline')}
   </section>`;
 }
 
-function placeCards(filter = localFilter) {
-  return places.filter((place) => filter === 'all' || place.group === filter).map((place) => `<article class="place">
-    <p class="place-type">${t(place.group)}</p><h2>${localize(place.name)}</h2><p class="body-copy">${localize(place.about)}</p>
-    <div class="map-actions">${external(naver(place.query),t('map'))}${place.source ? external(place.source,t('official'),'text-link') : ''}</div></article>`).join('');
+function placesFor(detail) {
+  if (detail === 'food') return places.filter(({ group }) => group === 'food');
+  if (detail === 'tours') return places.filter(({ group }) => group === 'walk');
+  return places;
+}
+
+function nearbyPreview(detail, title, intro) {
+  const featured = placesFor(detail).filter((place) => place.featured).slice(0,3);
+  return `<section class="section local-teaser">${sectionHeading(detail === 'food' ? 'NEARBY FOOD' : 'NEARBY TOURS',title,intro)}
+    <ul class="preview-list">${featured.map((place) => `<li><strong>${localize(place.name)}</strong><span>${t(place.category)}</span></li>`).join('')}</ul>
+    ${link(`#local/${detail}`,t('allPlaces'),'button button-outline')}</section>`;
+}
+
+function placeCards(detail) {
+  const query = normalize(placeQuery);
+  const results = placesFor(detail).filter((place) => {
+    const filterMatch = placeFilter === 'all' || (placeFilter === 'picks' && place.featured) || [place.category,place.group].includes(placeFilter);
+    const keywords = [place.query,...place.name,localize(place.about),t(place.category)].map(normalize);
+    return filterMatch && (!query || keywords.some((value) => value.includes(query)));
+  });
+  return results.map((place) => `<article class="place">
+    <p class="place-type">${t(place.category)}</p><h2>${localize(place.name)}</h2><p class="body-copy">${localize(place.about)}</p>
+    <div class="map-actions">${external(naver(place.query),t('naver'))}${external(google(place.query),t('google'))}${place.source ? external(place.source,place.sourceLabel ?? t('official'),'text-link') : ''}</div></article>`).join('') || `<p class="body-copy">${t('placeEmpty')}</p>`;
 }
 
 function localPage(detail) {
   const walkingCourses = `<section class="section courses">${sectionHeading('WALKING ROUTES',t('course'))}${courses.map(({ name,stops }) => `<article class="course"><h3>${localize(name)}</h3><ol>${stops.map((i) => `<li>${external(naver(places[i].query),localize(places[i].name),'text-link')}</li>`).join('')}</ol></article>`).join('')}</section>`;
-  if (detail === 'tours') return `${pageHeading('LOCAL NOTES',t('tours'),t('localIntro'))}${walkingCourses}`;
-  if (detail === 'food') return `${pageHeading('LOCAL NOTES',t('food'))}<section class="section content-section"><div id="places">${placeCards('food')}</div>${link('#local',t('localCta'),'button button-outline')}</section>`;
-  return `${pageHeading('LOCAL NOTES',t('localTitle'),t('localIntro'))}
-    <section class="section content-section">${filterButtons(localFilters,localFilter,'local-filter')}<div id="places">${placeCards()}</div></section>${walkingCourses}`;
+  const views = {
+    food:['NEARBY FOOD','food','localFoodIntro',['market','meals','cafes']],
+    tours:['NEARBY TOURS','tours','toursIntro',['walk','history','culture']],
+  };
+  const [heading,title,intro,categories] = views[detail] ?? ['LOCAL NOTES','localTitle','localIntro',['food','walk']];
+  return `${pageHeading(heading,t(title),t(intro))}<section class="section content-section">
+    ${filterButtons(['picks','all',...categories],placeFilter,'local-filter')}
+    <form class="search-field place-search" data-place-form role="search" aria-label="${t('placeSearch')}"><label for="place-query" class="visually-hidden">${t('placeSearch')}</label><input id="place-query" type="search" placeholder="${t('placeSearch')}" maxlength="80"><button type="submit" aria-label="${t('search')}">${icon('search')}</button></form>
+    <div id="places" aria-live="polite">${placeCards(detail)}</div></section>${detail !== 'food' ? walkingCourses : ''}`;
 }
 
 function getRoute() {
   const fragment = location.hash.slice(1);
   if (extraRoutes.includes(fragment) || navigation.some(([name]) => name === fragment) || guides.some(({ id }) => `guide/${id}` === fragment)) return fragment;
+  if (applianceAreas.some(({ id }) => fragment === `guide/facilities/${id}`)) return fragment;
   return 'home';
 }
 
 function menuLinks() {
+  const toGuideEntry = (id) => {
+    const item = guides.find((guide) => guide.id === id);
+    return [`guide/${id}`,item.icon,id === 'facilities' ? t('applianceTitle') : localize(item.title),localize(item.hint)];
+  };
   const entries = [
     ['home','home',t('home'),t('tagline')],
     ['rooms','room',t('roomTitle'),localize(['침실·다이닝·라운지·욕실 사진','Bedroom, dining, lounge and bathroom photos','寝室・ダイニング・ラウンジ・浴室の写真','卧室、用餐区、休息室和浴室照片','臥室、用餐區、休息區及浴室照片'])],
     ['location','pin',t('location'),t('addressShort')],
     ['location/airport','plane',t('airportReturn'),localize(['인천·김포공항 방면','Incheon and Gimpo airports','仁川・金浦空港方面','前往仁川或金浦机场','前往仁川或金浦機場'])],
-    ...guides.map(({ id,icon,title,hint }) => [`guide/${id}`,icon,localize(title),localize(hint)]),
+    ...['check-in','wifi','facilities','laundry','waste','rules'].map(toGuideEntry),
     ['local/food','food',t('food'),localize(['망원시장과 망리단길','Mangwon Market and Mangridan-gil','望遠市場とマンリダンギル','望远市场和望理团路','望遠市場和望理團路'])],
     ['local/tours','compass',t('tours'),localize(['망원·한강·홍대 산책','Walks in Mangwon, by the river and in Hongdae','望遠・漢江・弘大の散歩','望远、汉江和弘大散步','望遠、漢江和弘大散步'])],
+    ...['luggage','parking'].map(toGuideEntry),
     ['booking','calendar',t('booking'),'Booking.com'],
   ];
-  return entries.map(([href,symbol,title,hint]) => `<a href="#${href}"${route === href ? ' aria-current="page"' : ''}>${icon(symbol)}<span class="item-copy"><strong>${title}</strong><small>${hint}</small></span>${icon('right')}</a>`).join('');
+  const active = route.split('/').slice(0,2).join('/');
+  return entries.map(([href,symbol,title,hint]) => `<a href="#${href}"${active === href ? ' aria-current="page"' : ''}><span class="drawer-icon">${icon(symbol)}</span><span class="item-copy"><strong>${title}</strong><small>${hint}</small></span>${icon('right')}</a>`).join('');
 }
 
 function renderChrome() {
@@ -236,14 +320,17 @@ function renderChrome() {
   document.documentElement.lang = language;
   document.querySelector('.skip').textContent = t('skip');
   document.querySelector('.topbar .wordmark').setAttribute('aria-label', `${t('brand')} · ${t('home')}`);
-  document.querySelector('.menu-trigger').setAttribute('aria-label', t('menu'));
+  document.querySelector('.menu-trigger').setAttribute('aria-label', t('menuOpen'));
   languagePicker.querySelector('summary').setAttribute('aria-label', t('language'));
   document.querySelector('#active-language').textContent = languages.find(({ code }) => code === language).short;
   document.querySelector('#language-options').innerHTML = languages.map(({ code, name }) => `<button type="button" lang="${code}" data-action="language" data-value="${code}" aria-pressed="${code === language}">${name}</button>`).join('');
   bottom.setAttribute('aria-label',t('quick'));
   bottom.innerHTML = navigation.filter(([name]) => name !== 'location').map(([name, symbol]) => `<a href="#${name}"${active === name ? ' aria-current="page"' : ''}>${icon(symbol)}<span>${t(name)}</span></a>`).join('');
   bottom.hidden = false;
-  menu.innerHTML = `<div class="drawer-inner"><div class="drawer-header"><h2 id="menu-label">${t('menu')}</h2>${iconAction('close-menu','close',t('close'),'icon-button')}</div><nav aria-label="${t('menu')}">${menuLinks()}</nav></div>`;
+  menu.innerHTML = `<div class="drawer-inner"><div class="drawer-header"><h2 id="menu-label" class="visually-hidden">${t('menu')}</h2><div class="drawer-brand">${brandMark}</div>${iconAction('close-menu','close',t('menuClose'),'icon-button drawer-close')}</div><nav aria-label="${t('menu')}">${menuLinks()}</nav></div>`;
+  helpTrigger.innerHTML = `${icon('message')}<span>${t('helpTitle')}</span>`;
+  helpTrigger.hidden = false;
+  helpPanel.innerHTML = `<div class="help-panel-inner"><div class="help-panel-head"><h2 id="help-title">${t('helpTitle')}</h2>${iconAction('close-help','close',t('close'),'icon-button')}</div>${helpForm('dialog-help-query')}</div>`;
   lightbox.setAttribute('aria-label',t('enlarge'));
 }
 
@@ -251,16 +338,24 @@ function updateTopbar() {
   const isHome = route === 'home';
   document.querySelector('#topbar').classList.toggle('over-photo',isHome && window.scrollY < 44);
   document.querySelector('#bottom').classList.toggle('over-cover',isHome && window.scrollY < 120);
+  helpTrigger.classList.toggle('over-cover',isHome && window.scrollY < 120);
 }
 
 function render({ resetScroll = false, focus = false } = {}) {
+  const before = route;
   route = getRoute();
+  if (route !== before) {
+    placeQuery = '';
+    placeFilter = route.startsWith('local/') ? 'picks' : 'all';
+  }
   const homeTitle = language === 'ko' ? '스테이 어보드 · STAY ABODE | 서울 서교동 숙소' : 'STAY ABODE | A stay in Seogyo, Seoul';
-  document.title = route === 'home' ? homeTitle : `${t(route.split('/')[0])} · STAY ABODE`;
   renderChrome();
   const pages = { home, rooms:roomsPage, location:locationPage, guide:guidePage, local:localPage, booking:() => bookingBlock(true) + faqBlock() };
-  const [key, detail] = route.split('/');
-  main.innerHTML = pages[key](detail) + siteFooter();
+  const [key,...segments] = route.split('/');
+  main.innerHTML = pages[key](segments.join('/')) + siteFooter();
+  document.title = route === 'home' ? homeTitle : `${main.querySelector('h1').textContent.replace(/\s+/g,' ')} · STAY ABODE`;
+  const search = document.querySelector('#place-query');
+  if (search) search.value = placeQuery;
   main.classList.toggle('internal', key !== 'home');
   if (resetScroll) window.scrollTo({ top:0, behavior:'instant' });
   if (focus) main.focus({ preventScroll:true });
@@ -291,7 +386,7 @@ function openPhoto(id) {
   lightboxPhotos = visiblePhotos();
   lightbox.innerHTML = `<div class="lightbox-inner" data-swipe="lightbox"><div class="lightbox-head"><span id="photo-count" aria-live="polite"></span>${iconAction('close-photo','close',t('close'),'icon-button')}</div>
     <figure><img alt=""><figcaption id="photo-caption"></figcaption></figure>
-    <div class="lightbox-controls">${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div></div>`;
+    <div class="lightbox-controls"${lightboxPhotos.length === 1 ? ' hidden' : ''}>${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div></div>`;
   displayPhoto(lightboxPhotos.findIndex((photo) => photo.id === id));
   lightbox.showModal();
 }
@@ -299,6 +394,15 @@ function openPhoto(id) {
 function updateFilter(button, update) {
   button.closest('.filters').querySelectorAll('button').forEach((node) => node.setAttribute('aria-pressed', node === button));
   update();
+}
+
+function updatePlaceSearch(value) {
+  placeQuery = value;
+  if (normalize(value) && placeFilter === 'picks') {
+    placeFilter = 'all';
+    document.querySelectorAll('[data-action="local-filter"]').forEach((item) => item.setAttribute('aria-pressed',item.dataset.value === 'all'));
+  }
+  document.querySelector('#places').innerHTML = placeCards(route.split('/')[1]);
 }
 
 async function copyText(value, success, failure) {
@@ -323,10 +427,12 @@ document.addEventListener('click', (event) => {
   }
   if (event.target.closest('a[href^="#"]')) {
     if (menu.open) menu.close();
+    if (helpPanel.open) helpPanel.close();
     if (event.target.closest('a').hash === location.hash && event.target.closest('a').hash === '#home') window.scrollTo({ top:0 });
   }
   if (event.target === menu) menu.close();
   if (event.target === lightbox) lightbox.close();
+  if (event.target === helpPanel) helpPanel.close();
   const button = event.target.closest('button[data-action]');
   if (!button) return;
   const value = button.dataset.value;
@@ -336,6 +442,11 @@ document.addEventListener('click', (event) => {
       button.setAttribute('aria-expanded', 'true');
       break;
     case 'close-menu': menu.close(); break;
+    case 'open-help': helpPanel.showModal(); break;
+    case 'close-help': helpPanel.close(); break;
+    case 'help-topic':
+      showHelp(button.closest('.help-widget'),helpTopics.filter((topic) => topic.id === value));
+      break;
     case 'language':
       language = value;
       try { localStorage.setItem('abode-language', language); } catch { /* Storage is optional. */ }
@@ -343,7 +454,7 @@ document.addEventListener('click', (event) => {
       render();
       languagePicker.querySelector('summary').focus({ preventScroll:true });
       break;
-    case 'discover': document.querySelector('#intro').scrollIntoView({ block:'start' }); break;
+    case 'discover': document.querySelector('#quick-help').scrollIntoView({ block:'start' }); break;
     case 'slide': showSlide(slideIndex + Number(value)); break;
     case 'select-slide': showSlide(Number(value)); break;
     case 'copy-address': void copyText(address,'copied','copyError'); break;
@@ -353,13 +464,40 @@ document.addEventListener('click', (event) => {
       updateFilter(button, () => { document.querySelector('#photo-cards').innerHTML = photoCards(); });
       break;
     case 'local-filter':
-      localFilter = value;
-      updateFilter(button, () => { document.querySelector('#places').innerHTML = placeCards(); });
+      placeFilter = value;
+      updateFilter(button, () => { document.querySelector('#places').innerHTML = placeCards(route.split('/')[1]); });
       break;
     case 'photo': openPhoto(value); break;
     case 'photo-step': displayPhoto(lightboxIndex + Number(value)); break;
     case 'close-photo': lightbox.close(); break;
   }
+});
+
+document.addEventListener('submit', (event) => {
+  if (event.target.matches('[data-help-form]')) {
+    event.preventDefault();
+    const widget = event.target.closest('.help-widget');
+    const value = event.target.elements.query.value;
+    if (normalize(value)) showHelp(widget,matchHelp(value));
+    else widget.querySelector('.help-results').replaceChildren();
+  }
+  if (event.target.matches('[data-place-form]')) {
+    event.preventDefault();
+    updatePlaceSearch(event.target.querySelector('input').value);
+  }
+});
+
+document.addEventListener('input', (event) => {
+  if (event.target.id === 'place-query') updatePlaceSearch(event.target.value);
+});
+
+document.addEventListener('change', (event) => {
+  if (event.target.id !== 'room-filter') return;
+  galleryRoom = event.target.value;
+  galleryFilter = 'all';
+  document.querySelector('.gallery-filters').innerHTML = galleryFilters();
+  document.querySelector('#photo-cards').innerHTML = photoCards();
+  document.querySelector('#room-filter').focus({ preventScroll:true });
 });
 
 menu.addEventListener('close', () => document.querySelector('.menu-trigger').setAttribute('aria-expanded','false'));
@@ -399,6 +537,7 @@ window.addEventListener('scroll', updateTopbar, { passive:true });
 window.addEventListener('hashchange', () => {
   if (menu.open) menu.close();
   if (lightbox.open) lightbox.close();
+  if (helpPanel.open) helpPanel.close();
   render({ resetScroll:true, focus:true });
 });
 render();

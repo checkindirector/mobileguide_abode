@@ -25,7 +25,7 @@
   <div class="site" id="site">
     <a class="skip" href="#main">본문으로 이동</a>
     <header class="topbar" id="topbar">
-      <button class="icon-button menu-trigger" type="button" data-action="menu" aria-controls="menu" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
+      <button class="icon-button menu-trigger" type="button" data-action="menu" aria-haspopup="dialog" aria-controls="menu" aria-expanded="false" aria-label="메뉴 열기"><span></span><span></span><span></span></button>
       <a class="wordmark" href="#home" aria-label="스테이 어보드 홈"><img src="assets/abode-logo.png" width="980" height="236" alt="ABODE"></a>
       <details class="language" id="language">
         <summary aria-label="언어 선택"><span id="active-language">KO</span><span class="caret" aria-hidden="true"></span></summary>
@@ -40,7 +40,9 @@
       <noscript><section class="section"><h2>스테이 어보드</h2><p>서울특별시 마포구 월드컵로10길 36</p><p>체크인 오후 4시부터 · 체크아웃 오전 11시까지</p><a class="button" href="https://www.booking.com/hotel/kr/stay-abode.ko.html">Booking.com 예약하기</a></section></noscript>
     </main>
     <nav class="bottom" id="bottom" aria-label="빠른 메뉴" hidden></nav>
+    <button class="help-trigger" id="help-trigger" type="button" data-action="open-help" aria-haspopup="dialog" aria-controls="help-panel" hidden></button>
     <dialog class="drawer" id="menu" aria-labelledby="menu-label"></dialog>
+    <dialog class="help-panel" id="help-panel" aria-labelledby="help-title"></dialog>
     <dialog class="lightbox" id="lightbox" aria-label="사진 크게 보기"></dialog>
     <p class="toast" id="toast" role="status"></p>
   </div>
