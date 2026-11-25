@@ -35,6 +35,17 @@ export const cover = [
   { id:'facade', position:'50% 52%' },
 ];
 
+const kogl = 'https://www.kogl.or.kr/info/licenseType1.do';
+const archive = 'https://archive.visitseoul.net/ko/contents/';
+
+export const neighborhoodPhotos = {
+  '망원시장': { id:'local-mangwon-market', width:852, height:568, credit:'seoulTourism', source:`${archive}ARP003zw1`, license:'KOGL 1', terms:kogl },
+  '망리단길': { id:'local-mangridan', width:852, height:567, credit:'seoulTourism', source:`${archive}ARP003zk1`, license:'KOGL 1', terms:kogl },
+  '망원한강공원': { id:'local-mangwon-hangang', width:852, height:568, credit:'seoulTourism', source:`${archive}ARP006zl1`, license:'KOGL 1', terms:kogl },
+  '경의선숲길 연남동': { id:'local-gyeongui-forest', width:1024, height:683, credit:'forestPhotographer', source:'https://commons.wikimedia.org/wiki/File:Yeonnam-dong_Gyeongui_Line_Forest_Park_(1).jpg', license:'KOGL 1', terms:kogl },
+  '문화비축기지': { id:'local-culture-park', width:864, height:1152, author:'Mvcervi', source:'https://commons.wikimedia.org/wiki/File:Oil-tank-culture-park.jpg', license:'CC BY-SA 4.0', terms:'https://creativecommons.org/licenses/by-sa/4.0/', adapted:true },
+};
+
 export const photoRooms = {
   'room-101':'101', washbasin:'101',
   'bedroom-dining':'102', kitchen:'102',
@@ -65,8 +76,8 @@ export const arrival = {
 };
 
 export const places = [
-  { group:'food', category:'market', query:'망원시장', name:['망원시장','Mangwon Market','望遠市場','望远市场','望遠市場'], about:['시장 골목에서 간식과 가볍게 먹을 한 끼를 골라 보세요.','Pick up a snack or a casual meal in this neighborhood market.','市場の路地でおやつや軽い食事を探してみましょう。','在街坊市场选些小吃，或简单吃一餐。','在街坊市場挑些小吃，或簡單吃一餐。'], source:'https://access.visitkorea.or.kr/ms/detail.do?cotId=2e79d923-c59c-4058-b6c2-fbe316910e33' },
-  { group:'food', category:'cafes', query:'망리단길', name:['망리단길','Mangridan-gil','マンリダンギル','望理团路','望理團路'], about:['작은 카페와 상점이 이어지는 망원동 골목입니다.','A Mangwon neighborhood lane lined with small cafés and shops.','小さなカフェや店が並ぶ望遠洞の路地です。','望远洞一条聚集小咖啡馆和店铺的街巷。','望遠洞一條聚集小咖啡館與店舖的街巷。'], source:'https://korean.visitseoul.net/mapo-around/망리단길/KOP041785' },
+  { group:'food', category:'market', featured:true, query:'망원시장', name:['망원시장','Mangwon Market','望遠市場','望远市场','望遠市場'], about:['시장 골목에서 간식과 가볍게 먹을 한 끼를 골라 보세요.','Pick up a snack or a casual meal in this neighborhood market.','市場の路地でおやつや軽い食事を探してみましょう。','在街坊市场选些小吃，或简单吃一餐。','在街坊市場挑些小吃，或簡單吃一餐。'], source:'https://access.visitkorea.or.kr/ms/detail.do?cotId=2e79d923-c59c-4058-b6c2-fbe316910e33' },
+  { group:'food', category:'cafes', featured:true, query:'망리단길', name:['망리단길','Mangridan-gil','マンリダンギル','望理团路','望理團路'], about:['작은 카페와 상점이 이어지는 망원동 골목입니다.','A Mangwon neighborhood lane lined with small cafés and shops.','小さなカフェや店が並ぶ望遠洞の路地です。','望远洞一条聚集小咖啡馆和店铺的街巷。','望遠洞一條聚集小咖啡館與店舖的街巷。'], source:'https://korean.visitseoul.net/shopping/망리단길_/41785' },
   { group:'walk', category:'walk', featured:true, query:'망원한강공원', name:['망원한강공원','Mangwon Hangang Park','望遠漢江公園','望远汉江公园','望遠漢江公園'], about:['강을 따라 걷거나 잔디에 앉아 쉬기 좋은 공원입니다.','Walk along the river or take a break on the lawn.','川沿いの散歩や芝生での休憩にぴったりの公園です。','适合沿江散步，或在草地上休息。','適合沿江散步，或在草地上休息。'], source:'https://hangang.seoul.go.kr/www/contents/668.do?mid=471' },
   { group:'walk', category:'walk', featured:true, query:'경의선숲길 연남동', name:['경의선숲길','Gyeongui Line Forest Park','京義線スッキル','京义线森林公园','京義線森林公園'], about:['옛 철길을 따라 이어진 산책로를 걸으며 연남동을 둘러보세요.','Follow the former railway path and explore Yeonnam-dong along the way.','旧線路沿いの遊歩道を歩き、延南洞を散策できます。','沿旧铁路步道散步，顺路探索延南洞。','沿舊鐵路步道散步，順路探索延南洞。'], source:'https://korean.visitseoul.net/hallyu/도심-속-쉼터-경의선-숲길/KON017350' },
   { group:'walk', category:'walk', query:'홍대 걷고싶은거리', name:['홍대 걷고싶은거리','Hongdae Walking Street','弘大 散策通り','弘大步行街','弘大步行街'], about:['상점과 거리 공연이 모이는 홍대의 중심 거리입니다.','One of Hongdae’s main streets for shops and street performances.','店やストリートパフォーマンスが集まる弘大の中心通りです。','集聚商店和街头表演的弘大主要街道。','匯集商店和街頭表演的弘大主要街道。'], source:'https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=cde3497b-dcdc-4dd5-b941-38a69b88d9cc' },

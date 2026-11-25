@@ -1,4 +1,4 @@
-import { airportBus, arrival, address, booking, cover, courses, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
+import { airportBus, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
 import { buildingMaps, faq, guides, parking, wifiNetworks } from './operations.js';
@@ -61,7 +61,7 @@ const localize = (value) => translate(value, language);
 const icon = (name) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[name]}"/></svg>`;
 const imagePath = (id) => `assets/images/${id}.webp`;
 const caption = (id) => localize(photoById.get(id).caption);
-const image = (id, className = '') => `<img class="${className}" src="${imagePath(id)}" alt="${caption(id)}" loading="lazy" decoding="async">`;
+const image = (id, className = '', alt = caption(id)) => `<img class="${className}" src="${imagePath(id)}" alt="${alt}" loading="lazy" decoding="async">`;
 const brandMark = '<img src="assets/abode-logo.png" width="980" height="236" alt="ABODE">';
 const link = (href, text, className = '') => `<a class="${className}" href="${href}">${text}</a>`;
 const external = (href, text, className = 'button button-outline') => `<a class="${className}" href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
@@ -125,6 +125,37 @@ function showHelp(widget, matches) {
   results.innerHTML = matches.map(({ route:href,title,answer }) => `<article><strong>${localize(title)}</strong><p class="body-copy">${localize(answer)}</p>${link(`#${href}`,t('guideMore'),'text-link')}</article>`).join('') || `<p class="body-copy">${t('helpNoResult')}</p>`;
 }
 
+function propertyPhoto(id) {
+  return `<figure class="property-photo">${image(id,'','')}<figcaption>${caption(id)}</figcaption></figure>`;
+}
+
+function roomsEditorial() {
+  const spread = [['dining','room-spread-lead'],['room-401','room-spread-bedroom'],['bathroom','room-spread-detail']];
+  return `<section class="section home-rooms">
+    <header class="editorial-heading">${sectionHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}</header>
+    <div class="room-preview">
+      ${spread.map(([id,layout]) => `<a class="${layout}" href="#rooms" aria-label="${caption(id)} · ${t('galleryLink')}">${propertyPhoto(id)}</a>`).join('')}
+    </div>
+    ${link('#rooms',`${t('galleryLink')}${icon('right')}`,'editorial-link editorial-action')}
+  </section>`;
+}
+
+function arrivalEditorial() {
+  return `<section class="section location-teaser">
+    <header class="editorial-heading">${sectionHeading('GETTING HERE',t('location'),t('addresses'))}</header>
+    <div class="arrival-photos">
+      ${propertyPhoto('facade')}
+      ${propertyPhoto('entrance')}
+    </div>
+    <p class="body-copy arrival-note">${localize(arrival.subway)}</p>
+    <div class="map-actions editorial-maps">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}</div>
+    <div class="editorial-routes">
+      ${link('#location',`${icon('map')}<span>${t('location')}</span>${icon('right')}`)}
+      ${link('#location/airport',`${icon('plane')}<span>${t('airportReturn')}</span>${icon('right')}`)}
+    </div>
+  </section>`;
+}
+
 function home() {
   const first = cover[slideIndex];
   return `<section class="hero" aria-labelledby="home-title" data-swipe="hero">
@@ -138,12 +169,12 @@ function home() {
   </section>
   <section class="section quick-help" id="quick-help">${sectionHeading('STAY HELP',t('quickHelp'))}${helpForm('home-help-query')}</section>
   <section class="section essentials">${sectionHeading('STAY ESSENTIALS',t('essentials'))}${quickLinks()}</section>
-  <section class="section intro" id="intro">${sectionHeading('STAY ABODE',t('introTitle'),t('introText'))}</section>
-  <section class="section home-rooms">${sectionHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}
-    <div class="room-preview">${link('#rooms', image('triple-beds'))}${link('#rooms', image('dining'))}</div>
-    ${link('#rooms', t('galleryLink'), 'button button-outline')}
+  <section class="section intro" id="intro">
+    <header class="editorial-heading">${sectionHeading('ABODE JOURNAL',t('introTitle'),t('introText'))}</header>
+    ${propertyPhoto('room-201')}
   </section>
-  <section class="section location-teaser">${sectionHeading('GETTING HERE',t('location'),t('addresses'))}${image('entrance','feature-photo')}<div class="map-actions">${link('#location',t('location'),'button button-outline')}${link('#location/airport',t('airportReturn'),'button button-outline')}</div></section>
+  ${roomsEditorial()}
+  ${arrivalEditorial()}
   ${nearbyPreview('food',t('food'),t('localFoodIntro'))}
   ${nearbyPreview('tours',t('tours'),t('toursIntro'))}
   ${faqBlock()}
@@ -172,7 +203,7 @@ function galleryFilters() {
 function roomsPage() {
   return `${pageHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}
   <section class="section content-section">
-    <div class="gallery-feature">${image('bedroom-dining')}</div>
+    <div class="gallery-feature">${propertyPhoto('bedroom-dining')}</div>
     <div class="gallery-filters">${galleryFilters()}</div><div class="gallery-grid" id="photo-cards">${photoCards()}</div></section>
   <section class="section room-types">${sectionHeading('ROOM TYPES',t('roomTypes'),t('roomNote'))}
     <ul>${rooms.map(({ count,name,layout }) => `<li><span class="item-copy">${localize(name)}${layout ? `<small>${localize(layout)}</small>` : ''}</span><strong>${t('guests').replace('{n}',count)}</strong></li>`).join('')}</ul>${link('#booking',t('booking'),'button')}
@@ -214,7 +245,11 @@ function locationPage(detail) {
       <h2 id="parking-title">${icon('car')}${t('parkingHeading')}</h2>
       <p class="body-copy">${localize(parking)}</p>
     </article>
-    <article class="information">${sectionHeading('ENTRANCE',t('entrance'),localize(arrival.entrance))}${image('entrance','feature-photo')}${link('#guide/check-in',t('checkin'),'text-link')}</article>
+    <article class="information">
+      ${sectionHeading('ENTRANCE',t('entrance'),localize(arrival.entrance))}
+      <div class="arrival-photos">${propertyPhoto('facade')}${propertyPhoto('entrance')}</div>
+      ${link('#guide/check-in',t('checkin'),'text-link')}
+    </article>
     ${disclosure(t('subway'),localize(['망원역 약 5분 · 합정역 약 8분','Mangwon about 5 min · Hapjeong about 8 min','望遠駅から約5分・合井駅から約8分','望远站约 5 分钟、合井站约 8 分钟','望遠站約 5 分鐘、合井站約 8 分鐘']),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
     ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon)}
     ${disclosure(t('gimpo'),'AREX all-stop',transportBody(arrival.airport,trainLink))}
@@ -262,11 +297,31 @@ function placesFor(detail) {
   return places;
 }
 
+function neighborhoodPhoto(place) {
+  const { id,width,height,credit,author,source,license,terms,adapted } = neighborhoodPhotos[place.query];
+  return `<figure class="neighborhood-photo">
+    <img src="${imagePath(id)}" width="${width}" height="${height}" alt="" loading="lazy" decoding="async">
+    <figcaption>${t('photoCredit')} ${external(source,author ?? t(credit),'photo-credit-link')} · ${external(terms,license,'photo-credit-link')}${adapted ? ` · ${t('photoAdapted')}` : ''}</figcaption>
+  </figure>`;
+}
+
+function placeMap(place) {
+  return external(naver(place.query),`<span class="visually-hidden">${localize(place.name)} · </span>${t('viewMap')}${icon('right')}`,'editorial-link place-map');
+}
+
 function nearbyPreview(detail, title, intro) {
-  const featured = placesFor(detail).filter((place) => place.featured).slice(0,3);
-  return `<section class="section local-teaser">${sectionHeading(detail === 'food' ? 'NEARBY FOOD' : 'NEARBY TOURS',title,intro)}
-    <ul class="preview-list">${featured.map((place) => `<li><strong>${localize(place.name)}</strong><span>${t(place.category)}</span></li>`).join('')}</ul>
-    ${link(`#local/${detail}`,t('allPlaces'),'button button-outline')}</section>`;
+  const inSection = placesFor(detail);
+  const stories = inSection.filter(({ query }) => neighborhoodPhotos[query]);
+  const cafe = detail === 'food' && inSection.find(({ category,featured,query }) => category === 'cafes' && featured && !neighborhoodPhotos[query]);
+  return `<section class="section local-teaser neighborhood-${detail}">
+    <header class="editorial-heading">${sectionHeading(detail === 'food' ? 'NEARBY FOOD & CAFÉS' : 'NEARBY TOURS',title,intro)}</header>
+    <div class="place-spread">${stories.map((place) => `<article class="editorial-place">
+      ${neighborhoodPhoto(place)}
+      <div class="editorial-place-copy"><p class="editorial-category">${t(place.category)}</p><h3>${localize(place.name)}</h3><p class="body-copy">${localize(place.about)}</p>${placeMap(place)}</div>
+    </article>`).join('')}</div>
+    ${cafe ? `<article class="neighborhood-cafe"><div><p class="editorial-category">${t(cafe.category)}</p><h3>${localize(cafe.name)}</h3><p class="body-copy">${localize(cafe.about)}</p></div>${placeMap(cafe)}</article>` : ''}
+    ${link(`#local/${detail}`,`${t('allPlaces')}${icon('right')}`,'editorial-link editorial-action')}
+  </section>`;
 }
 
 function placeCards(detail) {
@@ -277,6 +332,7 @@ function placeCards(detail) {
     return filterMatch && (!query || keywords.some((value) => value.includes(query)));
   });
   return results.map((place) => `<article class="place">
+    ${neighborhoodPhotos[place.query] ? neighborhoodPhoto(place) : ''}
     <p class="place-type">${t(place.category)}</p><h2>${localize(place.name)}</h2><p class="body-copy">${localize(place.about)}</p>
     <div class="map-actions">${external(naver(place.query),t('naver'))}${external(google(place.query),t('google'))}${place.source ? external(place.source,place.sourceLabel ?? t('official'),'text-link') : ''}</div></article>`).join('') || `<p class="body-copy">${t('placeEmpty')}</p>`;
 }
