@@ -1,4 +1,4 @@
-import { airportBus, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
+import { airportAccessPhoto, airportBus, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
 import { buildingMaps, faq, guides, parking, wifiNetworks } from './operations.js';
@@ -33,7 +33,8 @@ const paths = {
 };
 
 const navigation = [['home','home'], ['rooms','room'], ['location','pin'], ['guide','guide'], ['local','compass'], ['booking','calendar']];
-const extraRoutes = ['location/airport', 'location/parking', 'local/food', 'local/tours', 'guide/check-in/checkout'];
+const locationSections = { 'location/parking':'parking', 'location/from-airport':'airport-arrivals' };
+const extraRoutes = ['location/airport', ...Object.keys(locationSections), 'local/food', 'local/tours', 'guide/check-in/checkout'];
 const main = document.querySelector('#main');
 const menu = document.querySelector('#menu');
 const lightbox = document.querySelector('#lightbox');
@@ -82,7 +83,7 @@ function sectionHeading(english, title, description = '') {
 }
 
 function siteFooter() {
-  const credits = route === 'home' ? `<details class="photo-credits"><summary>${t('photoSources')}</summary><ul>${places.filter(({ query }) => neighborhoodPhotos[query]).map((place) => `<li>${localize(place.name)} · ${photoAttribution(neighborhoodPhotos[place.query])}</li>`).join('')}</ul></details>` : '';
+  const credits = route === 'home' ? `<details class="photo-credits"><summary>${t('photoSources')}</summary><ul>${places.filter(({ query }) => neighborhoodPhotos[query]).map((place) => `<li>${localize(place.name)} · ${photoAttribution(neighborhoodPhotos[place.query])}</li>`).join('')}<li>${t('airportRailPhoto')} · ${photoAttribution(airportAccessPhoto)}</li></ul></details>` : '';
   return `<footer class="footer"><a class="wordmark" href="#home" aria-label="${t('brand')} · ${t('home')}">${brandMark}</a><p>${t('addresses')}</p><p>${t('stayBrand')}</p>${credits}</footer>`;
 }
 
@@ -145,17 +146,25 @@ function roomsEditorial() {
 }
 
 function arrivalEditorial() {
-  return `<section class="section location-teaser">
-    <header class="editorial-heading">${sectionHeading('GETTING HERE',t('location'),t('addresses'))}</header>
-    <div class="arrival-photos">
+  return `<section class="section location-teaser" aria-labelledby="home-location-title">
+    <p class="eyebrow" lang="en">GETTING HERE</p><h2 id="home-location-title">${t('location')}</h2>
+    <div class="address-card">
+      <h3>${t('brand')}</h3>
+      <p class="address-card-street">${t('addresses')}</p>
+      <p class="address-card-transit">${localize(arrival.subwayShort)}</p>
+      <div class="address-card-maps">
+        ${external(buildingMaps.naver,`${icon('pin')}<span>${t('naver')}</span>`,'')}
+        ${external(buildingMaps.google,`${icon('map')}<span>${t('google')}</span>`,'')}
+      </div>
+    </div>
+    <a class="airport-access-card" href="#location/from-airport">
+      ${photoImage(airportAccessPhoto)}
+      <span class="airport-access-copy"><small lang="en" aria-hidden="true">AIRPORT ACCESS</small><strong>${t('airportToAbode')}</strong></span>
+      ${icon('forward')}
+    </a>
+    <div class="arrival-photos home-arrival-photos">
       ${propertyPhoto('facade')}
       ${propertyPhoto('entrance')}
-    </div>
-    <p class="body-copy arrival-note">${localize(arrival.subway)}</p>
-    <div class="map-actions editorial-maps">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}</div>
-    <div class="editorial-routes">
-      ${link('#location',`${icon('map')}<span>${t('location')}</span>${icon('right')}`)}
-      ${link('#location/airport',`${icon('plane')}<span>${t('airportReturn')}</span>${icon('right')}`)}
     </div>
   </section>`;
 }
@@ -252,9 +261,11 @@ function locationPage(detail) {
       <div class="arrival-photos">${propertyPhoto('facade')}${propertyPhoto('entrance')}</div>
       ${link('#guide/check-in',t('checkin'),'text-link')}
     </article>
-    ${disclosure(t('subway'),localize(['망원역 약 5분 · 합정역 약 8분','Mangwon about 5 min · Hapjeong about 8 min','望遠駅から約5分・合井駅から約8分','望远站约 5 分钟、合井站约 8 分钟','望遠站約 5 分鐘、合井站約 8 分鐘']),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
-    ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon)}
-    ${disclosure(t('gimpo'),'AREX all-stop',transportBody(arrival.airport,trainLink))}
+    ${disclosure(t('subway'),localize(arrival.subwayShort),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
+    <section class="airport-arrivals" id="airport-arrivals" aria-label="${t('airport')}" tabindex="-1">
+      ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon)}
+      ${disclosure(t('gimpo'),'AREX all-stop',transportBody(arrival.airport,trainLink))}
+    </section>
     <div class="map-actions">${link('#location/airport',t('airportReturn'),'button button-outline')}</div>
   </section>`;
 }
@@ -303,13 +314,13 @@ function photoAttribution({ credit,author,source,license,terms,adapted }) {
   return `${external(source,author ?? t(credit),'photo-credit-link')} · ${external(terms,license,'photo-credit-link')}${adapted ? ` · ${t('photoAdapted')}` : ''}`;
 }
 
-function neighborhoodImage({ id,width,height }) {
+function photoImage({ id,width,height }) {
   return `<img src="${imagePath(id)}" width="${width}" height="${height}" alt="" loading="lazy" decoding="async">`;
 }
 
 function neighborhoodPhoto(place) {
   const photo = neighborhoodPhotos[place.query];
-  return `<figure class="neighborhood-photo">${neighborhoodImage(photo)}<figcaption>${t('photoCredit')} ${photoAttribution(photo)}</figcaption></figure>`;
+  return `<figure class="neighborhood-photo">${photoImage(photo)}<figcaption>${t('photoCredit')} ${photoAttribution(photo)}</figcaption></figure>`;
 }
 
 function nearbyPreview(detail) {
@@ -322,7 +333,7 @@ function nearbyPreview(detail) {
   return `<section class="nearby-preview neighborhood-${detail}" aria-labelledby="home-nearby-${detail}">
     <p class="eyebrow" lang="en">${tours ? 'NEARBY TOURS' : 'NEARBY PICKS'}</p><h2 id="home-nearby-${detail}">${title}</h2>
     <div class="nearby-list">${picks.map((place,i) => `<a class="nearby-card" href="${href}">
-      <span class="nearby-card-media">${neighborhoodImage(neighborhoodPhotos[place.query])}${tours ? `<span class="nearby-card-number" aria-hidden="true">${formatNumber(i+1)}</span>` : ''}</span>
+      <span class="nearby-card-media">${photoImage(neighborhoodPhotos[place.query])}${tours ? `<span class="nearby-card-number" aria-hidden="true">${formatNumber(i+1)}</span>` : ''}</span>
       <span class="nearby-card-copy"><small>${tours && place.area ? localize(place.area) : t(place.category)}</small><strong>${localize(place.name)}</strong><span class="nearby-card-description">${tours ? t(place.category) : localize(place.about)}</span></span>
       ${icon('forward')}
     </a>`).join('')}</div>
@@ -380,7 +391,7 @@ function menuLinks() {
     ['local/food','food',localize(['주변 맛집','Nearby restaurants','周辺の飲食店','周边美食','周邊美食']),localize(['어보드가 고른 주변 맛집','Local dining picked by ABODE','ABODEが選んだ周辺の飲食店','ABODE 精选周边餐厅','ABODE 精選周邊餐廳'])],
     ['local/tours','compass',localize(['추천 근교 투어','Recommended local tours','おすすめ近郊ツアー','推荐周边游','推薦周邊遊']),localize([`서울에서 만나는 추천 ${tourCount}곳`,`${tourCount} places to explore in Seoul`,`ソウルのおすすめ ${tourCount} か所`,`首尔 ${tourCount} 个推荐去处`,`首爾 ${tourCount} 個推薦去處`])],
   ];
-  const active = route.split('/').slice(0,2).join('/');
+  const active = locationSections[route] ? 'location' : route.split('/').slice(0,2).join('/');
   return entries.map(([href,symbol,title,hint]) => `<a href="#${href}"${active === href ? ' aria-current="page"' : ''}><span class="drawer-icon">${icon(symbol)}</span><span class="drawer-copy"><strong>${title}</strong><small>${hint}</small></span>${icon('right')}</a>`).join('');
 }
 
@@ -428,7 +439,7 @@ function render({ resetScroll = false, focus = false } = {}) {
   const search = document.querySelector('#place-query');
   if (search) search.value = placeQuery;
   main.classList.toggle('internal', key !== 'home');
-  const target = route === 'location/parking' ? document.querySelector('#parking') : null;
+  const target = locationSections[route] ? document.getElementById(locationSections[route]) : null;
   if (target) target.scrollIntoView({ block:'start', behavior:'instant' });
   else if (resetScroll) window.scrollTo({ top:0, behavior:'instant' });
   if (focus) (target ?? main).focus({ preventScroll:true });

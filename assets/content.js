@@ -38,6 +38,12 @@ export const cover = [
 const kogl = 'https://www.kogl.or.kr/info/licenseType1.do';
 const archive = 'https://archive.visitseoul.net/ko/contents/';
 
+export const airportAccessPhoto = {
+  id:'airport-access', width:1024, height:768, author:'MNXANL',
+  source:'https://commons.wikimedia.org/wiki/File:202403_AREX_Local_Platform_1,2_of_Incheon_International_Airport_Terminal_1_Station.jpg',
+  license:'CC BY-SA 4.0', terms:'https://creativecommons.org/licenses/by-sa/4.0/', adapted:true,
+};
+
 export const neighborhoodPhotos = {
   '망원시장': { id:'local-mangwon-market', width:852, height:568, credit:'seoulTourism', source:`${archive}ARP003zw1`, license:'KOGL 1', terms:kogl },
   '망리단길': { id:'local-mangridan', width:852, height:567, credit:'seoulTourism', source:`${archive}ARP003zk1`, license:'KOGL 1', terms:kogl },
@@ -64,6 +70,7 @@ export const rooms = [
 
 export const arrival = {
   subway:['망원역(6호선)에서 도보 약 5분, 합정역(2·6호선)에서 도보 약 8분입니다. 편한 출구와 길은 지도로 확인해 주세요.','About a 5-minute walk from Mangwon Station (Line 6) or 8 minutes from Hapjeong Station (Lines 2 and 6). Check the map for the most convenient exit.','望遠駅（6号線）から徒歩約5分、合井駅（2・6号線）から徒歩約8分です。便利な出口は地図でご確認ください。','从望远站（6 号线）步行约 5 分钟，从合井站（2、6 号线）步行约 8 分钟。请在地图上查看方便的出口。','從望遠站（6 號線）步行約 5 分鐘，從合井站（2、6 號線）步行約 8 分鐘。請在地圖上查看方便的出口。'],
+  subwayShort:['도보 · 망원역 약 5분 · 합정역 약 8분','Walk · Mangwon about 5 min · Hapjeong about 8 min','徒歩・望遠駅から約5分・合井駅から約8分','步行 · 望远站约 5 分钟 · 合井站约 8 分钟','步行 · 望遠站約 5 分鐘 · 合井站約 8 分鐘'],
   airport:['공항철도 서울역 방면 일반열차를 타고 홍대입구역에서 내리세요. 지하철 2호선으로 갈아타고 한 정거장 뒤 합정역에서 내려 숙소까지 걸어오실 수 있습니다.','Take the Seoul Station-bound AREX all-stop train to Hongik Univ. Station. Transfer to Line 2, ride one stop to Hapjeong and walk to ABODE.','空港鉄道のソウル駅方面の一般列車で弘大入口駅へ。2号線に乗り換え、1駅先の合井駅から徒歩でお越しいただけます。','搭乘开往首尔站的机场铁路普通列车至弘大入口站，换乘 2 号线坐一站到合井站，再步行前往住宿。','搭乘開往首爾站的機場鐵路普通列車至弘大入口站，轉乘 2 號線一站到合井站，再步行前往住宿。'],
   entrance:['월드컵로10길 대로변에서 루카스 커피 옆 ABODE 간판을 찾으세요. 검은 출입문 안에 셀프 체크인 키오스크가 있습니다.','On World Cup-ro 10-gil, look for the ABODE sign next to Lucas Coffee. The self check-in kiosk is inside the black entrance.','ワールドカップ路10ギルのLucas Coffeeの隣、ABODEの看板が目印です。黒い入口の内側にセルフチェックイン端末があります。','在世界杯路10街寻找 Lucas Coffee 旁的 ABODE 招牌。黑色入口内设有自助入住机。','在世界盃路10街尋找 Lucas Coffee 旁的 ABODE 招牌。黑色入口內設有自助入住機。'],
   bus:['인천공항에서는 6002번 공항리무진을 타고 합정역에서 내리는 방법도 있습니다. 해당 터미널의 승차 위치와 운행 시간은 공식 노선에서 확인해 주세요.','From Incheon Airport you can also take limousine bus 6002 and get off at Hapjeong Station. Check the official route for your terminal’s stop and timetable.','仁川空港からは空港リムジンバス6002番で合井駅にお越しいただけます。ターミナルごとの乗り場と時刻は公式案内をご確認ください。','从仁川机场也可乘坐 6002 路机场大巴至合井站。请在官方路线页面确认航站楼的乘车位置和时刻。','從仁川機場也可搭乘 6002 路機場巴士至合井站。請於官方路線頁面確認航廈乘車位置與時刻。'],
