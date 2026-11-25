@@ -1,10 +1,12 @@
 export const address = '서울특별시 마포구 월드컵로10길 36';
 export const booking = 'https://www.booking.com/hotel/kr/stay-abode';
 export const timetable = 'https://www.airportrailroad.com/train/normal/info/030/0';
+export const airportBus = 'https://www.airportlimousine.co.kr/sub/sub01.php?cat_no=6';
 
 export const photos = [
+  { id:'room-202', group:'bedroom', caption:['202호 침실과 다이닝','Room 202 bedroom and dining area','202号室の寝室とダイニング','202 号房的卧室与用餐区','202 號房的臥室與用餐區'] },
   { id:'bedroom-dining', group:'bedroom', caption:['원형 테이블이 있는 객실','Bedroom with a round table','丸テーブルのある客室','带圆桌的客房','附圓桌的客房'] },
-  { id:'lounge', group:'living', caption:['소파와 우드 테이블이 놓인 라운지','Lounge with a sofa and wood table','ソファと木のテーブルのあるラウンジ','带沙发和木桌的休息室','附沙發和木桌的休息室'] },
+  { id:'lounge', group:'living', caption:['301호 거실','Room 301 living area','301号室のリビング','301 号房的起居区','301 號房的起居區'] },
   { id:'facade', group:'exterior', caption:['가로수 너머로 보이는 어보드 외관','ABODE façade beyond the street trees','街路樹越しのABODE外観','街树后的 ABODE 外观','行道樹後方的 ABODE 外觀'] },
   { id:'triple-beds', group:'bedroom', caption:['나란히 놓인 세 개의 침대','Three beds side by side','ベッドが3台並ぶ客室','三张并排的床','三張並排的床'] },
   { id:'bunks', group:'bedroom', caption:['우드 계단이 있는 이층 침대','Bunk beds with wooden steps','木の階段が付いた二段ベッド','带木质阶梯的双层床','附木質階梯的雙層床'] },
@@ -17,58 +19,35 @@ export const photos = [
   { id:'washbasin', group:'bath', caption:['석재 무늬가 드러나는 세면대','Stone-patterned washbasin','石目模様の洗面台','石纹洗手台','石紋洗手台'] },
   { id:'entrance', group:'exterior', caption:['ABODE 간판 아래의 건물 입구','Building entrance beneath the ABODE sign','ABODEの看板がある建物の入口','ABODE 标志下的大楼入口','ABODE 招牌下的建築入口'] },
   { id:'hall', group:'exterior', caption:['객실 안내판과 엘리베이터','Room directory and elevator','客室案内板とエレベーター','客房导览牌与电梯','客房導覽牌與電梯'] },
+  { id:'room-101', group:'bedroom', caption:['101호 침실과 주방','Room 101 bedroom and kitchen','101号室の寝室とキッチン','101 号房的卧室与厨房','101 號房的臥室與廚房'] },
+  { id:'room-201', group:'bedroom', caption:['201호 객실과 조명','Room 201 and its lighting','201号室と照明','201 号房及室内灯光','201 號房及室內燈光'] },
+  { id:'room-301', group:'bedroom', caption:['301호 창가 침실','Room 301 window-side bedroom','301号室の窓辺の寝室','301 号房的窗边卧室','301 號房的窗邊臥室'] },
+  { id:'room-401', group:'bedroom', caption:['401호 창가 침실','Room 401 window-side bedroom','401号室の窓辺の寝室','401 号房的窗边卧室','401 號房的窗邊臥室'] },
+  { id:'lobby', group:'living', caption:['건물 라운지의 우드 선반','Wood shelving in the building lounge','建物ラウンジの木の棚','大楼休息区内的木质置物架','大樓休息區內的木質置物架'] },
 ];
 
 export const cover = [
-  { id:'bedroom-dining', position:'57% 50%' },
-  { id:'lounge', position:'48% 52%' },
+  { id:'room-202', position:'56% 47%' },
+  { id:'bedroom-dining', position:'58% 50%' },
+  { id:'dining', position:'50% 51%' },
+  { id:'room-401', position:'45% 52%' },
   { id:'facade', position:'50% 52%' },
 ];
 
 export const rooms = [
-  { count:14, name:['수페리어 패밀리룸','Superior Family Room','スーペリア ファミリールーム','高级家庭间','高級家庭房'] },
-  { count:12, name:['패밀리 스위트룸','Family Suite','ファミリースイート','家庭套房','家庭套房'] },
+  { count:14, name:['패밀리 객실','Family accommodation','ファミリールーム','家庭客房','家庭客房'], layout:['더블침대 7개','7 double beds','ダブルベッド7台','7 张双人床','7 張雙人床'] },
+  { count:12, name:['패밀리 객실','Family accommodation','ファミリールーム','家庭客房','家庭客房'], layout:['더블침대 5개, 싱글침대 2개','5 double beds and 2 single beds','ダブルベッド5台とシングルベッド2台','5 张双人床与 2 张单人床','5 張雙人床與 2 張單人床'] },
   { count:6, name:['트리플룸','Triple Room','トリプルルーム','三人间','三人房'] },
   { count:4, name:['트윈룸','Twin Room','ツインルーム','双床间','雙床房'] },
 ];
 
-export const guides = [
-  {
-    id:'check-in', icon:'key', title:['체크인·체크아웃','Check-in & check-out','チェックイン・アウト','入住与退房','入住與退房'],
-    lead:['입실은 오후 4시부터 자정까지, 퇴실은 오전 11시까지입니다.','Check in from 4:00 PM to midnight and check out by 11:00 AM.','チェックインは16:00から24:00まで、チェックアウトは11:00までです。','入住时间为 16:00 至午夜，退房时间为上午 11:00 前。','入住時間為 16:00 至午夜，退房時間為上午 11:00 前。'],
-    items:[
-      [['도착 전','Before you arrive','ご到着前','抵达前','抵達前'],['예약 메시지에서 객실과 입실 방법을 확인해 주세요. 자정 이후 도착 예정이라면 호스트에게 미리 문의해 주세요.','Check your booking messages for your room and entry instructions. If you expect to arrive after midnight, please contact your host in advance.','予約メッセージで客室と入室方法をご確認ください。深夜0時を過ぎる場合は、事前にホストへご連絡ください。','请在预订消息中查看客房及入内方式。若预计午夜以后抵达，请提前联系房东。','請在預訂訊息中查看客房及入內方式。若預計午夜以後抵達，請提前聯絡房東。']],
-      [['퇴실 전','Before you leave','ご出発前','退房前','退房前'],['개인 소지품을 챙기고, 늦은 퇴실이 필요하면 호스트에게 가능 여부를 확인해 주세요.','Take your belongings and ask your host in advance if you need a later check-out.','お忘れ物がないかご確認ください。レイトチェックアウトをご希望の場合は、事前にホストへご相談ください。','请带齐个人物品。若需延迟退房，请提前向房东确认。','請帶齊個人物品。若需延後退房，請提前向房東確認。']],
-    ],
-  },
-  {
-    id:'wifi', icon:'wifi', title:['Wi-Fi 연결','Connect to Wi-Fi','Wi-Fiに接続','连接 Wi-Fi','連線 Wi-Fi'],
-    lead:['숙소에서 무료 Wi-Fi를 이용할 수 있습니다.','Free Wi-Fi is available at the property.','館内で無料Wi-Fiをご利用いただけます。','住宿提供免费 Wi-Fi。','住宿提供免費 Wi-Fi。'],
-    items:[[['연결 방법','How to connect','接続方法','连接方式','連線方式'],['예약 메시지나 객실 안내에서 네트워크 이름과 비밀번호를 확인한 뒤, 기기의 Wi-Fi 설정에서 해당 네트워크를 선택해 주세요. 안내를 찾기 어렵다면 예약 채널로 호스트에게 문의해 주세요.','Find the network name and password in your booking messages or in-room information, then select that network in your device settings. If you cannot find the details, message your host through your booking platform.','予約メッセージまたは客室案内でネットワーク名とパスワードをご確認のうえ、端末のWi-Fi設定から選択してください。見つからない場合は予約サイトからホストにお問い合わせください。','请在预订消息或客房说明中查看网络名称和密码，再在设备的 Wi-Fi 设置中选择对应网络。若找不到信息，请通过预订平台联系房东。','請在預訂訊息或客房說明中查看網路名稱和密碼，再於裝置的 Wi-Fi 設定中選擇對應網路。若找不到資訊，請透過預訂平台聯絡房東。']]],
-  },
-  {
-    id:'facilities', icon:'room', title:['공용 공간·편의시설','Shared spaces & amenities','共用スペース・設備','公共空间与设施','公共空間與設施'],
-    lead:['공용 라운지와 주방을 이용할 수 있습니다.','A shared lounge and kitchen are available.','共用のラウンジとキッチンをご利用いただけます。','住宿设有共用休息室与厨房。','住宿設有共用休息室與廚房。'],
-    items:[
-      [['주방 및 다이닝','Kitchen and dining','キッチンとダイニング','厨房与用餐区','廚房與用餐區'],['공용 주방에는 전기 주전자와 식탁이 있습니다. 주방 기기의 사용 방법이나 객실별 비품은 투숙 안내에서 확인해 주세요.','The shared kitchen has an electric kettle and a dining table. Check your stay instructions for appliance use and room-specific amenities.','共用キッチンには電気ケトルとダイニングテーブルがあります。家電の使い方や客室ごとの備品は宿泊案内をご確認ください。','共用厨房配有电热水壶和餐桌。电器使用方法及各客房用品请查看入住说明。','共用廚房備有電熱水壺和餐桌。電器使用方法及各客房用品請查看入住說明。']],
-      [['욕실과 주차','Bathrooms and parking','バスルームと駐車場','浴室与停车','浴室與停車'],['일부 객실에는 전용 욕실이 있습니다. 차량을 가져오실 경우 주차 위치와 이용 가능 여부를 호스트에게 미리 확인해 주세요.','Some rooms have a private bathroom. If you are bringing a car, confirm parking location and availability with your host in advance.','一部の客室には専用バスルームがあります。車でお越しの場合は駐車場所と空き状況を事前にホストへご確認ください。','部分客房设有独立浴室。如自驾前来，请提前向房东确认停车位置及可用情况。','部分客房設有獨立浴室。如自行開車前來，請提前向房東確認停車位置及可用情況。']],
-    ],
-  },
-  {
-    id:'rules', icon:'list', title:['이용 수칙','House rules','ハウスルール','住宿规定','住宿規定'],
-    lead:['모두가 편안하게 머물 수 있도록 예약 조건과 현장 안내를 확인해 주세요.','Please check your booking conditions and on-site guidance for a comfortable stay for everyone.','皆さまに快適にお過ごしいただけるよう、予約条件と館内案内をご確認ください。','请查看预订条件和现场说明，让每位宾客都能舒适入住。','請查看預訂條件與現場說明，讓每位旅客都能舒適入住。'],
-    items:[
-      [['파티와 행사','Parties and events','パーティー・イベント','派对与活动','派對與活動'],['숙소에서 파티와 행사는 허용되지 않습니다.','Parties and events are not allowed.','館内でのパーティーやイベントはご遠慮ください。','住宿内不允许举办派对或活动。','住宿內不得舉辦派對或活動。']],
-      [['반려동물','Pets','ペット','宠物','寵物'],['반려동물 동반 투숙은 불가합니다.','Pets are not permitted.','ペット同伴でのご宿泊はできません。','不可携带宠物入住。','不可攜帶寵物入住。']],
-      [['세탁·분리배출','Laundry and waste','洗濯・ごみの分別','洗衣与垃圾分类','洗衣與垃圾分類'],['세탁 시설의 이용 가능 여부와 분리배출 장소는 객실 안내를 확인하거나 호스트에게 문의해 주세요.','Check your room information or ask your host about laundry availability and where to put sorted waste.','洗濯設備の利用可否とごみの分別場所は、客室案内またはホストにご確認ください。','请查看客房说明或向房东确认洗衣设施和垃圾分类投放地点。','請查看客房說明或向房東確認洗衣設備與資源回收投放地點。']],
-    ],
-  },
-];
-
 export const arrival = {
-  subway:['합정역(2·6호선) 또는 망원역(6호선)에서 출발할 수 있습니다. 현재 위치에서 편한 출구와 도보 동선을 지도에서 확인해 주세요.','Hapjeong Station (Lines 2 and 6) and Mangwon Station (Line 6) are options. Check the map for the most convenient exit and walking route.','合井駅（2・6号線）または望遠駅（6号線）からお越しいただけます。便利な出口と徒歩ルートは地図でご確認ください。','可从合井站（2、6号线）或望远站（6号线）步行前往。请在地图上查看方便的出口和步行路线。','可從合井站（2、6號線）或望遠站（6號線）步行前往。請在地圖上查看方便的出口和步行路線。'],
+  subway:['망원역(6호선)에서 도보 약 5분, 합정역(2·6호선)에서 도보 약 8분입니다. 편한 출구와 길은 지도로 확인해 주세요.','About a 5-minute walk from Mangwon Station (Line 6) or 8 minutes from Hapjeong Station (Lines 2 and 6). Check the map for the most convenient exit.','望遠駅（6号線）から徒歩約5分、合井駅（2・6号線）から徒歩約8分です。便利な出口は地図でご確認ください。','从望远站（6 号线）步行约 5 分钟，从合井站（2、6 号线）步行约 8 分钟。请在地图上查看方便的出口。','從望遠站（6 號線）步行約 5 分鐘，從合井站（2、6 號線）步行約 8 分鐘。請在地圖上查看方便的出口。'],
   airport:['인천공항·김포공항에서 공항철도 일반열차를 타고 홍대입구역에서 내리세요. 2호선으로 갈아타고 한 정거장 뒤 합정역에서 내려 숙소까지 걸어오실 수 있습니다.','Take the AREX all-stop train from Incheon or Gimpo Airport to Hongik Univ. Station. Transfer to Line 2, ride one stop to Hapjeong, and walk to the property.','仁川・金浦空港から空港鉄道の一般列車で弘大入口駅へ。2号線に乗り換え、1駅先の合井駅から徒歩でお越しいただけます。','从仁川或金浦机场搭乘机场铁路普通列车至弘大入口站，换乘 2 号线坐一站到合井站，再步行前往住宿。','從仁川或金浦機場搭乘機場鐵路普通列車至弘大入口站，轉乘 2 號線一站到合井站，再步行前往住宿。'],
-  entrance:['월드컵로10길에서 검은 출입문 위 ABODE 간판을 찾으세요. 도착 후에는 예약 메시지에 받은 입실 안내를 따라 주세요.','On World Cup-ro 10-gil, look for the ABODE sign above the black entrance. Follow the entry instructions sent with your booking.','ワールドカップ路10ギルで、黒い入口の上にあるABODEの看板をお探しください。到着後は予約時の入室案内に従ってください。','在世界杯路10街寻找黑色入口上方的 ABODE 标志。抵达后请按照预订消息中的入住说明操作。','在世界盃路10街尋找黑色入口上方的 ABODE 招牌。抵達後請依預訂訊息中的入住說明操作。'],
+  entrance:['월드컵로10길 대로변에서 루카스 커피 옆 ABODE 간판을 찾으세요. 검은 출입문 안에 셀프 체크인 키오스크가 있습니다.','On World Cup-ro 10-gil, look for the ABODE sign next to Lucas Coffee. The self check-in kiosk is inside the black entrance.','ワールドカップ路10ギルのLucas Coffeeの隣、ABODEの看板が目印です。黒い入口の内側にセルフチェックイン端末があります。','在世界杯路10街寻找 Lucas Coffee 旁的 ABODE 招牌。黑色入口内设有自助入住机。','在世界盃路10街尋找 Lucas Coffee 旁的 ABODE 招牌。黑色入口內設有自助入住機。'],
+  bus:['인천공항에서는 6002번 공항리무진을 타고 합정역에서 내리는 방법도 있습니다. 해당 터미널의 승차 위치와 운행 시간은 공식 노선에서 확인해 주세요.','From Incheon Airport you can also take limousine bus 6002 and get off at Hapjeong Station. Check the official route for your terminal’s stop and timetable.','仁川空港からは空港リムジンバス6002番で合井駅にお越しいただけます。ターミナルごとの乗り場と時刻は公式案内をご確認ください。','从仁川机场也可乘坐 6002 路机场大巴至合井站。请在官方路线页面确认航站楼的乘车位置和时刻。','從仁川機場也可搭乘 6002 路機場巴士至合井站。請於官方路線頁面確認航廈乘車位置與時刻。'],
+  returnTrain:['합정역에서 2호선으로 홍대입구역까지 한 정거장 이동하세요. 공항철도 일반열차로 갈아타면 김포공항과 인천공항 1·2터미널에 갈 수 있습니다.','Take Line 2 one stop from Hapjeong to Hongik Univ. Station. Transfer to the AREX all-stop train for Gimpo Airport or Incheon Airport Terminal 1 or 2.','合井駅から2号線で1駅、弘大入口駅へ。空港鉄道の一般列車に乗り換えると、金浦空港と仁川空港第1・第2ターミナルに行けます。','从合井站乘 2 号线一站至弘大入口站，换乘机场铁路普通列车前往金浦机场或仁川机场 1、2 号航站楼。','從合井站搭乘 2 號線一站至弘大入口站，轉乘機場鐵路普通列車前往金浦機場或仁川機場第 1、2 航廈。'],
+  returnBus:['인천공항으로 갈 때는 합정역의 공항 방면 정류장에서 6002번을 탈 수 있습니다. 탑승 전 정류장과 이용하실 터미널을 확인해 주세요.','For Incheon, take bus 6002 from the airport-bound stop at Hapjeong Station. Check the stop and your terminal before boarding.','仁川空港へは合井駅の空港方面乗り場から6002番に乗れます。乗り場とターミナルを確認してからご乗車ください。','前往仁川机场可从合井站的机场方向站点乘坐 6002 路。上车前确认站点和航站楼。','前往仁川機場可從合井站的機場方向站牌搭乘 6002 路。上車前確認站牌與航廈。'],
   help:['예약하신 플랫폼에서 예약 내역을 열고 호스트에게 메시지를 보내 주세요.','Open your reservation on the platform you booked with and send a message to your host.','ご予約のサイトで予約内容を開き、ホストへメッセージをお送りください。','打开预订平台上的订单，给房东发送消息。','開啟預訂平台上的訂單，傳送訊息給房東。'],
 };
 
@@ -79,6 +58,8 @@ export const places = [
   { group:'walk', query:'경의선숲길 연남동', name:['경의선숲길','Gyeongui Line Forest Park','京義線スッキル','京义线森林公园','京義線森林公園'], about:['옛 철길을 따라 이어진 산책로를 걸으며 연남동을 둘러보세요.','Follow the former railway path and explore Yeonnam-dong along the way.','旧線路沿いの遊歩道を歩き、延南洞を散策できます。','沿旧铁路步道散步，顺路探索延南洞。','沿舊鐵路步道散步，順路探索延南洞。'], source:'https://korean.visitseoul.net/hallyu/도심-속-쉼터-경의선-숲길/KON017350' },
   { group:'walk', query:'홍대 걷고싶은거리', name:['홍대 걷고싶은거리','Hongdae Walking Street','弘大 散策通り','弘大步行街','弘大步行街'], about:['상점과 거리 공연이 모이는 홍대의 중심 거리입니다.','One of Hongdae’s main streets for shops and street performances.','店やストリートパフォーマンスが集まる弘大の中心通りです。','集聚商店和街头表演的弘大主要街道。','匯集商店和街頭表演的弘大主要街道。'], source:'https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=cde3497b-dcdc-4dd5-b941-38a69b88d9cc' },
   { group:'walk', query:'문화비축기지', name:['문화비축기지','Oil Tank Culture Park','文化備蓄基地','文化储备基地','文化儲備基地'], about:['옛 석유 저장 시설을 전시와 공연을 위한 공간으로 바꾼 문화 공원입니다.','Former oil storage tanks now house exhibitions and performance spaces.','旧石油備蓄施設が展示や公演の空間に生まれ変わった文化公園です。','旧石油储存设施改建成展览和演出空间的文化公园。','舊石油儲存設施改建成展覽及演出空間的文化公園。'], source:'https://korean.visitseoul.net/area/parksseoul/KOP023543' },
+  { group:'food', query:'루카스 초이스 서울 마포구 월드컵로10길 40', name:['루카스 초이스','Lucas Choice','ルーカスチョイス','Lucas Choice 咖啡馆','Lucas Choice 咖啡館'], about:['숙소 옆 월드컵로10길 40에 있는 카페입니다.','A café next to ABODE at 40 World Cup-ro 10-gil.','ABODEの隣、ワールドカップ路10ギル40にあるカフェです。','位于住宿隔壁、世界杯路10街40号的咖啡馆。','位於住宿隔壁、世界盃路10街40號的咖啡館。'] },
+  { group:'food', query:'망원동즉석우동 본점', name:['망원동즉석우동 본점','Mangwon Instant Udon','望遠洞インスタントうどん本店','望远洞现煮乌冬面总店','望遠洞現煮烏龍麵總店'], about:['망원동에서 우동으로 식사하기 좋은 동네 식당입니다.','A neighborhood spot for an udon meal in Mangwon.','望遠洞でうどんを楽しめる地元の食堂です。','在望远洞吃一餐乌冬面的街坊餐馆。','在望遠洞吃一餐烏龍麵的街坊餐館。'], source:'https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=b0dfec73-b897-4200-9985-686e313060a2' },
 ];
 
 export const courses = [
