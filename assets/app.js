@@ -244,6 +244,41 @@ function airportTransport(title, steps, links, note) {
   </div>`;
 }
 
+function airportDuration([min, max]) {
+  const range = `${min}–${max}`;
+  return localize([`약 ${range}분`, `~${range} min`, `約${range}分`, `约 ${range} 分钟`, `約 ${range} 分鐘`]);
+}
+
+function airportArrivalCard(title, choices, body) {
+  return `<details class="guide-disclosure airport-arrival-card">
+    <summary>
+      <strong class="airport-card-title">${title}</strong>
+      <span class="airport-choices">
+        ${choices.map(({ when, mode, minutes }) => `<span class="airport-choice">
+          <span class="airport-choice-copy">
+            <small>${localize(when)}</small>
+            <strong>${localize(mode)}</strong>
+          </span>
+          <span class="airport-duration">${airportDuration(minutes)}</span>
+        </span>`).join('')}
+      </span>
+      <span class="airport-card-more">${localize(airportGuide.directionsLabel)}${icon('down')}</span>
+    </summary>
+    <div class="disclosure-body">${body}</div>
+  </details>`;
+}
+
+function airportTaxi(title, stand, abodeMap, minutes) {
+  return `<div class="airport-transport">
+    <p class="airport-transport-title airport-taxi-title">
+      <strong>${localize(title)}</strong>
+      ${minutes ? `<span class="airport-duration">${airportDuration(minutes)}</span>` : ''}
+    </p>
+    <p class="airport-taxi-copy">${localize(airportGuide.taxiInstructions)}</p>
+    <div class="map-actions">${external(stand,localize(airportGuide.taxiStandLink))}${abodeMap}</div>
+  </div>`;
+}
+
 function locationPage(detail) {
   const station = (name) => external(walking(name,address),name === '망원역' ? localize(['망원역 도보 경로','Walk from Mangwon','望遠駅からの徒歩ルート','从望远站步行','從望遠站步行']) : localize(['합정역 도보 경로','Walk from Hapjeong','合井駅からの徒歩ルート','从合井站步行','從合井站步行']));
   const trainLink = external(timetable,t('train'));
@@ -267,8 +302,10 @@ function locationPage(detail) {
   const abodeMap = external(buildingMaps.google,localize(airportGuide.abodeMap));
   const incheon = airportTransport(trainTitle,airportGuide.arrivalTrain,incheonTrainLinks,airportGuide.expressTip)
     + airportTransport(airportGuide.arrivalDayBusTitle,airportGuide.arrivalDayBus,busLink() + station('합정역'))
-    + airportTransport(airportGuide.arrivalNightBusTitle,airportGuide.arrivalNightBus,busLink(true) + abodeMap);
-  const gimpo = airportTransport(trainTitle,airportGuide.arrivalTrain,railFrom('050',t('train')) + station('합정역'));
+    + airportTransport(airportGuide.arrivalNightBusTitle,airportGuide.arrivalNightBus,busLink(true) + abodeMap)
+    + airportTaxi(airportGuide.incheonTaxiTitle,'https://www.airport.kr/ap_ko/987/subview.do',abodeMap,airportGuide.incheonTaxiMinutes);
+  const gimpo = airportTransport(trainTitle,airportGuide.arrivalTrain,railFrom('050',t('train')) + station('합정역'))
+    + airportTaxi(airportGuide.taxiTitle,'https://www.airport.co.kr/gimpo/cms/frCon/index.do?CONTENTS_NO=5&amp;MENU_ID=1290',abodeMap);
   return `${pageHeading('GETTING HERE',t('locationHeading'),t('addresses'))}
   <section class="section content-section">
     <div class="map-actions">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}${action('copy-address',`${icon('copy')}${t('copy')}`,'button button-cream')}</div>
@@ -284,8 +321,9 @@ function locationPage(detail) {
     ${disclosure(t('subway'),localize(arrival.subwayShort),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
     <section class="airport-arrivals airport-guide" id="airport-arrivals" aria-labelledby="airport-arrivals-title" tabindex="-1">
       <h2 id="airport-arrivals-title">${localize(airportGuide.arrivalHeading)}</h2>
-      ${disclosure(t('incheon'),localize(incheonHint),incheon)}
-      ${disclosure(t('gimpo'),localize(airportGuide.gimpoArrivalHint),gimpo)}
+      <p class="airport-time-basis">${localize(airportGuide.durationBasis)}</p>
+      ${airportArrivalCard(t('incheon'),airportGuide.incheonChoices,incheon)}
+      ${airportArrivalCard(t('gimpo'),airportGuide.gimpoChoices,gimpo)}
     </section>
     <div class="map-actions">${link('#location/airport',t('airportReturn'),'button button-outline')}</div>
   </section>`;

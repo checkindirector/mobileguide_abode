@@ -20,10 +20,53 @@ const airportTerminalStop = [
   '依航班資訊在仁川機場第 1 或第 2 航廈下車。',
 ];
 
+const usualArrival = ['평소엔 · 도로 정체 없이', 'Usual choice · No road traffic', '通常はこちら・渋滞なし', '一般时段 · 不受堵车影响', '一般時段 · 不受塞車影響'];
+const allStopRail = ['공항철도 일반열차', 'All-stop airport train', '空港鉄道の一般列車', '机场铁路普通列车', '機場鐵路普通列車'];
+const directTaxi = ['숙소까지 택시', 'Taxi to ABODE', 'ABODEまでタクシー', '乘出租车直达 ABODE', '搭計程車直達 ABODE'];
+
 export const airportGuide = {
   arrivalHeading: ['공항에서 어보드로', 'From the airport to ABODE', '空港からABODEへ', '从机场前往 ABODE', '從機場前往 ABODE'],
+  durationBasis: [
+    '첫 교통편에 탄 뒤 숙소까지 걸리는 시간입니다. 환승과 도보를 포함하며, 수속과 첫 교통편 대기는 별도입니다. 도로 상황에 따라 더 걸릴 수 있습니다.',
+    'Estimates run from boarding to ABODE and include transfers and walking. Allow extra time for airport formalities, the initial wait and road traffic.',
+    '最初の乗車からABODEまでの目安で、乗り換えと徒歩を含みます。入国手続きなどの空港での時間や最初の便を待つ時間は別途必要です。道路状況により長くかかる場合があります。',
+    '时间从首次上车算至 ABODE，包含换乘和步行。机场手续与首次候车时间另计，遇到堵车可能更久。',
+    '時間從第一次上車算到 ABODE，包含轉乘和步行。機場手續與第一次候車的時間另計，遇到塞車可能更久。',
+  ],
+  incheonChoices: [
+    { when: usualArrival, mode: allStopRail, minutes: [65, 85] },
+    {
+      when: ['짐이 많을 때 · 환승 없이 합정역', 'Heavy luggage · No transfer to Hapjeong', '荷物が多いとき・合井駅まで乗り換えなし', '行李多 · 直达合井站', '行李多 · 直達合井站'],
+      mode: ['6002번 공항 리무진', 'Airport bus 6002', '空港バス 6002番', '6002 路机场巴士', '6002 路機場巴士'],
+      minutes: [50, 85],
+    },
+    {
+      when: ['막차 이후 · 버스가 없으면 택시', 'After the last train · Taxi if no bus is running', '終電後・バスがなければタクシー', '末班列车后 · 没有巴士时搭出租车', '末班列車後 · 沒有巴士時搭計程車'],
+      mode: ['N6002번 심야 리무진', 'Night bus N6002', '深夜バス N6002番', 'N6002 路深夜巴士', 'N6002 路深夜巴士'],
+      minutes: [60, 90],
+    },
+  ],
+  gimpoChoices: [
+    { when: usualArrival, mode: allStopRail, minutes: [30, 45] },
+    {
+      when: ['짐이 많거나 늦은 밤 · 환승 없이 이동', 'Heavy luggage or late at night · No transfer', '荷物が多いとき・深夜は乗り換えなし', '行李多或深夜抵达 · 无需换乘', '行李多或深夜抵達 · 無須轉乘'],
+      mode: directTaxi,
+      minutes: [20, 35],
+    },
+  ],
+  incheonTaxiMinutes: [45, 80],
+  incheonTaxiTitle: ['심야버스가 없을 때 · 택시', 'Taxi if the night bus isn’t running', '深夜バスがなければタクシー', '没有深夜巴士时搭出租车', '沒有深夜巴士時搭計程車'],
+  taxiTitle: directTaxi,
+  taxiInstructions: [
+    '도착한 터미널의 공식 택시 승차장에서 타세요. 기사님께 아래 어보드 지도를 열어 주소를 보여 주세요.',
+    'Use the official taxi stand at your arrival terminal. Open the ABODE map below and show the address to the driver.',
+    '到着したターミナルの正規のタクシー乗り場からお乗りください。下のABODEの地図を開き、運転手に住所をお見せください。',
+    '请在抵达航站楼的正规出租车乘车区上车。打开下方的 ABODE 地图，向司机出示地址。',
+    '請在抵達航廈的正式計程車招呼站搭車。開啟下方的 ABODE 地圖，向司機出示地址。',
+  ],
+  taxiStandLink: ['공식 택시 승차장', 'Official taxi stands', '公式タクシー乗り場案内', '官方出租车乘车区', '官方計程車招呼站'],
+  directionsLabel: ['탑승 방법', 'Boarding details', '乗り方', '乘车方法', '搭乘方式'],
   incheonHint: ['공항철도 일반열차 · 주간·심야 리무진', 'All-stop airport train · Day and night buses', '空港鉄道の一般列車・昼間と深夜のバス', '机场铁路普通列车 · 日间及深夜巴士', '機場鐵路普通列車 · 日間及深夜巴士'],
-  gimpoArrivalHint: ['공항철도 일반열차로 홍대입구역까지', 'All-stop airport train to Hongik Univ. Station', '空港鉄道の一般列車で弘大入口駅へ', '乘机场铁路普通列车至弘大入口站', '搭機場鐵路普通列車至弘大入口站'],
   gimpoDepartureHint: ['홍대입구역에서 공항철도 일반열차', 'All-stop airport train from Hongik Univ. Station', '弘大入口駅から空港鉄道の一般列車', '在弘大入口站换乘机场铁路普通列车', '在弘大入口站轉乘機場鐵路普通列車'],
   trainTitle: ['공항철도 일반열차 (AREX)', 'All-stop airport train (AREX)', '空港鉄道の一般列車（AREX）', '机场铁路普通列车（AREX）', '機場鐵路普通列車（AREX）'],
   dayBusTitle: ['주간 공항 리무진 6002번', 'Daytime airport bus 6002', '昼間の空港バス 6002番', '日间机场巴士 6002 路', '日間機場巴士 6002 路'],
@@ -74,11 +117,11 @@ export const airportGuide = {
       '末班列車過後，請查看 N6002 路時刻表。在機場售票櫃台或自助機購票後，前往首爾方向的深夜巴士月台搭車。',
     ],
     [
-      '홍대입구 정류장(머큐어호텔·L7호텔 인근)에서 내리세요. 숙소까지는 어보드 지도를 열어 이동하세요.',
-      'Get off at the Hongik Univ. bus stop near Mercure and L7 hotels. Open the ABODE map for the rest of the trip.',
-      '弘大入口のバス停（メルキュール・L7ホテル付近）で降りてください。ABODEまでは地図をご利用ください。',
-      '在弘大入口巴士站（美居酒店及 L7 酒店附近）下车，打开 ABODE 地图继续前往住宿。',
-      '在弘大入口公車站牌（美居酒店及 L7 酒店附近）下車，開啟 ABODE 地圖繼續前往住宿。',
+      '홍대입구 정류장(머큐어호텔·L7호텔 인근)에서 내리세요. 숙소까지 도보 약 15~25분이며, 짐이 많다면 정류장에서 택시를 이용하세요.',
+      'Get off at the Hongik Univ. bus stop near Mercure and L7 hotels. ABODE is about a 15–25 minute walk. Take a taxi from the stop if you have heavy luggage.',
+      '弘大入口のバス停（メルキュール・L7ホテル付近）で降りてください。ABODEまで徒歩約15〜25分です。荷物が多い場合はタクシーをご利用ください。',
+      '在弘大入口巴士站（美居酒店及 L7 酒店附近）下车，到 ABODE 步行约 15–25 分钟。行李多时可从车站搭出租车。',
+      '在弘大入口公車站牌（美居酒店及 L7 酒店附近）下車，到 ABODE 步行約 15–25 分鐘。行李多時可從站牌搭計程車。',
     ],
   ],
   departureIncheonTrain: [
