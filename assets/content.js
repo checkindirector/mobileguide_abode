@@ -4,6 +4,132 @@ export const timetable = 'https://www.airportrailroad.com/train/normal/info/030/
 export const airportBus = 'https://www.airportlimousine.co.kr/sub/sub01.php?cat_no=6';
 export const nightBus = 'https://www.airportlimousine.co.kr/sub/sub01.php?cat_no=82';
 
+const hongikTransfer = [
+  '어보드에서 합정역까지 걸어간 뒤, 지하철 2호선으로 한 정거장 이동해 홍대입구역에서 내리세요.',
+  'Walk from ABODE to Hapjeong Station. Take Subway Line 2 one stop to Hongik Univ. Station.',
+  'ABODEから合井駅まで歩き、地下鉄2号線で1駅先の弘大入口駅までお進みください。',
+  '从 ABODE 步行至合井站，乘地铁 2 号线一站到弘大入口站。',
+  '從 ABODE 步行至合井站，搭乘捷運 2 號線一站到弘大入口站。',
+];
+
+const airportTerminalStop = [
+  '항공편에 맞춰 인천공항 1터미널 또는 2터미널에서 내리세요.',
+  'Get off at Incheon Airport Terminal 1 or Terminal 2, as shown on your flight booking.',
+  'フライトに合わせて仁川空港第1または第2ターミナルで降りてください。',
+  '按航班信息在仁川机场 1 号或 2 号航站楼下车。',
+  '依航班資訊在仁川機場第 1 或第 2 航廈下車。',
+];
+
+export const airportGuide = {
+  arrivalHeading: ['공항에서 어보드로', 'From the airport to ABODE', '空港からABODEへ', '从机场前往 ABODE', '從機場前往 ABODE'],
+  incheonHint: ['공항철도 일반열차 · 주간·심야 리무진', 'All-stop airport train · Day and night buses', '空港鉄道の一般列車・昼間と深夜のバス', '机场铁路普通列车 · 日间及深夜巴士', '機場鐵路普通列車 · 日間及深夜巴士'],
+  gimpoArrivalHint: ['공항철도 일반열차로 홍대입구역까지', 'All-stop airport train to Hongik Univ. Station', '空港鉄道の一般列車で弘大入口駅へ', '乘机场铁路普通列车至弘大入口站', '搭機場鐵路普通列車至弘大入口站'],
+  gimpoDepartureHint: ['홍대입구역에서 공항철도 일반열차', 'All-stop airport train from Hongik Univ. Station', '弘大入口駅から空港鉄道の一般列車', '在弘大入口站换乘机场铁路普通列车', '在弘大入口站轉乘機場鐵路普通列車'],
+  trainTitle: ['공항철도 일반열차 (AREX)', 'All-stop airport train (AREX)', '空港鉄道の一般列車（AREX）', '机场铁路普通列车（AREX）', '機場鐵路普通列車（AREX）'],
+  dayBusTitle: ['주간 공항 리무진 6002번', 'Daytime airport bus 6002', '昼間の空港バス 6002番', '日间机场巴士 6002 路', '日間機場巴士 6002 路'],
+  nightBusTitle: ['심야 공항 리무진 N6002번', 'Late-night airport bus N6002', '深夜の空港バス N6002番', '深夜机场巴士 N6002 路', '深夜機場巴士 N6002 路'],
+  arrivalDayBusTitle: ['주간 리무진 6002번 · 합정역 하차', 'Daytime bus 6002 to Hapjeong', '昼間の6002番バス・合井駅下車', '日间巴士 6002 路 · 合井站下车', '日間巴士 6002 路 · 合井站下車'],
+  arrivalNightBusTitle: ['심야 리무진 N6002번 · 홍대입구 하차', 'Late-night bus N6002 to Hongik Univ.', '深夜のN6002番バス・弘大入口下車', '深夜巴士 N6002 路 · 弘大入口下车', '深夜巴士 N6002 路 · 弘大入口下車'],
+  terminalOneTimetable: ['1터미널 열차 시간표', 'Terminal 1 train times', '第1ターミナルの列車時刻表', '1 号航站楼列车时刻表', '第 1 航廈列車時刻表'],
+  terminalTwoTimetable: ['2터미널 열차 시간표', 'Terminal 2 train times', '第2ターミナルの列車時刻表', '2 号航站楼列车时刻表', '第 2 航廈列車時刻表'],
+  abodeMap: ['어보드 지도', 'ABODE on Google Maps', 'ABODEの地図', 'ABODE 地图', 'ABODE 地圖'],
+  arrivalTrain: [
+    [
+      '공항에서 공항철도(AREX) 표지판을 따라가세요. 서울역 방면 일반열차를 타고 홍대입구역에서 내리세요.',
+      'Follow signs for the Airport Railroad (AREX). Take a Seoul Station-bound all-stop train and get off at Hongik Univ. Station.',
+      '空港で空港鉄道（AREX）の案内に従い、ソウル駅方面の一般列車に乗って弘大入口駅で降りてください。',
+      '在机场沿机场铁路（AREX）标识，搭乘开往首尔站的普通列车，在弘大入口站下车。',
+      '在機場沿機場鐵路（AREX）指標，搭乘開往首爾站的普通列車，在弘大入口站下車。',
+    ],
+    [
+      '홍대입구역에서 지하철 2호선으로 환승하세요. 한 정거장 뒤 합정역에서 내려 어보드까지 약 8분 걸어오시면 됩니다.',
+      'Transfer to Subway Line 2 and get off at Hapjeong, one stop away. It’s about an 8-minute walk to ABODE.',
+      '地下鉄2号線に乗り換え、1駅先の合井駅で降りてください。ABODEまで徒歩約8分です。',
+      '换乘地铁 2 号线，一站后在合井站下车。步行约 8 分钟即可到达 ABODE。',
+      '轉乘捷運 2 號線，一站後在合井站下車。步行約 8 分鐘即可到達 ABODE。',
+    ],
+  ],
+  arrivalDayBus: [
+    [
+      '인천공항 1터미널은 1층 6A-1, 2터미널은 지하 1층 30번에서 타세요. 2터미널에서는 매표소나 발권기에서 승차권을 먼저 구입하세요.',
+      'Board at Terminal 1, Level 1, stop 6A-1, or Terminal 2, Level B1, stop 30. At Terminal 2, buy your ticket first at a counter or machine.',
+      '第1ターミナルは1階6A-1番、第2ターミナルは地下1階30番乗り場です。第2ターミナルでは先に窓口または券売機で乗車券を購入してください。',
+      '在 1 号航站楼 1 层 6A-1 号或 2 号航站楼地下 1 层 30 号站台乘车。在 2 号航站楼请先到售票柜台或自助机购票。',
+      '在第 1 航廈 1 樓 6A-1 號或第 2 航廈地下 1 樓 30 號月台搭車。在第 2 航廈請先至售票櫃台或自助機購票。',
+    ],
+    [
+      '합정역 정류장에서 내리세요. 여기서 어보드까지 약 8분 걸어오시면 됩니다.',
+      'Get off at Hapjeong Station. It’s about an 8-minute walk to ABODE.',
+      '合井駅のバス停で降りてください。ABODEまで徒歩約8分です。',
+      '在合井站巴士站下车，步行约 8 分钟即可到达 ABODE。',
+      '在合井站公車站牌下車，步行約 8 分鐘即可到達 ABODE。',
+    ],
+  ],
+  arrivalNightBus: [
+    [
+      '열차가 끊긴 시간에는 N6002번 운행 시간을 확인하세요. 인천공항 매표소나 발권기에서 승차권을 구입한 뒤 서울행 심야버스 승차장에서 타세요.',
+      'If the trains have stopped running, check the N6002 timetable. Buy a ticket at an airport counter or machine, then board at the Seoul night bus stop.',
+      '終電後はN6002番の時刻をご確認ください。空港の窓口または券売機で乗車券を購入し、ソウル方面の深夜バス乗り場からお乗りください。',
+      '末班列车过后，请查看 N6002 路时刻表。在机场售票柜台或自助机购票后，前往首尔方向的深夜巴士站台乘车。',
+      '末班列車過後，請查看 N6002 路時刻表。在機場售票櫃台或自助機購票後，前往首爾方向的深夜巴士月台搭車。',
+    ],
+    [
+      '홍대입구 정류장(머큐어호텔·L7호텔 인근)에서 내리세요. 숙소까지는 어보드 지도를 열어 이동하세요.',
+      'Get off at the Hongik Univ. bus stop near Mercure and L7 hotels. Open the ABODE map for the rest of the trip.',
+      '弘大入口のバス停（メルキュール・L7ホテル付近）で降りてください。ABODEまでは地図をご利用ください。',
+      '在弘大入口巴士站（美居酒店及 L7 酒店附近）下车，打开 ABODE 地图继续前往住宿。',
+      '在弘大入口公車站牌（美居酒店及 L7 酒店附近）下車，開啟 ABODE 地圖繼續前往住宿。',
+    ],
+  ],
+  departureIncheonTrain: [
+    hongikTransfer,
+    [
+      '홍대입구역에서 종착역이 인천공항2터미널인 공항철도 일반열차로 환승하세요. 항공편에 맞춰 1터미널역 또는 2터미널역에서 내리세요.',
+      'Transfer to an AREX all-stop train terminating at Incheon Airport Terminal 2. Get off at Terminal 1 or Terminal 2, as shown on your flight booking.',
+      '弘大入口駅で仁川空港第2ターミナル行きの空港鉄道一般列車に乗り換え、フライトに合わせて第1または第2ターミナル駅で降りてください。',
+      '在弘大入口站换乘终点为仁川机场 2 号航站楼的机场铁路普通列车。按航班信息在 1 号或 2 号航站楼站下车。',
+      '在弘大入口站轉乘終點為仁川機場第 2 航廈的機場鐵路普通列車。依航班資訊在第 1 或第 2 航廈站下車。',
+    ],
+  ],
+  departureGimpoTrain: [
+    hongikTransfer,
+    [
+      '홍대입구역에서 인천공항 방면 공항철도 일반열차로 환승하세요. 김포공항역에서 내려 국내선 또는 국제선 터미널 표지판을 따라가세요.',
+      'Transfer to an AREX all-stop train in the Incheon Airport direction. Get off at Gimpo Airport Station and follow the signs for Domestic or International Departures.',
+      '弘大入口駅で仁川空港方面の空港鉄道一般列車に乗り換えます。金浦空港駅で降り、国内線または国際線の案内に従ってお進みください。',
+      '在弘大入口站换乘仁川机场方向的机场铁路普通列车，在金浦机场站下车。跟随标识前往国内线或国际线航站楼。',
+      '在弘大入口站轉乘仁川機場方向的機場鐵路普通列車，在金浦機場站下車。依指標前往國內線或國際線航廈。',
+    ],
+  ],
+  departureDayBus: [
+    [
+      '합정역의 인천공항 방면 정류장에서 6002번을 타세요. 시간표에서 ‘공항방면’을 선택한 뒤 ‘합정역’을 누르면 승차 위치와 출발 시간을 볼 수 있어요.',
+      'Board bus 6002 at the Incheon Airport-bound stop at Hapjeong Station. In the timetable, select the airport direction and then Hapjeong Station for the stop and departure times.',
+      '合井駅の仁川空港方面のバス停で6002番に乗ります。時刻表で空港方面を選び、合井駅を押すと乗り場と発車時刻を確認できます。',
+      '在合井站的仁川机场方向站点乘坐 6002 路。在时刻表中选择机场方向，再点选合井站查看站点及发车时间。',
+      '在合井站的仁川機場方向站牌搭乘 6002 路。在時刻表中選擇機場方向，再點選合井站查看站牌及發車時間。',
+    ],
+    airportTerminalStop,
+  ],
+  departureNightBus: [
+    [
+      '홍대입구의 도로 가운데에 있는 버스 정류장에서 인천공항 방면 N6002번을 타세요. 출발 전 시간표에서 홍대입구 출발 시간을 확인하세요.',
+      'Take the Incheon Airport-bound N6002 from the stop in the middle of the road at Hongik Univ. Station. Check the timetable for departures from this stop.',
+      '弘大入口の道路中央にあるバス停から仁川空港方面のN6002番に乗ります。出発前に弘大入口の発車時刻をご確認ください。',
+      '在弘大入口站道路中央的巴士站搭乘仁川机场方向的 N6002 路。出发前请查询弘大入口站的发车时间。',
+      '在弘大入口站道路中央的公車站牌搭乘仁川機場方向的 N6002 路。出發前請查詢弘大入口站的發車時間。',
+    ],
+    airportTerminalStop,
+  ],
+  expressTip: [
+    '인천공항에서는 ‘일반열차 / All Stop Train’ 표지를 찾으세요. 직통열차는 홍대입구역을 통과해 서울역으로 갑니다.',
+    'At Incheon Airport, look for “All Stop Train” signs. The Express Train goes straight to Seoul Station and skips Hongik Univ. Station.',
+    '仁川空港では「一般列車 / All Stop Train」の表示を目印にしてください。直通列車は弘大入口駅を通過してソウル駅へ向かいます。',
+    '在仁川机场请找“普通列车 / All Stop Train”标识。直达列车会经过弘大入口站，直接开往首尔站。',
+    '在仁川機場請找「普通列車 / All Stop Train」指標。直達列車會通過弘大入口站，直接開往首爾站。',
+  ],
+};
+
 export const photos = [
   { id:'room-202', group:'bedroom', caption:['202호 침실과 다이닝','Room 202 bedroom and dining area','202号室の寝室とダイニング','202 号房的卧室与用餐区','202 號房的臥室與用餐區'] },
   { id:'bedroom-dining', group:'bedroom', caption:['원형 테이블이 있는 객실','Bedroom with a round table','丸テーブルのある客室','带圆桌的客房','附圓桌的客房'] },
@@ -71,14 +197,8 @@ export const rooms = [
 export const arrival = {
   subway:['망원역(6호선)에서 도보 약 5분, 합정역(2·6호선)에서 도보 약 8분입니다. 편한 출구와 길은 지도로 확인해 주세요.','About a 5-minute walk from Mangwon Station (Line 6) or 8 minutes from Hapjeong Station (Lines 2 and 6). Check the map for the most convenient exit.','望遠駅（6号線）から徒歩約5分、合井駅（2・6号線）から徒歩約8分です。便利な出口は地図でご確認ください。','从望远站（6 号线）步行约 5 分钟，从合井站（2、6 号线）步行约 8 分钟。请在地图上查看方便的出口。','從望遠站（6 號線）步行約 5 分鐘，從合井站（2、6 號線）步行約 8 分鐘。請在地圖上查看方便的出口。'],
   subwayShort:['도보 · 망원역 약 5분 · 합정역 약 8분','Walk · Mangwon about 5 min · Hapjeong about 8 min','徒歩・望遠駅から約5分・合井駅から約8分','步行 · 望远站约 5 分钟 · 合井站约 8 分钟','步行 · 望遠站約 5 分鐘 · 合井站約 8 分鐘'],
-  airport:['공항철도 서울역 방면 일반열차를 타고 홍대입구역에서 내리세요. 지하철 2호선으로 갈아타고 한 정거장 뒤 합정역에서 내려 숙소까지 걸어오실 수 있습니다.','Take the Seoul Station-bound AREX all-stop train to Hongik Univ. Station. Transfer to Line 2, ride one stop to Hapjeong and walk to ABODE.','空港鉄道のソウル駅方面の一般列車で弘大入口駅へ。2号線に乗り換え、1駅先の合井駅から徒歩でお越しいただけます。','搭乘开往首尔站的机场铁路普通列车至弘大入口站，换乘 2 号线坐一站到合井站，再步行前往住宿。','搭乘開往首爾站的機場鐵路普通列車至弘大入口站，轉乘 2 號線一站到合井站，再步行前往住宿。'],
   entrance:['월드컵로10길 대로변에서 루카스 커피 옆 ABODE 간판을 찾으세요. 검은 출입문 안에 셀프 체크인 키오스크가 있습니다.','On World Cup-ro 10-gil, look for the ABODE sign next to Lucas Coffee. The self check-in kiosk is inside the black entrance.','ワールドカップ路10ギルのLucas Coffeeの隣、ABODEの看板が目印です。黒い入口の内側にセルフチェックイン端末があります。','在世界杯路10街寻找 Lucas Coffee 旁的 ABODE 招牌。黑色入口内设有自助入住机。','在世界盃路10街尋找 Lucas Coffee 旁的 ABODE 招牌。黑色入口內設有自助入住機。'],
-  bus:['인천공항에서는 6002번 공항리무진을 타고 합정역에서 내리는 방법도 있습니다. 해당 터미널의 승차 위치와 운행 시간은 공식 노선에서 확인해 주세요.','From Incheon Airport you can also take limousine bus 6002 and get off at Hapjeong Station. Check the official route for your terminal’s stop and timetable.','仁川空港からは空港リムジンバス6002番で合井駅にお越しいただけます。ターミナルごとの乗り場と時刻は公式案内をご確認ください。','从仁川机场也可乘坐 6002 路机场大巴至合井站。请在官方路线页面确认航站楼的乘车位置和时刻。','從仁川機場也可搭乘 6002 路機場巴士至合井站。請於官方路線頁面確認航廈乘車位置與時刻。'],
   returnTrain:['합정역에서 2호선으로 홍대입구역까지 한 정거장 이동하세요. 공항철도 일반열차로 갈아타면 김포공항과 인천공항 1·2터미널에 갈 수 있습니다.','Take Line 2 one stop from Hapjeong to Hongik Univ. Station. Transfer to the AREX all-stop train for Gimpo Airport or Incheon Airport Terminal 1 or 2.','合井駅から2号線で1駅、弘大入口駅へ。空港鉄道の一般列車に乗り換えると、金浦空港と仁川空港第1・第2ターミナルに行けます。','从合井站乘 2 号线一站至弘大入口站，换乘机场铁路普通列车前往金浦机场或仁川机场 1、2 号航站楼。','從合井站搭乘 2 號線一站至弘大入口站，轉乘機場鐵路普通列車前往金浦機場或仁川機場第 1、2 航廈。'],
-  returnBus:['인천공항으로 갈 때는 합정역의 공항 방면 정류장에서 6002번을 탈 수 있습니다. 탑승 전 정류장과 이용하실 터미널을 확인해 주세요.','For Incheon, take bus 6002 from the airport-bound stop at Hapjeong Station. Check the stop and your terminal before boarding.','仁川空港へは合井駅の空港方面乗り場から6002番に乗れます。乗り場とターミナルを確認してからご乗車ください。','前往仁川机场可从合井站的机场方向站点乘坐 6002 路。上车前确认站点和航站楼。','前往仁川機場可從合井站的機場方向站牌搭乘 6002 路。上車前確認站牌與航廈。'],
-  nightArrival:['심야에는 인천공항에서 N6002를 타고 홍대입구 정류장에서 내릴 수 있습니다. 버스 운행 시간과 내리는 정류장 위치를 공식 노선에서 확인해 주세요.','At night, take N6002 from Incheon Airport to the Hongdae Entrance stop. Check the operator’s timetable and arrival stop before travelling.','深夜は仁川空港からN6002で弘大入口停留所へ。運行時刻と降車場所をご確認ください。','深夜可从仁川机场搭乘 N6002 到弘大入口站。请查看官方时间表与下车站点。','深夜可從仁川機場搭乘 N6002 到弘大入口站。請查看官方時間表與下車站點。'],
-  nightDeparture:['심야에는 홍대입구 중앙차로에서 인천공항 방면 N6002를 탈 수 있습니다. 출발 전에 시간표에서 탑승 장소를 확인해 주세요.','At night, take the Incheon Airport-bound N6002 from the median bus stop at Hongdae Entrance. Check the operator’s timetable and boarding location before leaving.','深夜は弘大入口の中央車線の停留所から仁川空港方面のN6002に乗れます。出発前に時刻と乗り場をご確認ください。','深夜可在弘大入口中央车道站点搭乘仁川机场方向的 N6002。出发前请确认时间表和站点。','深夜可在弘大入口中央車道站牌搭乘仁川機場方向的 N6002。出發前請確認時間表與站牌。'],
-  gimpoReturn:['합정역에서 2호선으로 홍대입구역까지 한 정거장 이동하세요. 인천공항 방면 공항철도 일반열차로 갈아타고 김포공항역에서 내리세요.','Take Line 2 from Hapjeong one stop to Hongik Univ. Station. Transfer to an Incheon Airport-bound AREX all-stop train and get off at Gimpo Airport.','合井駅から2号線で1駅、弘大入口駅へ。仁川空港方面の空港鉄道一般列車に乗り換え、金浦空港駅で降りてください。','从合井站乘 2 号线一站到弘大入口站，换乘仁川机场方向的机场铁路普通列车，在金浦机场站下车。','從合井站搭乘 2 號線一站到弘大入口站，轉乘仁川機場方向的機場鐵路普通列車，在金浦機場站下車。'],
   help:['예약하신 플랫폼에서 예약 내역을 열고 호스트에게 메시지를 보내 주세요.','Open your reservation on the platform you booked with and send a message to your host.','ご予約のサイトで予約内容を開き、ホストへメッセージをお送りください。','打开预订平台上的订单，给房东发送消息。','開啟預訂平台上的訂單，傳送訊息給房東。'],
 };
 

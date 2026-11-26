@@ -300,6 +300,19 @@ main:focus { outline: 0; }
 .disclosure-body { padding: 0 13px 15px; }
 .disclosure-body > :first-child { margin-top: 0; }
 .disclosure-body > .map-actions + p { margin-top: 19px; }
+.airport-arrivals { margin-top: 29px; }
+.airport-arrivals h2 { font-size: 22px; line-height: 1.3; }
+.airport-guide summary svg { flex: none; }
+.airport-guide summary .item-copy { gap: 4px; }
+.airport-guide summary small { font-size: 14px; }
+.airport-transport { padding: 15px 0; border-top: 1px solid var(--line); }
+.airport-transport:last-child { padding-bottom: 2px; }
+.airport-transport-title { margin: 0; font-size: 16px; line-height: 1.4; }
+.airport-transport .steps { gap: 7px; margin-top: 9px; padding-inline-start: 19px; }
+.airport-note { margin: 11px 0 0; padding: 8px 10px; background: var(--sand); font-size: 14px; line-height: 1.55; }
+.airport-transport .map-actions { margin-top: 11px; }
+.airport-transport .button { min-height: 44px; padding: 7px 10px; font-size: 13px; }
+:lang(ko) .airport-transport-title, :lang(ko) .airport-note { word-break: keep-all; }
 .guide-timing { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-bottom: 18px; background: var(--line); border: 1px solid var(--line); }
 .guide-timing div { display: grid; gap: 4px; padding: 13px 15px; background: var(--sand); }
 .guide-timing span { color: var(--muted); font-size: 14px; }

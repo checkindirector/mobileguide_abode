@@ -1,4 +1,4 @@
-import { airportAccessPhoto, airportBus, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
+import { airportAccessPhoto, airportBus, airportGuide, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
 import { buildingMaps, faq, guides, parking, wifiNetworks } from './operations.js';
@@ -223,7 +223,7 @@ function roomsPage() {
 
 function busLink(night = false) {
   const number = night ? 'N6002' : '6002';
-  const title = localize([`${number}번 리무진 시간표`, `Bus ${number} timetable`, `空港バス${number}番の時刻表`,`${number} 路机场巴士时刻表`,`${number} 路機場巴士時刻表`]);
+  const title = localize([`${number}번 정류장·시간표`,`${number} stops and timetable`,`${number}番のバス停・時刻表`,`${number} 路站点与时刻表`,`${number} 路站牌與時刻表`]);
   return external(night ? nightBus : airportBus,title);
 }
 
@@ -235,20 +235,40 @@ function transportBody(text, links) {
   return `<p class="body-copy">${localize(text)}</p><div class="map-actions">${links}</div>`;
 }
 
+function airportTransport(title, steps, links, note) {
+  return `<div class="airport-transport">
+    <p class="airport-transport-title"><strong>${localize(title)}</strong></p>
+    <ol class="steps">${steps.map((step) => `<li>${localize(step)}</li>`).join('')}</ol>
+    ${note ? `<p class="airport-note">${localize(note)}</p>` : ''}
+    <div class="map-actions">${links}</div>
+  </div>`;
+}
+
 function locationPage(detail) {
   const station = (name) => external(walking(name,address),name === '망원역' ? localize(['망원역 도보 경로','Walk from Mangwon','望遠駅からの徒歩ルート','从望远站步行','從望遠站步行']) : localize(['합정역 도보 경로','Walk from Hapjeong','合井駅からの徒歩ルート','从合井站步行','從合井站步行']));
   const trainLink = external(timetable,t('train'));
-  const busStop = (name) => external(naver(name),t('naver')) + external(google(name),t('google'));
+  const { incheonHint, trainTitle, dayBusTitle, nightBusTitle } = airportGuide;
   if (detail === 'airport') {
     const toHapjeong = external(walking(address,'합정역'),localize(['합정역까지 도보 경로','Walk to Hapjeong Station','合井駅までの徒歩ルート','步行至合井站','步行至合井站']));
-    const incheon = transportBody(arrival.returnTrain,trainLink + toHapjeong) + transportBody(arrival.returnBus,busLink() + busStop('합정역 공항버스 정류장 6002 인천공항 방면')) + transportBody(arrival.nightDeparture,busLink(true) + busStop('홍대입구 공항버스 정류장 인천공항 방면'));
-    return `${pageHeading('TO THE AIRPORT',t('airportReturn'))}<section class="section content-section">
-      ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon,true)}
-      ${disclosure(t('gimpo'),'Metro Line 2 · AREX',transportBody(arrival.gimpoReturn,trainLink + toHapjeong))}
+    const busStop = (name) => external(naver(name),t('naver')) + external(google(name),t('google'));
+    const incheon = airportTransport(trainTitle,airportGuide.departureIncheonTrain,trainLink + toHapjeong)
+      + airportTransport(dayBusTitle,airportGuide.departureDayBus,busLink() + busStop('합정역 공항버스 정류장 6002 인천공항 방면'))
+      + airportTransport(nightBusTitle,airportGuide.departureNightBus,busLink(true) + busStop('홍대입구 공항버스 정류장 인천공항 방면'));
+    const gimpo = airportTransport(trainTitle,airportGuide.departureGimpoTrain,trainLink + toHapjeong);
+    return `${pageHeading('TO THE AIRPORT',t('airportReturn'))}<section class="section content-section airport-guide">
+      ${disclosure(t('incheon'),localize(incheonHint),incheon)}
+      ${disclosure(t('gimpo'),localize(airportGuide.gimpoDepartureHint),gimpo)}
       ${link('#location',t('location'),'button button-outline')}
     </section>`;
   }
-  const incheon = transportBody(arrival.airport,trainLink) + transportBody(arrival.bus,busLink()) + transportBody(arrival.nightArrival,busLink(true));
+  const railFrom = (station, title) => external(`https://www.airportrailroad.com/train/normal/info/${station}`,title);
+  const incheonTrainLinks = railFrom('100',localize(airportGuide.terminalOneTimetable))
+    + railFrom('110',localize(airportGuide.terminalTwoTimetable)) + station('합정역');
+  const abodeMap = external(buildingMaps.google,localize(airportGuide.abodeMap));
+  const incheon = airportTransport(trainTitle,airportGuide.arrivalTrain,incheonTrainLinks,airportGuide.expressTip)
+    + airportTransport(airportGuide.arrivalDayBusTitle,airportGuide.arrivalDayBus,busLink() + station('합정역'))
+    + airportTransport(airportGuide.arrivalNightBusTitle,airportGuide.arrivalNightBus,busLink(true) + abodeMap);
+  const gimpo = airportTransport(trainTitle,airportGuide.arrivalTrain,railFrom('050',t('train')) + station('합정역'));
   return `${pageHeading('GETTING HERE',t('locationHeading'),t('addresses'))}
   <section class="section content-section">
     <div class="map-actions">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}${action('copy-address',`${icon('copy')}${t('copy')}`,'button button-cream')}</div>
@@ -262,9 +282,10 @@ function locationPage(detail) {
       ${link('#guide/check-in',t('checkin'),'text-link')}
     </article>
     ${disclosure(t('subway'),localize(arrival.subwayShort),transportBody(arrival.subway,station('망원역') + station('합정역')),true)}
-    <section class="airport-arrivals" id="airport-arrivals" aria-label="${t('airport')}" tabindex="-1">
-      ${disclosure(t('incheon'),'AREX · 6002 · N6002',incheon)}
-      ${disclosure(t('gimpo'),'AREX all-stop',transportBody(arrival.airport,trainLink))}
+    <section class="airport-arrivals airport-guide" id="airport-arrivals" aria-labelledby="airport-arrivals-title" tabindex="-1">
+      <h2 id="airport-arrivals-title">${localize(airportGuide.arrivalHeading)}</h2>
+      ${disclosure(t('incheon'),localize(incheonHint),incheon)}
+      ${disclosure(t('gimpo'),localize(airportGuide.gimpoArrivalHint),gimpo)}
     </section>
     <div class="map-actions">${link('#location/airport',t('airportReturn'),'button button-outline')}</div>
   </section>`;
