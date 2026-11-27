@@ -47,7 +47,8 @@ const helpPanel = document.querySelector('#help-panel');
 const helpTrigger = document.querySelector('#help-trigger');
 const languagePicker = document.querySelector('#language');
 const photoById = new Map(photos.map((photo) => [photo.id, photo]));
-const devicePhotos = new Map(guides.flatMap(({ items }) => items).filter(({ photo }) => photo).map(({ id,photo }) => [id,photo]));
+const deviceSlides = new Map(guides.flatMap(({ items }) => items).filter(({ visuals }) => visuals).map(({ id,photo,visuals }) =>
+  [id, photo ? [photo, ...visuals] : visuals]));
 const filters = ['all','bedroom','living','bath','exterior'];
 const formatNumber = (number) => String(number).padStart(2, '0');
 
@@ -355,29 +356,67 @@ function guideArticle({ title,text,steps,image: id,anchor }) {
   </article>`;
 }
 
-function devicePhoto(deviceId, { id,mark,caption:description }) {
-  const photoLabel = localize(description);
-  const marker = mark ? `<span class="device-photo-marker" style="--x:${mark[0]}%;--y:${mark[1]}%" aria-hidden="true"></span>` : '';
-  return `<figure class="device-photo${mark ? ' has-marker' : ''}">
-    <button type="button" data-action="device-photo" data-value="${deviceId}" aria-label="${t('enlarge')} · ${photoLabel}">
-      ${image(id,'','')}${marker}<span class="device-photo-expand">${icon('expand')}</span>
-    </button><figcaption>${photoLabel}</figcaption>
+function photoMarkers(marks) {
+  return marks.map(([x,y]) => `<span class="device-photo-marker" style="--x:${x}%;--y:${y}%" aria-hidden="true"></span>`).join('');
+}
+
+function deviceCarousel(deviceId, title) {
+  const slides = deviceSlides.get(deviceId);
+  const slideLabel = ({ caption:description, kind, source }) =>
+    [kind ? t(kind) : '', description ? localize(description) : title, source].filter(Boolean).join(' · ');
+  return `<figure class="device-carousel" data-device-carousel="${deviceId}" role="group" aria-label="${title} · ${t('deviceVisuals')}">
+    <div class="device-track">
+      ${slides.map((slide,index) => `<button type="button" class="device-frame" data-action="device-photo" data-value="${index}" data-caption="${slideLabel(slide)}" aria-label="${t('enlarge')} · ${slideLabel(slide)}"${index ? ' tabindex="-1"' : ''}>
+        ${image(slide.id,'','')}${photoMarkers(slide.marks ?? [])}<span class="device-photo-expand">${icon('expand')}</span>
+      </button>`).join('')}
+    </div>
+    <div class="device-carousel-controls">
+      <button type="button" class="device-slide" data-action="device-slide" data-value="-1" aria-disabled="true" aria-label="${t('prev')}">${icon('left')}</button>
+      <span><span>${t('swipePhotos')}</span><span class="device-counter" aria-live="polite">1 / ${slides.length}</span></span>
+      ${iconAction('device-slide','right',t('next'),'device-slide','1')}
+    </div>
+    <figcaption>${slideLabel(slides[0])}</figcaption>
   </figure>`;
 }
 
-function deviceArticle({ id,title,model,photo,controls,text,note,resources }) {
+function deviceArticle({ id,title,model,controls,text,note }) {
+  const heading = localize(title);
   return `<article class="information guide-detail device-detail">
-    <h2 id="device-${id}" tabindex="-1">${localize(title)}</h2>
+    <h2 id="device-${id}" tabindex="-1">${heading}</h2>
     ${model ? `<p class="device-model">${model}</p>` : ''}
-    ${photo ? devicePhoto(id,photo) : ''}
+    ${deviceCarousel(id,heading)}
     ${text ? `<p class="body-copy">${localize(text)}</p>` : ''}
     ${controls ? `<ol class="device-steps" role="list">${controls.map(([control,step],index) => `<li>
       <span class="device-step-index" aria-hidden="true">${index + 1}</span>
       <div><span class="device-control">${control}</span><p>${localize(step)}</p></div>
     </li>`).join('')}</ol>` : ''}
     ${note ? `<p class="device-note">${localize(note)}</p>` : ''}
-    ${resources ? `<div class="device-resources">${resources.map(([name,url,type]) => external(url,`<span>${name}<small>${t(type)}</small></span>${icon('forward')}`,'device-resource')).join('')}</div>` : ''}
   </article>`;
+}
+
+const deviceSlideIndex = (track) => Math.round(track.scrollLeft / track.clientWidth);
+
+function showDeviceSlide(carousel, offset) {
+  const track = carousel.querySelector('.device-track');
+  const index = Math.min(track.children.length - 1, Math.max(0, deviceSlideIndex(track) + offset));
+  track.scrollTo({ left:index * track.clientWidth, behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+}
+
+function updateDeviceSlide(track) {
+  const focusOnSlide = track.contains(document.activeElement);
+  const carousel = track.parentElement;
+  const index = deviceSlideIndex(track);
+  const slide = track.children[index];
+  const count = track.children.length;
+  const counter = carousel.querySelector('.device-counter');
+  const counterText = `${index + 1} / ${count}`;
+  if (!slide || counter.textContent === counterText) return;
+  counter.textContent = counterText;
+  carousel.querySelector('figcaption').textContent = slide.dataset.caption;
+  carousel.querySelector('[data-action="device-slide"][data-value="-1"]').setAttribute('aria-disabled',index === 0);
+  carousel.querySelector('[data-action="device-slide"][data-value="1"]').setAttribute('aria-disabled',index === count - 1);
+  for (const frame of track.children) frame.tabIndex = frame === slide ? 0 : -1;
+  if (focusOnSlide) slide.focus({ preventScroll:true });
 }
 
 function deviceIndex(items) {
@@ -586,13 +625,18 @@ function displayPhoto(index) {
   const photo = lightboxPhotos[lightboxIndex];
   lightbox.querySelector('img').src = imagePath(photo.id);
   lightbox.querySelector('img').alt = photo.alt ?? caption(photo.id);
+  lightbox.querySelector('.lightbox-markers').innerHTML = photoMarkers(photo.marks ?? []);
+  const description = lightbox.querySelector('.lightbox-description');
+  description.hidden = !photo.description;
+  description.textContent = photo.description ?? '';
   lightbox.querySelector('#photo-count').textContent = `${formatNumber(lightboxIndex + 1)} / ${formatNumber(lightboxPhotos.length)}`;
 }
 
 function openPhotoViewer(items, selectedIndex = 0) {
   lightboxPhotos = items;
   lightbox.innerHTML = `<div class="lightbox-inner" data-swipe="lightbox"><div class="lightbox-head">${iconAction('close-photo','close',t('close'),'icon-button')}</div>
-    <figure><img alt=""><figcaption id="photo-count" aria-live="polite"></figcaption></figure>
+    <figure><div class="lightbox-image"><img alt=""><div class="lightbox-markers" aria-hidden="true"></div></div>
+      <figcaption><span class="lightbox-description" hidden></span><span id="photo-count" aria-live="polite"></span></figcaption></figure>
     <div class="lightbox-controls"${lightboxPhotos.length === 1 ? ' hidden' : ''}>${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div></div>`;
   displayPhoto(selectedIndex);
   lightbox.showModal();
@@ -688,10 +732,16 @@ document.addEventListener('click', (event) => {
       break;
     }
     case 'device-photo': {
-      const photo = devicePhotos.get(value);
-      openPhotoViewer([{ id:photo.id, alt:localize(photo.caption) }]);
+      const carousel = button.closest('[data-device-carousel]');
+      const items = deviceSlides.get(carousel.dataset.deviceCarousel).map((slide,index) => ({
+        ...slide, alt:localize(slide.caption) ?? '', description:carousel.querySelector('.device-track').children[index].dataset.caption,
+      }));
+      openPhotoViewer(items,Number(value));
       break;
     }
+    case 'device-slide':
+      if (button.getAttribute('aria-disabled') !== 'true') showDeviceSlide(button.closest('[data-device-carousel]'),Number(value));
+      break;
     case 'device-jump': jumpToSection(document.getElementById(`device-${value}`),true); break;
     case 'photo-step': displayPhoto(lightboxIndex + Number(value)); break;
     case 'close-photo': lightbox.close(); break;
@@ -735,8 +785,18 @@ document.addEventListener('keydown', (event) => {
   if (lightbox.open && ['ArrowLeft','ArrowRight'].includes(event.key)) {
     event.preventDefault();
     displayPhoto(lightboxIndex + (event.key === 'ArrowRight' ? 1 : -1));
+  } else if (['ArrowLeft','ArrowRight'].includes(event.key)) {
+    const carousel = event.target.closest('[data-device-carousel]');
+    if (carousel) {
+      event.preventDefault();
+      showDeviceSlide(carousel,event.key === 'ArrowRight' ? 1 : -1);
+    }
   }
 });
+
+main.addEventListener('scroll', (event) => {
+  if (event.target.matches('.device-track')) updateDeviceSlide(event.target);
+}, { capture:true, passive:true });
 
 let touchStart;
 document.addEventListener('touchstart', (event) => {

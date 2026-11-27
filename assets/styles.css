@@ -22,6 +22,9 @@
   --topbar: 66px;
   --safe: env(safe-area-inset-bottom, 0px);
   --typeface: Oxanium, 'Arial Narrow', Arial, sans-serif;
+  --copy-size: 15px;
+  --copy-leading: 1.62;
+  --device-marker: #D50016;
   --page-title-size: 40px;
   --wifi-title-size: 43px;
 }
@@ -105,7 +108,7 @@ main:focus { outline: 0; }
 .page-heading h1, .booking-section h1 { font-size: var(--page-title-size); font-weight: 600; line-height: 1.12; }
 .page-heading .eyebrow { font-size: 12px; font-weight: 500; }
 [data-page="guide/wifi"] .page-heading h1 { font-size: var(--wifi-title-size); }
-.body-copy { margin-top: 12px; max-width: 42ch; color: var(--muted); font-size: 15px; line-height: 1.62; }
+.body-copy { margin-top: 12px; max-width: 42ch; color: var(--muted); font-size: var(--copy-size); line-height: var(--copy-leading); }
 .intro h2 { font-size: 32px; line-height: 1.14; }
 .intro .body-copy { font-size: 16px; line-height: 1.72; }
 .quick-help h2 { font-size: 25px; }
@@ -353,7 +356,7 @@ main[data-page^="guide"] { font-weight: 500; }
 main[data-page^="guide"] .page-heading h1 { font-weight: 700; }
 main[data-page^="guide"] .information h2 { font-weight: 600; }
 main[data-page^="guide"] .guide-row strong, main[data-page^="guide"] .content-section .button { font-weight: 600; }
-main[data-page^="guide"] :is(.body-copy, .steps) { color: #434343; font-size: 16px; line-height: 1.65; }
+main[data-page^="guide"] :is(.body-copy, .steps, .device-steps) { color: #434343; font-size: var(--copy-size); line-height: var(--copy-leading); }
 main[data-page^="guide"] .steps { gap: 12px; }
 main[data-page^="guide"] .steps li::marker { color: var(--muted); font-weight: 500; }
 main[data-page^="guide"] .guide-detail strong { font-weight: 700; }
@@ -373,24 +376,29 @@ main[data-page^="guide"] .guide-detail strong { font-weight: 700; }
 .device-index svg { width: 14px; height: 14px; color: var(--journal-umber); }
 .device-detail { margin-top: 28px; padding-top: 22px; }
 .device-model { font-size: 14px; line-height: 1.5; margin-top: 5px; color: #434343; font-weight: 500; overflow-wrap: anywhere; }
-.device-photo { margin: 13px 0 0; }
-.device-photo button { position: relative; display: block; width: 100%; border: 0; padding: 0; background: var(--sand); }
-.device-photo:not(.has-marker) img { max-height: 235px; object-fit: contain; }
-.device-photo-marker { position: absolute; top: var(--y); left: var(--x); translate: -50% -50%; width: 24px; height: 24px; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 2px var(--journal-umber); }
+.device-carousel { margin: 13px 0 0; min-width: 0; }
+.device-track { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; background: var(--sand); }
+.device-track::-webkit-scrollbar { display: none; }
+.device-frame { flex: 0 0 100%; min-width: 0; aspect-ratio: 4 / 3; scroll-snap-align: start; position: relative; display: grid; border: 0; padding: 0; background: #eee8df; }
+.device-frame:focus-visible { outline-offset: -4px; }
+.device-frame img { height: 100%; min-height: 0; object-fit: contain; }
+.device-photo-marker { position: absolute; top: var(--y); left: var(--x); translate: -50% -50%; width: clamp(42px, 12vw, 54px); aspect-ratio: 1; border: 4px solid var(--device-marker); border-radius: 50%; box-shadow: 0 0 0 2px #fff, inset 0 0 0 1px #fff; background: #dc142416; pointer-events: none; }
 .device-photo-expand { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 32px; height: 32px; background: var(--paper); }
 .device-photo-expand svg { width: 16px; height: 16px; }
-.device-photo figcaption { margin-top: 6px; color: #434343; font-size: 13px; line-height: 1.45; }
+.device-carousel-controls { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; border-bottom: 1px solid var(--line); }
+.device-carousel-controls > span { display: flex; justify-content: center; align-items: center; gap: 8px; color: #434343; font-size: 12px; font-weight: 600; line-height: 1.35; text-align: center; }
+.device-counter { flex: none; font-variant-numeric: tabular-nums; color: var(--ink); }
+.device-slide { display: grid; place-items: center; height: 44px; border: 0; background: transparent; color: var(--ink); }
+.device-slide svg { width: 19px; height: 19px; }
+.device-slide[aria-disabled="true"] { opacity: .35; cursor: default; }
+.device-slide:focus-visible { outline-offset: -3px; }
+.device-carousel figcaption { margin-top: 8px; min-height: 2.9em; color: #434343; font-size: 13px; line-height: 1.45; }
 .device-steps { display: grid; gap: 9px; margin: 13px 0 0; padding: 0; list-style: none; }
-.device-steps li { display: grid; grid-template-columns: 25px minmax(0, 1fr); gap: 9px; padding: 10px 9px; background: #eee8df; color: #434343; font-size: 16px; line-height: 1.58; }
+.device-steps li { display: grid; grid-template-columns: 25px minmax(0, 1fr); gap: 9px; padding: 10px 9px; background: #eee8df; }
 .device-step-index { display: grid; place-items: center; align-self: start; width: 25px; height: 25px; border: 1px solid #c6b6a1; border-radius: 50%; color: var(--journal-umber); font-size: 13px; font-weight: 700; line-height: 1; }
 .device-control { display: block; margin-bottom: 3px; color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
 .device-note { margin-top: 11px; color: #434343; font-size: 14px; }
-.device-resources { display: grid; margin-top: 14px; border-block: 1px solid var(--line); }
-.device-resource { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; padding: 6px 0; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
-.device-resource + .device-resource { border-top: 1px solid var(--line); }
-.device-resource small { display: block; color: #434343; font-size: 13px; font-weight: 500; }
-.device-resource svg { width: 16px; height: 16px; color: var(--journal-umber); }
-:lang(ko) :is(.device-steps, .device-photo figcaption, .device-index) { word-break: keep-all; overflow-wrap: anywhere; }
+:lang(ko) :is(.device-steps, .device-carousel figcaption, .device-index) { word-break: keep-all; overflow-wrap: anywhere; }
 .steps { display: grid; gap: 10px; padding-left: 25px; margin: 13px 0 0; font-size: 15px; line-height: 1.65; }
 .steps li { padding-left: 5px; }
 .steps li::marker { color: var(--ink); font-weight: 700; }
@@ -446,10 +454,13 @@ dialog::backdrop { background: #17130e92; }
 .help-panel-head { display: flex; justify-content: space-between; align-items: center; }
 .help-panel-head h2 { font-size: 25px; font-weight: 800; line-height: 1.2; }
 .lightbox { width: min(calc(100% - 14px), 760px); max-height: calc(100svh - 24px); background: #242423; color: white; }
-.lightbox-inner { padding: 10px 12px 15px; }
+.lightbox-inner { padding: 10px 12px 15px; touch-action: pan-y pinch-zoom; }
 .lightbox-head { display: flex; align-items: center; justify-content: flex-end; }
 .lightbox img { width: auto; max-width: 100%; max-height: calc(100svh - 175px); margin: 0 auto; object-fit: contain; }
+.lightbox-image { position: relative; width: fit-content; max-width: 100%; margin: 0 auto; }
+.lightbox-markers { position: absolute; inset: 0; pointer-events: none; }
 .lightbox figcaption { margin-top: 9px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.lightbox-description { display: block; margin-bottom: 3px; }
 .lightbox-controls { display: flex; justify-content: center; gap: 13px; margin-top: 6px; }
 .lightbox :focus-visible { outline-color: white; }
 .toast { position: fixed; z-index: 6; bottom: calc(69px + var(--safe)); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); font-size: 14px; padding: 9px 15px; width: max-content; max-width: 95%; opacity: 0; pointer-events: none; }
