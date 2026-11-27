@@ -27,6 +27,7 @@ const paths = {
   down:'m6 9 6 6 6-6', left:'m15 6-6 6 6 6', right:'m9 6 6 6-6 6',
   forward:'M4 12h15m-6-6 6 6-6 6',
   close:'m6 6 12 12M18 6 6 18', copy:'M8 8h12v12H8zM16 4H4v12',
+  expand:'M14 4h6v6m0-6-6 6M4 14v6h6m-6 0 6-6',
   search:'M10.5 3a7.5 7.5 0 1 0 0 15 7.5 7.5 0 1 0 0-15Zm5.3 12.8L21 21',
   message:'M4 4h16v12h-9l-5 4v-4H4Zm4 5h8m-8 3h5',
 };
@@ -46,6 +47,7 @@ const helpPanel = document.querySelector('#help-panel');
 const helpTrigger = document.querySelector('#help-trigger');
 const languagePicker = document.querySelector('#language');
 const photoById = new Map(photos.map((photo) => [photo.id, photo]));
+const devicePhotos = new Map(guides.flatMap(({ items }) => items).filter(({ photo }) => photo).map(({ id,photo }) => [id,photo]));
 const filters = ['all','bedroom','living','bath','exterior'];
 const formatNumber = (number) => String(number).padStart(2, '0');
 
@@ -343,26 +345,54 @@ function locationPage(detail) {
   </section>`;
 }
 
-function guideArticle({ title,text,steps,model,image: id,manuals,anchor }) {
+function guideArticle({ title,text,steps,image: id,anchor }) {
   const heading = localize(title);
   return `<article class="information guide-detail">
     <h2${anchor ? ` id="${anchor}" tabindex="-1"` : ''}>${heading}</h2>
-    ${model ? `<p class="device-model">${model}</p>` : ''}
     ${steps ? `<ol class="steps">${steps.map((step) => `<li>${localize(step)}</li>`).join('')}</ol>` : ''}
     ${id ? `<img class="guide-photo" src="${imagePath(id)}" alt="${heading}" loading="lazy" decoding="async">` : ''}
     ${text ? `<p class="body-copy">${localize(text)}</p>` : ''}
-    ${manuals ? `<div class="map-actions">${manuals.map(([brand,url]) => external(url,`${brand} · ${t('manual')}`)).join('')}</div>` : ''}
   </article>`;
+}
+
+function devicePhoto(deviceId, { id,mark,caption:description }) {
+  const photoLabel = localize(description);
+  const marker = mark ? `<span class="device-photo-marker" style="--x:${mark[0]}%;--y:${mark[1]}%" aria-hidden="true"></span>` : '';
+  return `<figure class="device-photo${mark ? ' has-marker' : ''}">
+    <button type="button" data-action="device-photo" data-value="${deviceId}" aria-label="${t('enlarge')} · ${photoLabel}">
+      ${image(id,'','')}${marker}<span class="device-photo-expand">${icon('expand')}</span>
+    </button><figcaption>${photoLabel}</figcaption>
+  </figure>`;
+}
+
+function deviceArticle({ id,title,model,photo,controls,text,note,resources }) {
+  return `<article class="information guide-detail device-detail">
+    <h2 id="device-${id}" tabindex="-1">${localize(title)}</h2>
+    ${model ? `<p class="device-model">${model}</p>` : ''}
+    ${photo ? devicePhoto(id,photo) : ''}
+    ${text ? `<p class="body-copy">${localize(text)}</p>` : ''}
+    ${controls ? `<ol class="device-steps" role="list">${controls.map(([control,step],index) => `<li>
+      <span class="device-step-index" aria-hidden="true">${index + 1}</span>
+      <div><span class="device-control">${control}</span><p>${localize(step)}</p></div>
+    </li>`).join('')}</ol>` : ''}
+    ${note ? `<p class="device-note">${localize(note)}</p>` : ''}
+    ${resources ? `<div class="device-resources">${resources.map(([name,url,type]) => external(url,`<span>${name}<small>${t(type)}</small></span>${icon('forward')}`,'device-resource')).join('')}</div>` : ''}
+  </article>`;
+}
+
+function deviceIndex(items) {
+  return `<nav class="device-index" aria-label="${t('deviceJump')}">${items.map(({ id,title }) => action('device-jump',`${localize(title)}${icon('down')}`,'',id)).join('')}</nav>`;
 }
 
 function appliancePage(guide, areaId) {
   const area = applianceAreas.find(({ id }) => id === areaId);
   if (area) {
+    const items = guide.items.filter((item) => item.area === area.id);
     return `<header class="page-heading facility-heading">
       ${link('#guide/facilities',`${icon('left')}${t('backToFacilities')}`,'facility-back')}
       <h1>${localize(area.title)}</h1>
     </header><section class="section content-section">
-      ${guide.items.filter((item) => item.area === area.id).map(guideArticle).join('')}
+      ${items.length > 1 ? deviceIndex(items) : ''}${items.map(deviceArticle).join('')}
     </section>`;
   }
   const list = `<div class="guide-rows">${applianceAreas.map(({ id,icon:symbol,title,hint }) => `<a class="guide-row" href="#guide/facilities/${id}"><span class="guide-icon">${icon(symbol)}</span><span class="item-copy"><strong>${localize(title)}</strong><small>${localize(hint)}</small></span>${icon('right')}</a>`).join('')}</div>`;
@@ -385,7 +415,7 @@ function guidePage(detail) {
     <ul class="networks">${wifiNetworks.map((name) => `<li><strong>${name}</strong><button class="button button-cream" type="button" data-action="copy-network" data-value="${name}" aria-label="${t('copyNetwork')} · ${name}">${icon('copy')}${t('copyNetwork')}</button></li>`).join('')}</ul>`;
   return `${pageHeading('GUEST GUIDE',localize(item.title),checkin ? '' : localize(item.lead))}<section class="section content-section">
     ${checkin ? quickTimes : ''}${item.id === 'wifi' ? networks : ''}
-    ${item.items.map(guideArticle).join('')}
+    ${item.id === 'laundry' ? deviceIndex(item.items) + item.items.map(deviceArticle).join('') : item.items.map(guideArticle).join('')}
     ${checkin ? `<div class="map-actions">${link('#location/parking',t('parking'),'button button-outline')}${link('#location',t('location'),'button button-outline')}</div>` : ''}
     ${link('#guide',t('backToGuide'),'button button-outline')}
   </section>`;
@@ -555,16 +585,16 @@ function displayPhoto(index) {
   lightboxIndex = (index + lightboxPhotos.length) % lightboxPhotos.length;
   const photo = lightboxPhotos[lightboxIndex];
   lightbox.querySelector('img').src = imagePath(photo.id);
-  lightbox.querySelector('img').alt = caption(photo.id);
+  lightbox.querySelector('img').alt = photo.alt ?? caption(photo.id);
   lightbox.querySelector('#photo-count').textContent = `${formatNumber(lightboxIndex + 1)} / ${formatNumber(lightboxPhotos.length)}`;
 }
 
-function openPhoto(id) {
-  lightboxPhotos = visiblePhotos();
+function openPhotoViewer(items, selectedIndex = 0) {
+  lightboxPhotos = items;
   lightbox.innerHTML = `<div class="lightbox-inner" data-swipe="lightbox"><div class="lightbox-head">${iconAction('close-photo','close',t('close'),'icon-button')}</div>
     <figure><img alt=""><figcaption id="photo-count" aria-live="polite"></figcaption></figure>
     <div class="lightbox-controls"${lightboxPhotos.length === 1 ? ' hidden' : ''}>${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div></div>`;
-  displayPhoto(lightboxPhotos.findIndex((photo) => photo.id === id));
+  displayPhoto(selectedIndex);
   lightbox.showModal();
 }
 
@@ -652,7 +682,17 @@ document.addEventListener('click', (event) => {
       placeFilter = value;
       updateFilter(button, () => { document.querySelector('#places').innerHTML = placeCards(route.split('/')[1]); });
       break;
-    case 'photo': openPhoto(value); break;
+    case 'photo': {
+      const items = visiblePhotos();
+      openPhotoViewer(items,items.findIndex(({ id }) => id === value));
+      break;
+    }
+    case 'device-photo': {
+      const photo = devicePhotos.get(value);
+      openPhotoViewer([{ id:photo.id, alt:localize(photo.caption) }]);
+      break;
+    }
+    case 'device-jump': jumpToSection(document.getElementById(`device-${value}`),true); break;
     case 'photo-step': displayPhoto(lightboxIndex + Number(value)); break;
     case 'close-photo': lightbox.close(); break;
   }

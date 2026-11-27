@@ -349,11 +349,12 @@ main:focus { outline: 0; }
 .airport-transport .map-actions { margin-top: 11px; }
 .airport-transport .button { min-height: 44px; padding: 7px 10px; font-size: 13px; font-weight: 600; }
 :lang(ko) .airport-guide { word-break: keep-all; overflow-wrap: anywhere; }
-main[data-page^="guide"] { font-weight: 400; }
+main[data-page^="guide"] { font-weight: 500; }
 main[data-page^="guide"] .page-heading h1 { font-weight: 700; }
 main[data-page^="guide"] .information h2 { font-weight: 600; }
 main[data-page^="guide"] .guide-row strong, main[data-page^="guide"] .content-section .button { font-weight: 600; }
-main[data-page^="guide"] .steps { gap: 12px; line-height: 1.72; }
+main[data-page^="guide"] :is(.body-copy, .steps) { color: #434343; font-size: 16px; line-height: 1.65; }
+main[data-page^="guide"] .steps { gap: 12px; }
 main[data-page^="guide"] .steps li::marker { color: var(--muted); font-weight: 500; }
 main[data-page^="guide"] .guide-detail strong { font-weight: 700; }
 .facility-heading { padding-top: 12px; }
@@ -366,7 +367,30 @@ main[data-page^="guide"] .guide-detail strong { font-weight: 700; }
 .guide-timing strong { font-size: 22px; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; }
 .guide-timing svg { width: 16px; height: 16px; color: var(--journal-umber); }
 .guide-photo { max-height: 280px; object-fit: contain; margin: 13px auto 0; background: var(--sand); }
-.device-model { font-size: 15px; line-height: 1.5; margin-top: 4px; color: var(--muted); overflow-wrap: anywhere; }
+.device-index { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--line); background: var(--line); }
+.device-index button { display: flex; justify-content: space-between; align-items: center; gap: 5px; padding: 8px 9px; min-height: 46px; border: 0; background: var(--sand); text-align: start; font-size: 13px; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+.device-index button:focus-visible { outline-offset: -3px; }
+.device-index svg { width: 14px; height: 14px; color: var(--journal-umber); }
+.device-detail { margin-top: 28px; padding-top: 22px; }
+.device-model { font-size: 14px; line-height: 1.5; margin-top: 5px; color: #434343; font-weight: 500; overflow-wrap: anywhere; }
+.device-photo { margin: 13px 0 0; }
+.device-photo button { position: relative; display: block; width: 100%; border: 0; padding: 0; background: var(--sand); }
+.device-photo:not(.has-marker) img { max-height: 235px; object-fit: contain; }
+.device-photo-marker { position: absolute; top: var(--y); left: var(--x); translate: -50% -50%; width: 24px; height: 24px; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 0 2px var(--journal-umber); }
+.device-photo-expand { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 32px; height: 32px; background: var(--paper); }
+.device-photo-expand svg { width: 16px; height: 16px; }
+.device-photo figcaption { margin-top: 6px; color: #434343; font-size: 13px; line-height: 1.45; }
+.device-steps { display: grid; gap: 9px; margin: 13px 0 0; padding: 0; list-style: none; }
+.device-steps li { display: grid; grid-template-columns: 25px minmax(0, 1fr); gap: 9px; padding: 10px 9px; background: #eee8df; color: #434343; font-size: 16px; line-height: 1.58; }
+.device-step-index { display: grid; place-items: center; align-self: start; width: 25px; height: 25px; border: 1px solid #c6b6a1; border-radius: 50%; color: var(--journal-umber); font-size: 13px; font-weight: 700; line-height: 1; }
+.device-control { display: block; margin-bottom: 3px; color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+.device-note { margin-top: 11px; color: #434343; font-size: 14px; }
+.device-resources { display: grid; margin-top: 14px; border-block: 1px solid var(--line); }
+.device-resource { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; padding: 6px 0; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.device-resource + .device-resource { border-top: 1px solid var(--line); }
+.device-resource small { display: block; color: #434343; font-size: 13px; font-weight: 500; }
+.device-resource svg { width: 16px; height: 16px; color: var(--journal-umber); }
+:lang(ko) :is(.device-steps, .device-photo figcaption, .device-index) { word-break: keep-all; overflow-wrap: anywhere; }
 .steps { display: grid; gap: 10px; padding-left: 25px; margin: 13px 0 0; font-size: 15px; line-height: 1.65; }
 .steps li { padding-left: 5px; }
 .steps li::marker { color: var(--ink); font-weight: 700; }

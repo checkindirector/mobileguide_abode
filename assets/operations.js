@@ -1,3 +1,5 @@
+import { applianceItems, laundryItems } from './equipment.js';
+
 export const buildingMaps = {
   naver: 'https://naver.me/FlBXF2M4',
   google: 'https://maps.app.goo.gl/j4KpUVcJ6bRxaBtv8',
@@ -51,26 +53,13 @@ export const guides = [
     id:'facilities', icon:'room', title:['가전·시설 안내','Appliances & facilities','家電・設備案内','电器与设施','家電與設施'],
     hint:['프로젝터·정수기·주방·비품','Projector, water dispensers and amenities','プロジェクター・浄水器・備品','投影仪、净水器、厨房与备品','投影機、飲水機、廚房與備品'],
     lead:['객실의 주요 기기와 투숙 중 필요한 비품을 확인하세요.', 'Find the room appliances and supplies you may need during your stay.', '客室の主な家電や滞在中に使う備品をご確認ください。', '查看入住期间可能用到的客房电器及备品。', '查看入住期間可能用到的客房家電與備品。'],
-    items:[
-      { area:'room', title:['객실 냉난방·전기장판','Heating, cooling and electric mat','客室の冷暖房・電気マット','客房冷暖设备与电热垫','客房冷暖設備與電熱墊'], text:['전기장판은 타이머를 설정하고, 퇴실할 때 냉난방 전원을 꺼 주세요. 조작부가 다르거나 조절이 어려울 때는 호스트에게 문의해 주세요.','Set a timer on the electric heating mat and turn off heating and cooling before check-out. Ask your host if you need help with the controls.','電気マットのタイマーを設定し、退室時に冷暖房をお切りください。操作が分からない場合はホストにご連絡ください。','使用电热垫请设置定时，退房时关闭冷暖设备。如需操作协助，请联系房东。','使用電熱墊請設定定時，退房時關閉冷暖設備。如需操作協助，請聯絡房東。'] },
-      { area:'room', title:['4층 빔프로젝터','Floor 4 projector','4階のプロジェクター','4 楼投影仪','4 樓投影機'], model:'MAXELL MP-JU4001', image:'guide-projector',
-        steps:[['프로젝터 리모컨의 빨간 전원 버튼을 3초간 눌러 주세요.', 'Hold the red power button on the projector remote for three seconds.', 'プロジェクターのリモコンの赤い電源ボタンを3秒間長押しします。', '按住投影仪遥控器的红色电源键 3 秒。', '按住投影機遙控器的紅色電源鍵 3 秒。'], ['본체의 초록색 표시등이 켜지면 TV 리모컨의 전원 버튼을 눌러 주세요.', 'When the green indicator on the projector lights up, press power on the TV remote.', '本体の緑のランプが点灯したら、テレビのリモコンの電源ボタンを押します。', '投影仪绿灯亮起后，按电视遥控器的电源键。', '投影機綠燈亮起後，按電視遙控器的電源鍵。']] },
-      { area:'kitchen', title:['3층·4층 정수기','Water dispensers on floors 3 and 4','3・4階の浄水器','3、4 楼净水器','3、4 樓飲水機'], model:'3F  CHUNGHO WP-30C9460BN  ·  4F  CUCKOO CP-AD011UGW',
-        text:['온수를 사용할 때는 뜨거운 물에 주의해 주세요. 4층 정수기에서 물을 받을 때 생기는 작은 기포는 정상입니다.', 'Take care when dispensing hot water. Small bubbles can appear normally when the floor 4 dispenser fills a cup.', '温水を出す際はやけどにご注意ください。4階の浄水器で水を出す際の小さな気泡は正常です。', '接热水时请小心烫伤。使用 4 楼净水器接水时出现少量气泡属正常现象。', '取用熱水時請小心燙傷。使用 4 樓飲水機取水時出現少量氣泡屬正常現象。'],
-        manuals:[['CHUNGHO','https://www.chungho.co.kr/newch/admin/manual/202405290953269229.pdf'], ['CUCKOO','https://cdn.cuckoo.co.kr/upload_cuckoo/_bo_rep/manual/file_a83bac30-b2ee-4e9b-a68f-fa11c20bd1aa.pdf']] },
-      { area:'room', title:['블루투스 스피커','Bluetooth speaker','Bluetoothスピーカー','蓝牙音箱','藍牙喇叭'], model:'Britz BZ-HMR',
-        text:['전 객실에 스피커가 있습니다. 켜고 기기의 블루투스 목록에서 스피커를 선택하세요. 밤 9시 이후에는 음량을 낮춰 주세요.', 'Every room has a speaker. Switch it on, then select it from your device’s Bluetooth list. Keep the volume low after 9 PM.', '全室にスピーカーがあります。電源を入れ、端末のBluetoothリストから選んでください。21時以降は音量を控えめにしてください。', '所有客房均配有音箱。开机后，在设备的蓝牙列表中选择音箱。晚上 9 点后请调低音量。', '所有客房均配有喇叭。開機後，在裝置的藍牙清單中選擇喇叭。晚上 9 點後請調低音量。'] },
-      { area:'kitchen', title:['인덕션과 환풍기','Induction hob and ventilation','IH調理器と換気扇','电磁炉和排风扇','電磁爐與排風扇'], text:['조리 전에 주방 환풍기를 켜고, 조리를 마친 뒤 인덕션 전원을 꺼 주세요. 숙소에서는 간단한 조리가 가능합니다.','Turn on the kitchen fan before cooking and switch off the induction hob when finished. Light cooking is permitted.','調理前に換気扇を入れ、調理後はIH調理器の電源をお切りください。簡単な調理ができます。','烹饪前打开排风扇，结束后关闭电磁炉。住宿允许简单烹饪。','烹飪前打開排風扇，結束後關閉電磁爐。住宿允許簡單烹飪。'] },
-      { area:'supplies', title:['수건과 2층 게스트 박스','Towels and the floor 2 guest box','タオルと2階のゲストボックス','毛巾和 2 楼客用备品箱','毛巾與 2 樓旅客備品箱'], text:['한국식 수건을 제공합니다. 더 필요하면 <strong>2층 게스트 박스</strong>를 이용해 주세요. 대형 바디타월은 제공하지 않습니다.','Korean-size towels are provided. Find extras in the <strong>floor 2 guest box</strong>. Large bath towels are not provided.','韓国サイズのタオルを備えています。追加は<strong>2階のゲストボックス</strong>をご利用ください。大判バスタオルはありません。','提供韩式尺寸毛巾，额外毛巾在 <strong>2 楼宾客备品箱</strong>。不提供大浴巾。','提供韓式尺寸毛巾，額外毛巾在 <strong>2 樓旅客備品箱</strong>。無提供大浴巾。'] },
-    ],
+    items:applianceItems,
   },
   {
     id:'laundry', icon:'laundry', title:['세탁·건조 안내','Laundry & drying','洗濯・乾燥','洗衣与烘干','洗衣與烘乾'],
     hint:['세탁실 위치와 기기 사용','Locations and washer controls','設置場所と使い方','位置及使用方法','位置及使用方式'],
-    lead:['2층 복도에는 세탁기와 건조기가 따로 있고, 3·4층 객실에는 세탁·건조 겸용 기기가 있습니다. 밤 9시 이후에는 사용을 자제해 주세요.', 'Separate machines are in the floor 2 corridor. Rooms on floors 3 and 4 have a washer-dryer. Please avoid using them after 9 PM.', '2階の廊下に洗濯機と乾燥機、3・4階の客室に洗濯乾燥機があります。21時以降の使用はお控えください。', '2 楼走廊有独立洗衣机与烘干机，3、4 楼客房配有洗烘一体机。晚上 9 点后请尽量不要使用。', '2 樓走廊有獨立洗衣機與烘乾機，3、4 樓客房配有洗脫烘一體機。晚上 9 點後請盡量避免使用。'],
-    items:[{ title:['2층 복도 세탁기·건조기','Floor 2 washer and dryer','2階の洗濯機と乾燥機','2 楼独立洗衣机与烘干机','2 樓獨立洗衣機與烘乾機'], text:['세탁과 건조는 각각 표시된 기기에서 진행해 주세요. 세탁을 마친 뒤 옷감의 건조 가능 여부를 확인하고 건조기로 옮겨 주세요.','Use the designated washer and dryer. After washing, check the garment labels before transferring laundry to the dryer.','表示に従って洗濯機と乾燥機を使い分けてください。洗濯後は衣類の表示を確認してから乾燥機へ移してください。','请在各自标示的机器上洗涤与烘干。洗完后先确认衣物是否可烘干，再转入烘干机。','請在各自標示的機器上洗滌與烘乾。洗完後先確認衣物是否可烘乾，再移入烘衣機。'] },{ title:['3·4층 세탁·건조 겸용','Washer-dryers on floors 3 and 4','3・4階の洗濯乾燥機','3、4 楼洗烘一体机','3、4 樓洗脫烘一體機'], model:'LG FY9WTB', image:'guide-laundry',
-      text:['세탁물을 넣고 문을 닫은 뒤 전원을 켜세요. 세탁 또는 건조 코스를 선택한 후 시작 버튼을 눌러 주세요. 세탁과 건조의 허용 용량이 다르므로 기기 표기와 제조사 안내를 확인해 주세요.', 'Load the laundry, close the door and switch on. Select a wash or dry cycle and press Start. Washing and drying have different load limits. Check the machine label and LG’s guidance.', '洗濯物を入れてドアを閉め、電源を入れます。洗濯または乾燥のコースを選び、スタートを押してください。洗濯と乾燥の容量は異なるため、本体表示とメーカー案内をご確認ください。', '放入衣物、关闭机门后开机。选择洗涤或烘干程序并按启动。两种模式的容量不同，请查看机身标示与厂家说明。', '放入衣物、關閉機門後開機。選擇洗滌或烘乾行程並按啟動。洗滌與烘乾容量不同，請查看機身標示及原廠說明。'],
-      manuals:[['LG','https://www.lge.co.kr/business/washing-machines/fy9wtb']] }],
+    lead:['2층 복도에는 세탁기와 건조기가 따로 있고, 3·4층 객실에는 세탁·건조 겸용 기기가 있습니다. 이용 시간은 09:00–21:00입니다.', 'The 2F corridor has a separate washer and dryer. Rooms on 3F and 4F have a washer-dryer. Laundry hours are 09:00–21:00.', '2階の廊下には洗濯機と乾燥機が別々にあり、3・4階の客室には洗濯乾燥機があります。ご利用時間は9:00〜21:00です。', '2 楼走廊有独立洗衣机和烘干机，3、4 楼客房配有洗烘一体机。使用时间为 09:00–21:00。', '2 樓走廊有獨立洗衣機和烘衣機，3、4 樓客房配有洗脫烘一體機。使用時間為 09:00–21:00。'],
+    items:laundryItems,
   },
   {
     id:'waste', icon:'waste', title:['쓰레기 분리배출','Waste & recycling','ごみの分別','垃圾分类','垃圾分類'],
