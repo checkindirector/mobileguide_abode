@@ -14,7 +14,8 @@ export const applianceItems = [
   {
     id:'cooling', area:'room',
     visuals:[
-      guide('ac',['전원 켜기 → 냉방 선택 → 온도 조절','Power on → Cool mode → Adjust temperature','電源 → 冷房 → 温度調節','开机 → 制冷 → 调节温度','開機 → 冷房 → 調節溫度'])
+      guide('ac-wall',['301호 벽면 조작부 · 전원과 온도','Room 301 wall control · Power and temperature','301号室の壁面操作部・電源と温度','301 号房墙面控制器 · 电源与温度','301 號房壁面控制器 · 電源與溫度']),
+      guide('ac',['삼성 리모컨 DB98-32905B-00 · 전원, 모드, 온도','Samsung remote DB98-32905B-00 · Power, mode and temperature','Samsungリモコン DB98-32905B-00・電源、モード、温度','三星遥控器 DB98-32905B-00 · 电源、模式与温度','三星遙控器 DB98-32905B-00 · 電源、模式與溫度'])
     ],
     title:['객실 에어컨','Room air conditioning','客室のエアコン','客房空调','客房冷氣'],
     photo:{ id:'guide-abode-room-controls', marks:[[6,44]], caption:['301호 실제 사진 · 거울 왼쪽 벽의 삼성 조작부','Room 301 · Samsung wall control to the left of the mirror','301号室の実物写真・鏡の左側のSamsung操作部','301 号房实拍 · 镜子左侧的三星墙面控制器','301 號房實拍 · 鏡子左側的三星壁面控制器'] },
@@ -56,7 +57,7 @@ export const applianceItems = [
   {
     id:'speaker', area:'room',
     visuals:[
-      guide('speaker',['스피커 전원 켜기 → 휴대전화 블루투스 연결','Turn the speaker on → Pair on your phone','電源を入れる → 携帯電話でペアリング','开启音箱 → 在手机上配对','開啟喇叭 → 在手機上配對']),
+      guide('speaker',['스피커 상단 버튼 · 전원, 재생, 모드','Top of the speaker · Power, playback and mode','スピーカー上面・電源、再生、モード','音箱顶部按钮 · 电源、播放与模式','喇叭頂部按鈕 · 電源、播放與模式']),
       guide('speaker-volume',['밤 9시 이후에는 음량을 낮춰 주세요.','Keep the volume low after 9 PM.','21時以降は音量を控えめにしてください。','晚上 9 点后请调低音量。','晚上 9 點後請調低音量。'])
     ],
     title:['블루투스 스피커','Bluetooth speaker','Bluetoothスピーカー','蓝牙音箱','藍牙喇叭'],
@@ -69,13 +70,14 @@ export const applianceItems = [
   {
     id:'cooktop', area:'kitchen',
     visuals:[
-      official('induction','Haatz IH-232S',['전원과 오른쪽 인덕션 화력 + / −','Power and the induction heat controls (+ / −) on the right','電源と右側のIH火力調節（+ / −）','电源与右侧火力调节（+ / −）','電源與右側火力調節（+ / −）'])
+      official('induction','Haatz IH-232S',['전원과 오른쪽 인덕션 화력 + / −','Power and the induction heat controls (+ / −) on the right','電源と右側のIH火力調節（+ / −）','电源与右侧火力调节（+ / −）','電源與右側火力調節（+ / −）']),
+      guide('hood',['301호 주방 후드 · 전면 터치 패널과 풍량 버튼','Room 301 range hood · Front touch panel and fan speed button','301号室のレンジフード・前面タッチパネルと風量ボタン','301 号房抽油烟机 · 正面触控面板与风速按钮','301 號房抽油煙機 · 正面觸控面板與風速按鈕'])
     ],
     title:['인덕션과 주방 후드','Induction cooktop and range hood','IH調理器とレンジフード','电磁炉与抽油烟机','電磁爐與抽油煙機'],
     model:'Haatz IH-232S · SIH-30S',
     photo:{ id:'guide-laundry', marks:[[32,56],[29,27]], caption:['301호 실제 사진 · 싱크대 오른쪽 검은 상판이 인덕션이고, 위의 스테인리스 기기가 후드입니다.','Room 301 · The black cooktop is to the right of the sink, with the stainless-steel hood above.','301号室の実物写真・流しの右の黒い面がIH、上のステンレス製の機器がフードです。','301 号房实拍 · 水槽右边的黑色台面是电磁炉，上方为不锈钢油烟机。','301 號房實拍 · 水槽右側的黑色檯面是電磁爐，上方為不鏽鋼抽油煙機。'] },
     controls:[
-      ['FAN', ['조리하기 전에 상판 위 주방 후드를 켜세요. 인덕션용 냄비나 팬을 화구 가운데에 놓으세요.', 'Turn on the hood above the cooktop before cooking. Centre an induction-compatible pan on the cooking zone.', '調理前にフードを回し、IH対応の鍋を加熱部の中央に置きます。', '先开启上方的抽油烟机，再把电磁炉适用的锅放在炉区中央。', '先開啟上方的抽油煙機，再把電磁爐適用的鍋放在爐區中央。']],
+      ['FAN', ['조리 전에 후드의 팬 모양 버튼을 터치해 풍량을 1~3단으로 조절하세요. 인덕션용 냄비나 팬은 화구 가운데에 놓으세요.', 'Before cooking, tap the fan symbol on the hood to select speed 1, 2 or 3. Centre an induction-compatible pan on the cooking zone.', '調理前にフードのファンマークをタッチし、風量を1〜3段階で調節します。IH対応の鍋は加熱部の中央に置きます。', '烹饪前，触按油烟机上的风扇图标，将风速调至 1 至 3 档。将电磁炉适用的锅放在炉区中央。', '烹調前，觸按抽油煙機上的風扇圖示，將風速調至 1 至 3 檔。將電磁爐適用的鍋放在爐區中央。']],
       ['⏻ → INDUCTION + / −', ['전원 버튼을 약 1초간 누른 뒤 오른쪽 Induction + / −로 화력을 조절하세요. 왼쪽 Timer는 작동 시간 설정에 사용합니다.', 'Hold Power for about one second, then use the Induction + / − buttons on the right to adjust the heat. The Timer on the left sets the cooking time.', '電源を約1秒押し、右側のInduction + / −で火力を調節します。左側のTimerは時間設定用です。', '按住电源键约 1 秒，再用右侧 Induction + / − 调节火力。左侧 Timer 用于设置时间。', '按住電源鍵約 1 秒，再用右側 Induction + / − 調整火力。左側 Timer 用於設定時間。']],
       ['H', ['조리를 마치면 전원을 끄세요. H가 표시되면 상판이 아직 뜨거우니 손대지 마세요.', 'Switch off after cooking. The H indicator means the glass is still hot. Keep your hands off it.', '調理後は電源を切ります。Hの表示中は天板が熱いため触れないでください。', '烹饪后请关闭电源。显示 H 表示台面仍热，请勿触摸。', '烹調後請關閉電源。顯示 H 代表檯面仍熱，請勿觸摸。']],
     ],
@@ -124,14 +126,14 @@ export const applianceItems = [
   {
     id:'kettle', area:'kitchen',
     visuals:[
-      guide('kettle-fill',['물을 MAX 선 아래까지 채우세요.','Fill with water below the MAX line.','MAX線を超えないよう水を入れます。','加水至 MAX 线以下。','加水至 MAX 線以下。']),
-      guide('kettle-switch',['받침에 올리고 전원을 켜세요.','Set the kettle on its base and switch it on.','台に戻してスイッチを入れます。','将水壶放回底座再开机。','將水壺放回底座再開機。'])
+      guide('kettle-switch',['손잡이 아래 전원 스위치를 아래로 누르세요.','Press down on the power switch below the handle.','持ち手の下にある電源スイッチを押し下げます。','向下按手柄下方的电源开关。','將手把下方的電源開關往下按。']),
+      guide('kettle-fill',['물을 MAX 선 아래까지 채우세요.','Fill with water below the MAX line.','MAX線を超えないよう水を入れます。','加水至 MAX 线以下。','加水至 MAX 線以下。'])
     ],
     title:['전기포트','Electric kettle','電気ケトル','电热水壶','電熱水壺'],
     model:'OLLY OLK05B / OLK05W',
     controls:[
       ['WATER · MAX', ['포트를 받침에서 들어 물만 넣고 MAX 표시를 넘기지 마세요. 뚜껑을 닫은 뒤 받침에 올리세요.', 'Lift the kettle off the base and fill with water only, below MAX. Close the lid and set it back on the base.', 'ケトルを台から外し、MAXを超えないよう水だけを入れます。ふたを閉めて台に戻します。', '把水壶从底座取下，只加水且不得超过 MAX 线。合盖后放回底座。', '將水壺從底座取下，只加水且勿超過 MAX 線。蓋好後放回底座。']],
-      [power, ['전원 스위치를 켜세요. 끓인 뒤에는 손잡이로 들고, 주둥이의 증기에 주의하세요.', 'Switch the kettle on. When pouring, use the handle and keep clear of steam from the spout.', 'スイッチを入れます。注ぐ際は持ち手を使い、注ぎ口の蒸気に注意してください。', '打开电源开关。倒水时握住把手，小心壶嘴蒸气。', '開啟電源開關。倒水時握住把手，小心壺嘴蒸氣。']],
+      [power, ['손잡이 아래의 스위치를 아래로 눌러 켜세요. 끓인 뒤에는 손잡이로 들고, 주둥이의 증기에 주의하세요.', 'Press the switch below the handle down to turn it on. When pouring, use the handle and keep clear of steam from the spout.', '持ち手の下のスイッチを押し下げて電源を入れます。注ぐ際は持ち手を使い、注ぎ口の蒸気に注意してください。', '向下按手柄下方的开关。倒水时握住把手，小心壶嘴蒸气。', '將手把下方的開關往下按。倒水時握住把手，小心壺嘴蒸氣。']],
     ],
   },
   {
