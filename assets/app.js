@@ -1,7 +1,7 @@
 import { airportAccessPhoto, airportBus, airportGuide, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
-import { buildingMaps, faq, guides, parking, wifiNetworks } from './operations.js';
+import { buildingMaps, faq, guides, parking, wifiNetworks, wifiPasswordNotice } from './operations.js';
 
 const paths = {
   home:'M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z',
@@ -32,8 +32,13 @@ const paths = {
 };
 
 const navigation = [['home','home'], ['rooms','room'], ['location','pin'], ['guide','guide'], ['local','compass'], ['booking','calendar']];
-const locationSections = { 'location/parking':'parking', 'location/from-airport':'airport-arrivals' };
-const extraRoutes = ['location/airport', ...Object.keys(locationSections), 'local/food', 'local/tours', 'guide/check-in/checkout'];
+const sectionTargets = {
+  'location/parking':'parking',
+  'location/from-airport':'airport-arrivals',
+  'guide/check-in/arrival':'check-in-steps',
+  'guide/check-in/checkout':'check-out-steps',
+};
+const extraRoutes = ['location/airport', ...Object.keys(sectionTargets), 'local/food', 'local/tours'];
 const main = document.querySelector('#main');
 const menu = document.querySelector('#menu');
 const lightbox = document.querySelector('#lightbox');
@@ -338,21 +343,30 @@ function locationPage(detail) {
   </section>`;
 }
 
-function guideArticle({ title,text,steps,model,image: id,manuals }, fold = false, open = false) {
+function guideArticle({ title,text,steps,model,image: id,manuals,anchor }) {
   const heading = localize(title);
-  const body = `${model && !fold ? `<p class="device-model">${model}</p>` : ''}
+  return `<article class="information guide-detail">
+    <h2${anchor ? ` id="${anchor}" tabindex="-1"` : ''}>${heading}</h2>
+    ${model ? `<p class="device-model">${model}</p>` : ''}
+    ${steps ? `<ol class="steps">${steps.map((step) => `<li>${localize(step)}</li>`).join('')}</ol>` : ''}
     ${id ? `<img class="guide-photo" src="${imagePath(id)}" alt="${heading}" loading="lazy" decoding="async">` : ''}
     ${text ? `<p class="body-copy">${localize(text)}</p>` : ''}
-    ${steps ? `<ol class="steps">${steps.map((step) => `<li>${localize(step)}</li>`).join('')}</ol>` : ''}
-    ${manuals ? `<div class="map-actions">${manuals.map(([brand,url]) => external(url,`${brand} · ${t('manual')}`)).join('')}</div>` : ''}`;
-  return fold ? disclosure(heading,model,body,open) : `<article class="information guide-detail"><h2>${heading}</h2>${body}</article>`;
+    ${manuals ? `<div class="map-actions">${manuals.map(([brand,url]) => external(url,`${brand} · ${t('manual')}`)).join('')}</div>` : ''}
+  </article>`;
 }
 
 function appliancePage(guide, areaId) {
   const area = applianceAreas.find(({ id }) => id === areaId);
+  if (area) {
+    return `<header class="page-heading facility-heading">
+      ${link('#guide/facilities',`${icon('left')}${t('backToFacilities')}`,'facility-back')}
+      <h1>${localize(area.title)}</h1>
+    </header><section class="section content-section">
+      ${guide.items.filter((item) => item.area === area.id).map(guideArticle).join('')}
+    </section>`;
+  }
   const list = `<div class="guide-rows">${applianceAreas.map(({ id,icon:symbol,title,hint }) => `<a class="guide-row" href="#guide/facilities/${id}"><span class="guide-icon">${icon(symbol)}</span><span class="item-copy"><strong>${localize(title)}</strong><small>${localize(hint)}</small></span>${icon('right')}</a>`).join('')}</div>`;
-  const visible = area ? guide.items.filter((item) => item.area === area.id) : [];
-  return `${pageHeading('APPLIANCE GUIDE',area ? localize(area.title) : t('applianceTitle'),area ? localize(area.hint) : localize(guide.lead))}<section class="section content-section">${area ? visible.map((item,i) => guideArticle(item,true,i === 0)).join('') + link('#guide/facilities',t('areaGuides'),'button button-outline') : list}</section>`;
+  return `${pageHeading('APPLIANCE GUIDE',t('applianceTitle'),localize(guide.lead))}<section class="section content-section">${list}</section>`;
 }
 
 function guidePage(detail) {
@@ -362,12 +376,17 @@ function guidePage(detail) {
     return `${pageHeading('GUEST GUIDE',t('guide'),t('guideIntro'))}<section class="section content-section">${guideLinks()}<article class="information"><h2>${t('help')}</h2><p class="body-copy">${localize(arrival.help)}</p></article></section>`;
   }
   if (item.id === 'facilities') return appliancePage(item,areaId);
-  const quickTimes = `<div class="guide-timing"><div><span>${t('checkin')}</span><strong>16:00</strong></div><div><span>${t('checkout')}</span><strong>11:00</strong></div></div>`;
-  const networks = `<ul class="networks">${wifiNetworks.map((name) => `<li><strong>${name}</strong><button class="button button-cream" type="button" data-action="copy-network" data-value="${name}" aria-label="${t('copyNetwork')} · ${name}">${icon('copy')}${t('copyNetwork')}</button></li>`).join('')}</ul>`;
-  return `${pageHeading('GUEST GUIDE',localize(item.title),localize(item.lead))}<section class="section content-section">
-    ${item.id === 'check-in' ? quickTimes : ''}${item.id === 'wifi' ? networks : ''}
-    ${item.items.map((entry,i) => guideArticle(entry,item.id === 'check-in',i === (areaId === 'checkout' ? 1 : 0))).join('')}
-    ${item.id === 'check-in' ? `<div class="map-actions">${link('#location/parking',t('parking'),'button button-outline')}${link('#location',t('location'),'button button-outline')}</div>` : ''}
+  const checkin = item.id === 'check-in';
+  const quickTimes = `<nav class="guide-timing" aria-label="${localize(item.title)}">
+    <a href="#guide/check-in/arrival"><span>${t('checkin')}</span><strong>16:00</strong>${icon('down')}</a>
+    <a href="#guide/check-in/checkout"><span>${t('checkout')}</span><strong>11:00</strong>${icon('down')}</a>
+  </nav>`;
+  const networks = `<p class="wifi-password-note"><strong>${localize(wifiPasswordNotice.title)}</strong> ${localize(wifiPasswordNotice.text)}</p>
+    <ul class="networks">${wifiNetworks.map((name) => `<li><strong>${name}</strong><button class="button button-cream" type="button" data-action="copy-network" data-value="${name}" aria-label="${t('copyNetwork')} · ${name}">${icon('copy')}${t('copyNetwork')}</button></li>`).join('')}</ul>`;
+  return `${pageHeading('GUEST GUIDE',localize(item.title),checkin ? '' : localize(item.lead))}<section class="section content-section">
+    ${checkin ? quickTimes : ''}${item.id === 'wifi' ? networks : ''}
+    ${item.items.map(guideArticle).join('')}
+    ${checkin ? `<div class="map-actions">${link('#location/parking',t('parking'),'button button-outline')}${link('#location',t('location'),'button button-outline')}</div>` : ''}
     ${link('#guide',t('backToGuide'),'button button-outline')}
   </section>`;
 }
@@ -459,7 +478,7 @@ function menuLinks() {
     ['local/food','food',localize(['주변 맛집','Nearby restaurants','周辺の飲食店','周边美食','周邊美食']),localize(['어보드가 고른 주변 맛집','Local dining picked by ABODE','ABODEが選んだ周辺の飲食店','ABODE 精选周边餐厅','ABODE 精選周邊餐廳'])],
     ['local/tours','compass',localize(['추천 근교 투어','Recommended local tours','おすすめ近郊ツアー','推荐周边游','推薦周邊遊']),localize([`서울에서 만나는 추천 ${tourCount}곳`,`${tourCount} places to explore in Seoul`,`ソウルのおすすめ ${tourCount} か所`,`首尔 ${tourCount} 个推荐去处`,`首爾 ${tourCount} 個推薦去處`])],
   ];
-  const active = locationSections[route] ? 'location' : route.split('/').slice(0,2).join('/');
+  const active = route.startsWith('location/') && sectionTargets[route] ? 'location' : route.split('/').slice(0,2).join('/');
   return entries.map(([href,symbol,title,hint]) => `<a href="#${href}"${active === href ? ' aria-current="page"' : ''}><span class="drawer-icon">${icon(symbol)}</span><span class="drawer-copy"><strong>${title}</strong><small>${hint}</small></span>${icon('right')}</a>`).join('');
 }
 
@@ -490,6 +509,11 @@ function updateTopbar() {
   helpTrigger.classList.toggle('over-cover',isHome && window.scrollY < 120);
 }
 
+function jumpToSection(target, focus = false) {
+  target.scrollIntoView({ block:'start', behavior:'instant' });
+  if (focus) target.focus({ preventScroll:true });
+}
+
 function render({ resetScroll = false, focus = false } = {}) {
   const before = route;
   route = getRoute();
@@ -507,10 +531,12 @@ function render({ resetScroll = false, focus = false } = {}) {
   const search = document.querySelector('#place-query');
   if (search) search.value = placeQuery;
   main.classList.toggle('internal', key !== 'home');
-  const target = locationSections[route] ? document.getElementById(locationSections[route]) : null;
-  if (target) target.scrollIntoView({ block:'start', behavior:'instant' });
-  else if (resetScroll) window.scrollTo({ top:0, behavior:'instant' });
-  if (focus) (target ?? main).focus({ preventScroll:true });
+  const target = sectionTargets[route] ? document.getElementById(sectionTargets[route]) : null;
+  if (target) jumpToSection(target,focus);
+  else {
+    if (resetScroll) window.scrollTo({ top:0, behavior:'instant' });
+    if (focus) main.focus({ preventScroll:true });
+  }
   updateTopbar();
 }
 
@@ -581,10 +607,12 @@ document.addEventListener('click', (event) => {
     if (menu.open) menu.close();
     if (helpPanel.open) helpPanel.close();
     if (anchor.hash === location.hash && anchor.hash === '#home') window.scrollTo({ top:0 });
-    if (anchor.hash === location.hash && anchor.hash === '#location/parking') {
-      const target = document.querySelector('#parking');
-      target.scrollIntoView({ block:'start', behavior:'instant' });
-      target.focus({ preventScroll:true });
+    if (anchor.hash === location.hash && sectionTargets[route]) {
+      const target = document.getElementById(sectionTargets[route]);
+      if (target) {
+        event.preventDefault();
+        jumpToSection(target,true);
+      }
     }
   }
   if (event.target === menu) menu.close();

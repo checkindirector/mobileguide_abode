@@ -1,5 +1,5 @@
 import { arrival } from './content.js';
-import { guides, parking } from './operations.js';
+import { guides, parking, wifiPasswordNotice } from './operations.js';
 
 export const applianceAreas = [
   { id:'room', icon:'room', title:['객실 안내','In your room','客室案内','客房指南','客房指南'], hint:['냉난방·프로젝터·스피커','Heating, projector and speaker','冷暖房・プロジェクター・スピーカー','冷暖设备、投影仪与音箱','冷暖設備、投影機與喇叭'] },
@@ -18,7 +18,7 @@ export const helpTopics = [
   { id:'checkout', route:'guide/check-in/checkout', title:['체크아웃 시간','Check-out time','チェックアウト時刻','退房时间','退房時間'], words:'체크아웃|퇴실|몇시까지|check out|departure time|チェックアウト|退室|退房', answer:checkin.lead },
   { id:'luggage', route:'guide/luggage', title:['짐 보관','Luggage storage','荷物預かり','行李寄存','行李寄存'], words:'짐보관|짐맡|짐|캐리어|가방|레이트체크아웃|luggage|baggage|suitcase|bags|late checkout|荷物|レイト|行李|延后退房|延後退房', answer:getGuide('luggage').lead },
   { id:'supplies', route:'guide/facilities/supplies', title:['공용 비품','Shared supplies','共用備品','公共备品','公共備品'], words:'수건|타월|비품|게스트박스|towel|guest box|supplies|タオル|備品|毛巾|备品|備品', answer:facilities.items.find(({ area }) => area === 'supplies').text },
-  { id:'wifi', route:'guide/wifi', title:['Wi-Fi 연결','Wi-Fi connection','Wi-Fi接続','连接 Wi-Fi','連線 Wi-Fi'], words:'와이파이|wifi|인터넷|비밀번호|internet|wi-fi|password|パスワード|网络|網路|密码|密碼', answer:getGuide('wifi').items[0].text },
+  { id:'wifi', route:'guide/wifi', title:['Wi-Fi 연결','Wi-Fi connection','Wi-Fi接続','连接 Wi-Fi','連線 Wi-Fi'], words:'와이파이|wifi|인터넷|비밀번호|internet|wi-fi|password|パスワード|网络|網路|密码|密碼', answer:getGuide('wifi').items[0].text.map((instruction,index) => `${instruction} ${wifiPasswordNotice.title[index]} ${wifiPasswordNotice.text[index]}`) },
   { id:'parking', route:'location/parking', title:['주차 안내','Parking','駐車場','停车','停車'], words:'주차|parking|駐車|停车|停車', answer:parking },
   { id:'laundry', route:'guide/laundry', title:['세탁·건조','Laundry & drying','洗濯・乾燥','洗衣与烘干','洗衣與烘乾'], words:'세탁|건조|드럼|laundry|washer|dryer|洗濯|乾燥|洗衣|烘干|烘乾', answer:getGuide('laundry').lead },
   { id:'waste', route:'guide/waste', title:['쓰레기 분리배출','Waste & recycling','ごみの分別','垃圾分类','垃圾分類'], words:'쓰레기|분리배출|재활용|음식물|garbage|waste|trash|recycle|recycling|ごみ|分別|垃圾|廚餘|厨余', answer:getGuide('waste').lead },

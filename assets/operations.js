@@ -3,6 +3,10 @@ export const buildingMaps = {
   google: 'https://maps.app.goo.gl/j4KpUVcJ6bRxaBtv8',
 };
 export const wifiNetworks = ['ABODE1', 'ABODE2', 'ABODE3', 'ABODE4'];
+export const wifiPasswordNotice = {
+  title:['비밀번호가 필요합니다.', 'A password is required.', 'パスワードが必要です。', '连接时需要密码。', '連線時需要密碼。'],
+  text:['객실 안내 또는 예약 메시지에서 확인해 주세요.', 'Find it in your room information or booking messages.', '客室案内または予約メッセージでご確認ください。', '请查看客房说明或预订消息。', '請查看客房說明或預訂訊息。'],
+};
 
 const luggage = ['입실 전과 퇴실 후에는 지하 1층 계단 아래 짐 보관소를 이용할 수 있습니다. 얼리 체크인과 레이트 체크아웃은 운영하지 않습니다.', 'You may leave bags beneath the stairs on level B1 before check-in or after check-out. Early check-in and late check-out are unavailable.', '入室前と退室後は、地下1階の階段下にある荷物置き場をご利用いただけます。アーリーチェックインとレイトチェックアウトはできません。', '入住前和退房后均可使用地下一层楼梯下方的行李寄存处。不提供提前入住和延迟退房。', '入住前與退房後皆可使用地下一層樓梯下的行李寄存處。無法提前入住或延後退房。'];
 export const parking = ['숙소 무료 주차는 최대 3대까지 선착순으로 이용할 수 있으며, 이중 주차가 필요할 수 있습니다. 만차 시 건물 앞 노상 공영주차장의 현장 요금과 운영 시간을 확인해 주세요.', 'Free on-site parking is first come, first served for up to three vehicles. Double parking may be needed. If full, check the posted rates and hours for the public street parking in front.', '宿の無料駐車場は先着3台までで、縦列駐車になる場合があります。満車の場合は、建物前の公営路上駐車場で料金と営業時間をご確認ください。', '住宿提供最多 3 个免费车位，先到先得，可能需要双排停车。车位已满时，请查看楼前市政路边停车位的现场价格和开放时间。', '住宿提供最多 3 個免費車位，先到先得，可能需要併排停車。車位已滿時，請查看樓前公有路邊停車位的現場費率與開放時間。'];
@@ -13,13 +17,13 @@ export const guides = [
     hint:['셀프 체크인과 퇴실 순서','Self check-in and departure steps','セルフチェックインと退室手順','自助入住与退房步骤','自助入住與退房步驟'],
     lead:['체크인은 오후 4시부터, 체크아웃은 오전 11시까지입니다.', 'Check in from 4:00 PM and check out by 11:00 AM.', 'チェックインは16:00から、チェックアウトは11:00までです。', '下午 4 点起入住，上午 11 点前退房。', '下午 4 點起入住，上午 11 點前退房。'],
     items:[
-      { title:['키오스크에서 셀프 체크인','Self check-in at the kiosk','端末でセルフチェックイン','在自助机办理入住','在自助機辦理入住'],
+      { anchor:'check-in-steps', title:['키오스크에서 셀프 체크인','Self check-in at the kiosk','端末でセルフチェックイン','在自助机办理入住','在自助機辦理入住'],
         steps:[
           ['체크인 전날 오후 6시에 발송되는 예약 메시지에서 입실 안내를 확인해 주세요.', 'Check the entry instructions sent via your booking platform at 6 PM the day before arrival.', 'ご到着前日の18時に予約サイトから届く入館案内をご確認ください。', '查看入住前一天下午 6 点通过预订平台发送的入内说明。', '查看入住前一天下午 6 點透過預訂平台傳送的入內說明。'],
           ['여권 또는 신분증을 준비한 뒤 건물 입구의 키오스크에서 화면 안내를 따라 체크인해 주세요.', 'Have your passport or ID ready and follow the instructions on the kiosk at the entrance.', 'パスポートまたは身分証を用意し、建物入口の端末の案内に従ってチェックインしてください。', '准备护照或身份证件，按建筑入口处自助机的提示办理入住。', '備妥護照或身分證件，依大樓入口處自助機的指示辦理入住。'],
           ['객실 안내를 확인하고 엘리베이터로 해당 층으로 이동해 주세요.', 'Check your room information and take the elevator to your floor.', '客室案内を確認し、エレベーターで該当階へお上がりください。', '确认客房信息后，搭电梯前往对应楼层。', '確認客房資訊後，搭電梯前往對應樓層。'],
         ], image:'guide-kiosk' },
-      { title:['퇴실 전 체크리스트','Check-out checklist','退室前のチェックリスト','退房检查清单','退房檢查清單'],
+      { anchor:'check-out-steps', title:['퇴실 전 체크리스트','Check-out checklist','退室前のチェックリスト','退房检查清单','退房檢查清單'],
         steps:[
           ['사용한 식기를 씻고 수건은 회수 바구니에 담아 주세요.', 'Wash used dishes and put used towels in the collection basket.', '使った食器を洗い、使用済みのタオルは回収かごに入れてください。', '洗净用过的餐具，将用过的毛巾放入回收篮。', '洗淨用過的餐具，將用過的毛巾放入回收籃。'],
           ['쓰레기를 종류별로 나누고, 3·4층에서는 엘리베이터 밖 분리수거함을 이용해 주세요.', 'Sort your waste. On floors 3 and 4, use the bins outside the elevator.', 'ごみを分別してください。3・4階ではエレベーター外の分別用ごみ箱をご利用ください。', '请分类垃圾。3、4 楼住客请使用电梯外的分类垃圾桶。', '請分類垃圾。3、4 樓住客請使用電梯外的分類垃圾桶。'],
@@ -39,7 +43,7 @@ export const guides = [
     hint:['네트워크 이름과 연결 방법','Network names and connection','ネットワーク名と接続方法','网络名称与连接方法','網路名稱與連線方式'],
     lead:['투숙 중 무료 Wi-Fi를 이용할 수 있습니다.', 'Free Wi-Fi is available during your stay.', 'ご滞在中は無料Wi-Fiをご利用いただけます。', '入住期间可免费使用 Wi-Fi。', '入住期間可免費使用 Wi-Fi。'],
     items:[
-      { title:['연결 방법','How to connect','接続方法','连接方法','連線方式'], text:['기기 설정에서 객실 안내에 표시된 네트워크를 선택하세요. 비밀번호는 객실 안내나 예약 메시지에서 확인해 주세요.', 'Select the network shown in your room information in your device settings. Find the password in your room information or booking messages.', '端末の設定で客室案内にあるネットワークを選択してください。パスワードは客室案内または予約メッセージでご確認ください。', '在设备设置中选择客房说明所示的网络。密码见客房说明或预订消息。', '在裝置設定中選擇客房說明所示的網路。密碼請見客房說明或預訂訊息。'] },
+      { title:['연결 방법','How to connect','接続方法','连接方法','連線方式'], text:['기기 설정에서 객실 안내에 표시된 네트워크를 선택하세요.', 'Select the network shown in your room information in your device settings.', '端末の設定で客室案内にあるネットワークを選択してください。', '在设备设置中选择客房说明所示的网络。', '在裝置設定中選擇客房說明所示的網路。'] },
       { title:['연결이 안 될 때','If you can’t connect','接続できないとき','无法连接时','無法連線時'], text:['기기의 Wi-Fi를 껐다 켠 뒤 네트워크 이름을 다시 확인해 주세요. 계속 연결되지 않으면 예약 채널에서 호스트에게 객실과 오류 화면을 알려 주세요.', 'Turn Wi-Fi off and on, then check the network name again. If it still fails, message your host with your room and the error shown.', '端末のWi-Fiを入れ直し、ネットワーク名を再度ご確認ください。解決しない場合は客室とエラー表示を予約サイトからホストへお知らせください。', '关闭并重新打开 Wi-Fi，再确认网络名称。若仍无法连接，请通过预订平台把客房和错误画面告知房东。', '關閉再開啟 Wi-Fi，並再次確認網路名稱。若仍無法連線，請透過預訂平台將客房和錯誤畫面告知房東。'] },
     ],
   },
@@ -48,6 +52,7 @@ export const guides = [
     hint:['프로젝터·정수기·주방·비품','Projector, water dispensers and amenities','プロジェクター・浄水器・備品','投影仪、净水器、厨房与备品','投影機、飲水機、廚房與備品'],
     lead:['객실의 주요 기기와 투숙 중 필요한 비품을 확인하세요.', 'Find the room appliances and supplies you may need during your stay.', '客室の主な家電や滞在中に使う備品をご確認ください。', '查看入住期间可能用到的客房电器及备品。', '查看入住期間可能用到的客房家電與備品。'],
     items:[
+      { area:'room', title:['객실 냉난방·전기장판','Heating, cooling and electric mat','客室の冷暖房・電気マット','客房冷暖设备与电热垫','客房冷暖設備與電熱墊'], text:['전기장판은 타이머를 설정하고, 퇴실할 때 냉난방 전원을 꺼 주세요. 조작부가 다르거나 조절이 어려울 때는 호스트에게 문의해 주세요.','Set a timer on the electric heating mat and turn off heating and cooling before check-out. Ask your host if you need help with the controls.','電気マットのタイマーを設定し、退室時に冷暖房をお切りください。操作が分からない場合はホストにご連絡ください。','使用电热垫请设置定时，退房时关闭冷暖设备。如需操作协助，请联系房东。','使用電熱墊請設定定時，退房時關閉冷暖設備。如需操作協助，請聯絡房東。'] },
       { area:'room', title:['4층 빔프로젝터','Floor 4 projector','4階のプロジェクター','4 楼投影仪','4 樓投影機'], model:'MAXELL MP-JU4001', image:'guide-projector',
         steps:[['프로젝터 리모컨의 빨간 전원 버튼을 3초간 눌러 주세요.', 'Hold the red power button on the projector remote for three seconds.', 'プロジェクターのリモコンの赤い電源ボタンを3秒間長押しします。', '按住投影仪遥控器的红色电源键 3 秒。', '按住投影機遙控器的紅色電源鍵 3 秒。'], ['본체의 초록색 표시등이 켜지면 TV 리모컨의 전원 버튼을 눌러 주세요.', 'When the green indicator on the projector lights up, press power on the TV remote.', '本体の緑のランプが点灯したら、テレビのリモコンの電源ボタンを押します。', '投影仪绿灯亮起后，按电视遥控器的电源键。', '投影機綠燈亮起後，按電視遙控器的電源鍵。']] },
       { area:'kitchen', title:['3층·4층 정수기','Water dispensers on floors 3 and 4','3・4階の浄水器','3、4 楼净水器','3、4 樓飲水機'], model:'3F  CHUNGHO WP-30C9460BN  ·  4F  CUCKOO CP-AD011UGW',
@@ -55,9 +60,8 @@ export const guides = [
         manuals:[['CHUNGHO','https://www.chungho.co.kr/newch/admin/manual/202405290953269229.pdf'], ['CUCKOO','https://cdn.cuckoo.co.kr/upload_cuckoo/_bo_rep/manual/file_a83bac30-b2ee-4e9b-a68f-fa11c20bd1aa.pdf']] },
       { area:'room', title:['블루투스 스피커','Bluetooth speaker','Bluetoothスピーカー','蓝牙音箱','藍牙喇叭'], model:'Britz BZ-HMR',
         text:['전 객실에 스피커가 있습니다. 켜고 기기의 블루투스 목록에서 스피커를 선택하세요. 밤 9시 이후에는 음량을 낮춰 주세요.', 'Every room has a speaker. Switch it on, then select it from your device’s Bluetooth list. Keep the volume low after 9 PM.', '全室にスピーカーがあります。電源を入れ、端末のBluetoothリストから選んでください。21時以降は音量を控えめにしてください。', '所有客房均配有音箱。开机后，在设备的蓝牙列表中选择音箱。晚上 9 点后请调低音量。', '所有客房均配有喇叭。開機後，在裝置的藍牙清單中選擇喇叭。晚上 9 點後請調低音量。'] },
-      { area:'room', title:['객실 냉난방·전기장판','Heating, cooling and electric mat','客室の冷暖房・電気マット','客房冷暖设备与电热垫','客房冷暖設備與電熱墊'], text:['전기장판은 타이머를 설정하고, 퇴실할 때 냉난방 전원을 꺼 주세요. 조작부가 다르거나 조절이 어려울 때는 호스트에게 문의해 주세요.','Set a timer on the electric heating mat and turn off heating and cooling before check-out. Ask your host if you need help with the controls.','電気マットのタイマーを設定し、退室時に冷暖房をお切りください。操作が分からない場合はホストにご連絡ください。','使用电热垫请设置定时，退房时关闭冷暖设备。如需操作协助，请联系房东。','使用電熱墊請設定定時，退房時關閉冷暖設備。如需操作協助，請聯絡房東。'] },
       { area:'kitchen', title:['인덕션과 환풍기','Induction hob and ventilation','IH調理器と換気扇','电磁炉和排风扇','電磁爐與排風扇'], text:['조리 전에 주방 환풍기를 켜고, 조리를 마친 뒤 인덕션 전원을 꺼 주세요. 숙소에서는 간단한 조리가 가능합니다.','Turn on the kitchen fan before cooking and switch off the induction hob when finished. Light cooking is permitted.','調理前に換気扇を入れ、調理後はIH調理器の電源をお切りください。簡単な調理ができます。','烹饪前打开排风扇，结束后关闭电磁炉。住宿允许简单烹饪。','烹飪前打開排風扇，結束後關閉電磁爐。住宿允許簡單烹飪。'] },
-      { area:'supplies', title:['수건과 2층 게스트 박스','Towels and the floor 2 guest box','タオルと2階のゲストボックス','毛巾和 2 楼客用备品箱','毛巾與 2 樓旅客備品箱'], text:['한국식 수건을 제공합니다. 더 필요하면 2층 게스트 박스를 이용해 주세요. 대형 바디타월은 제공하지 않습니다.','Korean-size towels are provided. Find extras in the floor 2 guest box. Large bath towels are not provided.','韓国サイズのタオルを備えています。追加は2階のゲストボックスをご利用ください。大判バスタオルはありません。','提供韩式尺寸毛巾，额外毛巾在 2 楼宾客备品箱。不提供大浴巾。','提供韓式尺寸毛巾，額外毛巾在 2 樓旅客備品箱。無提供大浴巾。'] },
+      { area:'supplies', title:['수건과 2층 게스트 박스','Towels and the floor 2 guest box','タオルと2階のゲストボックス','毛巾和 2 楼客用备品箱','毛巾與 2 樓旅客備品箱'], text:['한국식 수건을 제공합니다. 더 필요하면 <strong>2층 게스트 박스</strong>를 이용해 주세요. 대형 바디타월은 제공하지 않습니다.','Korean-size towels are provided. Find extras in the <strong>floor 2 guest box</strong>. Large bath towels are not provided.','韓国サイズのタオルを備えています。追加は<strong>2階のゲストボックス</strong>をご利用ください。大判バスタオルはありません。','提供韩式尺寸毛巾，额外毛巾在 <strong>2 楼宾客备品箱</strong>。不提供大浴巾。','提供韓式尺寸毛巾，額外毛巾在 <strong>2 樓旅客備品箱</strong>。無提供大浴巾。'] },
     ],
   },
   {

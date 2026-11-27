@@ -116,7 +116,7 @@ const strings = {
   allRooms:['모든 호실','All rooms','全客室','所有房间','所有房間'],
   incheon:['인천공항','Incheon Airport','仁川空港','仁川机场','仁川機場'],
   gimpo:['김포공항','Gimpo Airport','金浦空港','金浦机场','金浦機場'],
-  areaGuides:['공간별 안내','Choose a space','場所別の案内','按空间查看','依空間查看'],
+  backToFacilities:['시설 안내','Back to facilities','設備案内に戻る','返回设施指南','返回設施指南'],
   applianceTitle:['냉난방·주방기기·비품 안내','Room appliances & supplies','冷暖房・キッチン家電・備品','冷暖设备、厨房电器与备品','冷暖設備、廚房家電與備品'],
 };
 
