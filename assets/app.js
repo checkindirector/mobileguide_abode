@@ -27,7 +27,6 @@ const paths = {
   down:'m6 9 6 6 6-6', left:'m15 6-6 6 6 6', right:'m9 6 6 6-6 6',
   forward:'M4 12h15m-6-6 6 6-6 6',
   close:'m6 6 12 12M18 6 6 18', copy:'M8 8h12v12H8zM16 4H4v12',
-  expand:'M14 4h6v6m0-6-6 6M4 14v6h6m-6 0 6-6',
   search:'M10.5 3a7.5 7.5 0 1 0 0 15 7.5 7.5 0 1 0 0-15Zm5.3 12.8L21 21',
   message:'M4 4h16v12h-9l-5 4v-4H4Zm4 5h8m-8 3h5',
 };
@@ -202,7 +201,9 @@ function visiblePhotos() {
 }
 
 function photoCards() {
-  return visiblePhotos().map(({ id }) => `<button type="button" class="photo-card" data-action="photo" data-value="${id}" aria-label="${t('enlarge')} · ${caption(id)}"><span class="photo-thumbnail">${image(id)}<span class="photo-expand">${icon('expand')}</span></span><span class="photo-caption">${caption(id)}</span></button>`).join('');
+  return visiblePhotos().map(({ id }, index) => `<button type="button" class="photo-card" data-action="photo" data-value="${id}" aria-label="${t('enlarge')} · ${caption(id)}">
+    <span class="photo-thumbnail">${image(id, '', '')}</span><span class="photo-number" aria-hidden="true">${formatNumber(index + 1)}</span>
+  </button>`).join('');
 }
 
 function galleryFilters() {
@@ -212,12 +213,16 @@ function galleryFilters() {
 }
 
 function roomsPage() {
-  return `${pageHeading('ROOMS & SPACES',t('roomTitle'),t('roomIntro'))}
-  <section class="section content-section">
-    <div class="gallery-feature">${propertyPhoto('bedroom-dining')}</div>
-    <div class="gallery-filters">${galleryFilters()}</div><div class="gallery-grid" id="photo-cards">${photoCards()}</div></section>
-  <section class="section room-types">${sectionHeading('ROOM TYPES',t('roomTypes'),t('roomNote'))}
-    <ul>${rooms.map(({ count,name,layout }) => `<li><span class="item-copy">${localize(name)}${layout ? `<small>${localize(layout)}</small>` : ''}</span><strong>${t('guests').replace('{n}',count)}</strong></li>`).join('')}</ul>${link('#booking',t('booking'),'button')}
+  return `<section class="section room-types" aria-labelledby="room-types-title">
+    <p class="eyebrow" lang="en">ROOM TYPES</p><h1 id="room-types-title">${t('roomTypes')}</h1>
+    <ul>${rooms.map(({ count,name,layout }) => `<li><span class="item-copy">${localize(name)}${layout ? `<small>${localize(layout)}</small>` : ''}</span><strong>${t('guests').replace('{n}',count)}</strong></li>`).join('')}</ul>
+    <p class="body-copy">${t('roomNote')}</p>
+    ${link('#booking',`${t('booking')}${icon('forward')}`,'text-link')}
+  </section>
+  <section class="section room-gallery" aria-labelledby="room-gallery-title">
+    <p class="eyebrow" lang="en">ROOM GALLERY</p><h2 id="room-gallery-title">${t('roomTitle')}</h2>
+    <div class="gallery-filters">${galleryFilters()}</div>
+    <div class="gallery-grid" id="photo-cards">${photoCards()}</div>
   </section>`;
 }
 
@@ -254,10 +259,10 @@ function airportArrivalCard(title, choices, body) {
     <summary>
       <strong class="airport-card-title">${title}</strong>
       <span class="airport-choices">
-        ${choices.map(({ when, mode, minutes }) => `<span class="airport-choice">
+        ${choices.map(({ when, mode, minutes, best }) => `<span class="airport-choice">
           <span class="airport-choice-copy">
             <small>${localize(when)}</small>
-            <strong>${localize(mode)}</strong>
+            <strong>${localize(mode)}${best ? ' <span class="airport-best" lang="en">BEST</span>' : ''}</strong>
           </span>
           <span class="airport-duration">${airportDuration(minutes)}</span>
         </span>`).join('')}
@@ -306,7 +311,11 @@ function locationPage(detail) {
     + airportTaxi(airportGuide.incheonTaxiTitle,'https://www.airport.kr/ap_ko/987/subview.do',abodeMap,airportGuide.incheonTaxiMinutes);
   const gimpo = airportTransport(trainTitle,airportGuide.arrivalTrain,railFrom('050',t('train')) + station('합정역'))
     + airportTaxi(airportGuide.taxiTitle,'https://www.airport.co.kr/gimpo/cms/frCon/index.do?CONTENTS_NO=5&amp;MENU_ID=1290',abodeMap);
-  return `${pageHeading('GETTING HERE',t('locationHeading'),t('addresses'))}
+  return `<header class="page-heading location-heading">
+    <p class="eyebrow" lang="en">GETTING HERE</p>
+    <h1><span class="location-heading-area">${t('locationHeading')}</span> <span class="location-heading-name"><span lang="en">ABODE</span> <small lang="ko">어보드</small></span></h1>
+    <p class="body-copy">${t('addresses')}</p>
+  </header>
   <section class="section content-section">
     <div class="map-actions">${external(buildingMaps.naver,t('naver'))}${external(buildingMaps.google,t('google'))}${action('copy-address',`${icon('copy')}${t('copy')}`,'button button-cream')}</div>
     <article class="information parking-info" id="parking" aria-labelledby="parking-title" tabindex="-1">
@@ -521,14 +530,13 @@ function displayPhoto(index) {
   const photo = lightboxPhotos[lightboxIndex];
   lightbox.querySelector('img').src = imagePath(photo.id);
   lightbox.querySelector('img').alt = caption(photo.id);
-  lightbox.querySelector('#photo-caption').textContent = caption(photo.id);
-  lightbox.querySelector('#photo-count').textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
+  lightbox.querySelector('#photo-count').textContent = `${formatNumber(lightboxIndex + 1)} / ${formatNumber(lightboxPhotos.length)}`;
 }
 
 function openPhoto(id) {
   lightboxPhotos = visiblePhotos();
-  lightbox.innerHTML = `<div class="lightbox-inner" data-swipe="lightbox"><div class="lightbox-head"><span id="photo-count" aria-live="polite"></span>${iconAction('close-photo','close',t('close'),'icon-button')}</div>
-    <figure><img alt=""><figcaption id="photo-caption"></figcaption></figure>
+  lightbox.innerHTML = `<div class="lightbox-inner" data-swipe="lightbox"><div class="lightbox-head">${iconAction('close-photo','close',t('close'),'icon-button')}</div>
+    <figure><img alt=""><figcaption id="photo-count" aria-live="polite"></figcaption></figure>
     <div class="lightbox-controls"${lightboxPhotos.length === 1 ? ' hidden' : ''}>${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div></div>`;
   displayPhoto(lightboxPhotos.findIndex((photo) => photo.id === id));
   lightbox.showModal();

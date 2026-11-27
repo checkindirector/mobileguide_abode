@@ -34,7 +34,7 @@ export const airportGuide = {
     '時間從第一次上車算到 ABODE，包含轉乘和步行。機場手續與第一次候車的時間另計，遇到塞車可能更久。',
   ],
   incheonChoices: [
-    { when: usualArrival, mode: allStopRail, minutes: [65, 85] },
+    { when: usualArrival, mode: allStopRail, minutes: [65, 85], best: true },
     {
       when: ['짐이 많을 때 · 환승 없이 합정역', 'Heavy luggage · No transfer to Hapjeong', '荷物が多いとき・合井駅まで乗り換えなし', '行李多 · 直达合井站', '行李多 · 直達合井站'],
       mode: ['6002번 공항 리무진', 'Airport bus 6002', '空港バス 6002番', '6002 路机场巴士', '6002 路機場巴士'],
@@ -47,7 +47,7 @@ export const airportGuide = {
     },
   ],
   gimpoChoices: [
-    { when: usualArrival, mode: allStopRail, minutes: [30, 45] },
+    { when: usualArrival, mode: allStopRail, minutes: [30, 45], best: true },
     {
       when: ['짐이 많거나 늦은 밤 · 환승 없이 이동', 'Heavy luggage or late at night · No transfer', '荷物が多いとき・深夜は乗り換えなし', '行李多或深夜抵达 · 无需换乘', '行李多或深夜抵達 · 無須轉乘'],
       mode: directTaxi,
