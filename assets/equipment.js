@@ -2,7 +2,6 @@ const guide = (id,caption) => ({ id:`device-${id}`, kind:'deviceGuide', caption 
 const official = (id,source,caption) => ({ id:`device-official-${id}`, kind:'diagram', source, caption });
 
 const power = '⏻';
-const start = '▶ ‖';
 const laundryHours = [
   '이용 시간은 오전 9시부터 오후 9시 전까지입니다.',
   'Use the laundry between 9 AM and 9 PM.',
@@ -10,13 +9,6 @@ const laundryHours = [
   '洗衣设施开放时间为 09:00 至 21:00。',
   '洗衣設施開放時間為 09:00 至 21:00。',
 ];
-const washerStart = [start, [
-  '시작/일시정지를 눌러 시작하세요. 종료 후 문 잠금 표시가 꺼질 때까지 기다리세요.',
-  'Press Start/Pause. After the cycle ends, wait for the door-lock indicator to go out.',
-  'スタート／一時停止を押します。終了後、ドアロック表示が消えるまでお待ちください。',
-  '按下启动／暂停。程序结束后，等待门锁指示灯熄灭。',
-  '按下啟動／暫停。行程結束後，等待門鎖指示燈熄滅。',
-]];
 
 export const applianceItems = [
   {
@@ -77,14 +69,14 @@ export const applianceItems = [
   {
     id:'cooktop', area:'kitchen',
     visuals:[
-      official('induction','Haatz IH-232S',['인덕션 전원과 화구별 + / −','Power and + / − for each cooking zone','電源と各加熱部の + / −','电源与各炉区的 + / −','電源與各爐區的 + / −'])
+      official('induction','Haatz IH-232S',['전원과 오른쪽 인덕션 화력 + / −','Power and the induction heat controls (+ / −) on the right','電源と右側のIH火力調節（+ / −）','电源与右侧火力调节（+ / −）','電源與右側火力調節（+ / −）'])
     ],
     title:['인덕션과 주방 후드','Induction cooktop and range hood','IH調理器とレンジフード','电磁炉与抽油烟机','電磁爐與抽油煙機'],
     model:'Haatz IH-232S · SIH-30S',
     photo:{ id:'guide-laundry', marks:[[32,56],[29,27]], caption:['301호 실제 사진 · 싱크대 오른쪽 검은 상판이 인덕션이고, 위의 스테인리스 기기가 후드입니다.','Room 301 · The black cooktop is to the right of the sink, with the stainless-steel hood above.','301号室の実物写真・流しの右の黒い面がIH、上のステンレス製の機器がフードです。','301 号房实拍 · 水槽右边的黑色台面是电磁炉，上方为不锈钢油烟机。','301 號房實拍 · 水槽右側的黑色檯面是電磁爐，上方為不鏽鋼抽油煙機。'] },
     controls:[
       ['FAN', ['조리하기 전에 상판 위 주방 후드를 켜세요. 인덕션용 냄비나 팬을 화구 가운데에 놓으세요.', 'Turn on the hood above the cooktop before cooking. Centre an induction-compatible pan on the cooking zone.', '調理前にフードを回し、IH対応の鍋を加熱部の中央に置きます。', '先开启上方的抽油烟机，再把电磁炉适用的锅放在炉区中央。', '先開啟上方的抽油煙機，再把電磁爐適用的鍋放在爐區中央。']],
-      ['⏻ → + / −', ['전원 버튼을 약 1초간 누른 뒤 사용할 화구의 Induction + / −로 화력을 조절하세요.', 'Hold power for about a second. Use the Induction + / − controls for the zone you are using.', '電源を約1秒押し、使う加熱部のInduction + / −で火力を調節します。', '长按电源键约 1 秒，再用对应炉区的 Induction + / − 调节火力。', '長按電源鍵約 1 秒，再用對應爐區的 Induction + / − 調整火力。']],
+      ['⏻ → INDUCTION + / −', ['전원 버튼을 약 1초간 누른 뒤 오른쪽 Induction + / −로 화력을 조절하세요. 왼쪽 Timer는 작동 시간 설정에 사용합니다.', 'Hold Power for about one second, then use the Induction + / − buttons on the right to adjust the heat. The Timer on the left sets the cooking time.', '電源を約1秒押し、右側のInduction + / −で火力を調節します。左側のTimerは時間設定用です。', '按住电源键约 1 秒，再用右侧 Induction + / − 调节火力。左侧 Timer 用于设置时间。', '按住電源鍵約 1 秒，再用右側 Induction + / − 調整火力。左側 Timer 用於設定時間。']],
       ['H', ['조리를 마치면 전원을 끄세요. H가 표시되면 상판이 아직 뜨거우니 손대지 마세요.', 'Switch off after cooking. The H indicator means the glass is still hot. Keep your hands off it.', '調理後は電源を切ります。Hの表示中は天板が熱いため触れないでください。', '烹饪后请关闭电源。显示 H 表示台面仍热，请勿触摸。', '烹調後請關閉電源。顯示 H 代表檯面仍熱，請勿觸摸。']],
     ],
   },
@@ -117,14 +109,16 @@ export const applianceItems = [
   {
     id:'microwave', area:'kitchen',
     visuals:[
-      guide('microwave',['전자레인지용 용기 → 시간 버튼과 시작 버튼','Microwave-safe container → Time controls and Start','対応容器 → 時間調節とスタート','微波炉适用容器 → 时间键与启动键','微波爐適用容器 → 時間鍵與啟動鍵'])
+      guide('microwave',['빠른 가열 · 10초 / 3분 / 정지·취소 / 시작·+30초','Quick heat · 10 sec / 3 min / Stop–Cancel / Start–+30 sec','すぐ温める · 10秒 / 3分 / 停止・取消 / スタート・+30秒','快速加热 · 10 秒 / 3 分钟 / 停止或取消 / 启动或加 30 秒','快速加熱 · 10 秒 / 3 分鐘 / 停止或取消 / 啟動或加 30 秒']),
+      guide('microwave-modes',['추가 기능 · 출력조절 / 쾌속해동 / 즉석·냉동밥 / 자동요리 / 〈 〉','Cooking modes · Power level / Quick defrost / Ready or frozen rice / Auto cook / 〈 〉','追加機能 · 出力 / 急速解凍 / ご飯 / 自動調理 / 〈 〉','更多功能 · 功率 / 快速解冻 / 即食或冷冻米饭 / 自动烹调 / 〈 〉','更多功能 · 功率 / 快速解凍 / 即食或冷凍飯 / 自動烹調 / 〈 〉'])
     ],
     title:['전자레인지','Microwave','電子レンジ','微波炉','微波爐'],
     model:'Cuchen CMW-VN250W',
     photo:{ id:'guide-laundry', marks:[[77,55]], caption:['301호 실제 사진 · 조리대 오른쪽의 흰색 전자레인지','Room 301 · White microwave on the right side of the counter','301号室の実物写真・調理台右側の白い電子レンジ','301 号房实拍 · 台面右侧的白色微波炉','301 號房實拍 · 檯面右側的白色微波爐'] },
     controls:[
       ['MICROWAVE SAFE', ['전자레인지용 용기에 음식만 넣으세요. 금속, 포일, 밀폐 용기는 넣지 마세요.', 'Use a microwave-safe container. Remove metal and foil, and open any sealed lid before heating.', '電子レンジ対応容器を使用し、金属やアルミホイル、密閉容器は入れないでください。', '使用微波炉适用容器。勿放入金属、铝箔或密封容器。', '使用微波爐適用容器。請勿放入金屬、鋁箔或密封容器。']],
-      ['TIME → START', ['문을 닫고 데울 시간을 짧게 설정한 뒤 시작하세요. 꺼낼 때는 용기와 증기에 주의하세요.', 'Close the door, set a short heating time and start. Watch for hot containers and steam when removing food.', 'ドアを閉め、短めの加熱時間を設定して開始します。取り出す際は容器の熱さや蒸気に注意してください。', '关门后先设置较短时间再启动。取出时小心热容器和蒸气。', '關門後先設定較短時間再啟動。取出時小心熱容器和蒸氣。']],
+      ['시작/+30초 · START / +30 SEC', ['문을 닫고 조작부 오른쪽 아래의 시작/+30초를 눌러 짧게 데우세요.', 'Close the door and press 시작/+30초 (Start / +30 sec) at the bottom right for a short heat.', '扉を閉め、右下の「시작/+30초」（スタート・+30秒）を押して短時間加熱します。', '关门后按右下角的「시작/+30초」（启动 / 加 30 秒）短时加热。', '關門後按右下角的「시작/+30초」（啟動 / 加 30 秒）短時加熱。']],
+      ['정지/취소 · STOP / CANCEL', ['멈추려면 왼쪽 아래의 정지/취소를 누르세요. 음식을 꺼낼 때는 뜨거운 용기와 증기에 주의하세요.', 'To stop, press 정지/취소 (Stop / Cancel) at the bottom left. Take care when handling hot containers and steam.', '止めるときは左下の「정지/취소」（停止・取消）を押します。取り出すときは容器の熱さや蒸気にご注意ください。', '按左下角的「정지/취소」（停止 / 取消）停止。取出食物时小心热容器和蒸气。', '按左下角的「정지/취소」（停止 / 取消）停止。取出食物時小心熱容器和蒸氣。']],
     ],
   },
   {
@@ -155,14 +149,14 @@ export const laundryItems = [
   {
     id:'washer-2f', title:['2층 복도 세탁기','2F corridor washer','2階廊下の洗濯機','2 楼走廊洗衣机','2 樓走廊洗衣機'],
     visuals:[
-      official('samsung-washer','Samsung WF40F09M0Y',['전원 → 표준 코스 → 시작/일시정지','Power → Normal cycle → Start/Pause','電源 → 標準 → スタート／一時停止','电源 → 标准程序 → 启动／暂停','電源 → 標準行程 → 啟動／暫停']),
+      official('samsung-washer','Samsung WF40F09M0Y',['전원 → 표준세탁 → 동작/일시정지','Power → Normal wash → Start / Pause','電源 → 標準洗濯 → スタート／一時停止','电源 → 标准洗涤 → 启动／暂停','電源 → 標準洗滌 → 啟動／暫停']),
       official('samsung-detergent','Samsung WF40F09M0Y',['세탁용 세제를 넣는 서랍','Where to add laundry detergent','洗剤を入れる引き出し','放洗涤剂的抽屉','放洗劑的抽屜'])
     ],
     model:'Samsung WF40F09M0Y · 9 kg',
     controls:[
       [power, ['세탁물을 넣고 문을 닫으세요. 세제는 기기 옆에 있으며 세탁용 칸에 넣습니다. 전원을 켜세요.', 'Load the drum and close the door. Add detergent from beside the machines to the main wash compartment, then switch on.', '洗濯物を入れてドアを閉め、機器横の洗剤を洗濯用の投入口に入れ、電源を入れます。', '放入衣物并关门。将机器旁的洗涤剂加入主洗槽后开机。', '放入衣物並關門。將機器旁的洗衣劑加入主洗槽後開機。']],
-      ['표준 / NORMAL', ['일상 세탁은 다이얼을 표준에 맞추세요. 섬세한 옷은 라벨에 맞는 코스를 선택하세요.', 'Turn the dial to 표준 (Normal) for everyday loads. For delicate items, choose a cycle that matches the care label.', '普段の洗濯はダイヤルを「표준」に合わせます。デリケートな衣類は洗濯表示に合ったコースを選びます。', '日常衣物将旋钮转到「표준」标准。精细衣物请按洗标选择程序。', '日常衣物將旋鈕轉到「표준」標準。精緻衣物請依洗標選擇行程。']],
-      washerStart,
+      ['표준세탁 · NORMAL WASH', ['일상 세탁은 다이얼을 표준세탁에 맞추세요. 섬세한 옷은 라벨에 맞는 코스를 선택하세요.', 'Turn the dial to 표준세탁 (Normal Wash) for everyday loads. For delicate items, choose a cycle that matches the care label.', '普段の洗濯はダイヤルを「표준세탁」（標準洗濯）に合わせます。デリケートな衣類は洗濯表示に合ったコースを選びます。', '日常衣物将旋钮转到「표준세탁」（标准洗涤）。精细衣物请按洗标选择程序。', '日常衣物將旋鈕轉到「표준세탁」（標準洗滌）。精緻衣物請依洗標選擇行程。']],
+      ['동작/일시정지 · START / PAUSE', ['동작/일시정지 버튼을 길게 눌러 세탁을 시작하세요. 세탁이 끝나면 문 잠금 표시가 꺼질 때까지 기다리세요.', 'Press and hold 동작/일시정지 (Start / Pause) to start. When the cycle ends, wait for the door-lock indicator to go out.', '「동작/일시정지」（スタート／一時停止）を長押しします。終了後はドアロック表示が消えるまでお待ちください。', '长按「동작/일시정지」（启动／暂停）。程序结束后，等待门锁灯熄灭。', '長按「동작/일시정지」（啟動／暫停）。行程結束後，等待門鎖燈熄滅。']],
     ],
     note:laundryHours,
   },
@@ -170,12 +164,12 @@ export const laundryItems = [
     id:'dryer-2f', title:['2층 복도 건조기','2F corridor dryer','2階廊下の乾燥機','2 楼走廊烘干机','2 樓走廊烘衣機'],
     visuals:[
       official('samsung-dryer','Samsung DV90TA040KE',['코스 다이얼에서 표준건조 선택','Select 표준건조 (Normal Dry) on the dial','ダイヤルで「표준건조」標準乾燥を選びます。','用旋钮选择「표준건조」标准烘干','用旋鈕選擇「표준건조」標準烘乾']),
-      guide('dryer-load',['건조 가능한 옷만 넣고 문을 닫으세요.','Load only dryer-safe items and close the door.','乾燥機対応の衣類だけを入れ、ドアを閉めます。','只放入可烘干的衣物并关门。','只放入可烘乾的衣物並關門。'])
+      official('samsung-dryer-controls','Samsung DV90TA040KE',['전원과 동작/일시정지 버튼','Power and Start / Pause buttons','電源とスタート／一時停止ボタン','电源与启动／暂停按钮','電源與啟動／暫停按鈕'])
     ],
     model:'Samsung DV90TA040KE · 9 kg',
     controls:[
       [power, ['건조 가능한 옷만 넣고 문을 닫은 뒤 전원을 켜세요.', 'Load only dryer-safe items, close the door and switch the dryer on.', '乾燥機対応の衣類だけを入れ、ドアを閉めて電源を入れます。', '只放入可烘干的衣物，关门后开机。', '只放入可烘乾的衣物，關門後開機。']],
-      ['표준건조 / NORMAL DRY', ['일상 세탁물은 표준건조를 선택하세요. 시작/일시정지를 눌러 작동하고, 종료 후 옷을 꺼내세요.', 'Select 표준건조 (Normal Dry) for everyday items. Press Start/Pause and remove the load when the cycle ends.', '普段の洗濯物は「표준건조」を選び、スタート／一時停止を押します。終了後に取り出します。', '日常衣物选择「표준건조」标准烘干，按启动／暂停，结束后取出。', '日常衣物選擇「표준건조」標準烘乾，按啟動／暫停，結束後取出。']],
+      ['표준건조 · NORMAL DRY', ['일상 세탁물은 표준건조를 선택하세요. 동작/일시정지를 눌러 작동하고, 종료 후 옷을 꺼내세요.', 'Select 표준건조 (Normal Dry) for everyday items. Press 동작/일시정지 (Start / Pause) and remove the load when the cycle ends.', '普段の洗濯物は「표준건조」を選び、「동작/일시정지」（スタート／一時停止）を押します。終了後に取り出します。', '日常衣物选择「표준건조」标准烘干，按「동작/일시정지」（启动／暂停），结束后取出。', '日常衣物選擇「표준건조」標準烘乾，按「동작/일시정지」（啟動／暫停），結束後取出。']],
     ],
     note:laundryHours,
   },
@@ -188,8 +182,8 @@ export const laundryItems = [
     photo:{ id:'guide-laundry', marks:[[26,70]], caption:['301호 실제 사진 · 조리대 아래의 LG 세탁·건조기','Room 301 · LG washer-dryer underneath the counter','301号室の実物写真・調理台下のLG洗濯乾燥機','301 号房实拍 · 台面下方的 LG 洗烘一体机','301 號房實拍 · 檯面下方的 LG 洗脫烘一體機'] },
     controls:[
       [power, ['세탁물을 넣고 문을 닫으세요. 세제는 객실 싱크대 하부장에 있습니다. 세탁할 때 세제를 넣은 뒤 전원을 켜세요.', 'Load the drum and close the door. Detergent is in the cabinet below the room sink. Add it for washing, then switch on.', '洗濯物を入れてドアを閉めます。洗剤は客室の流し台下の収納にあります。洗濯時は洗剤を入れて電源を入れます。', '放入衣物并关门。洗涤剂在客房水槽下方柜内。洗衣时加洗涤剂后开机。', '放入衣物並關門。洗衣劑在客房水槽下方櫃內。洗衣時加洗衣劑後開機。']],
-      ['표준 / 건조', ['세탁은 표준 코스를 선택하세요. 건조할 때는 옷의 건조 가능 여부를 확인하고 건조 코스를 선택하세요. 건조 한도는 4.5kg입니다.', 'Choose 표준 (Normal) for washing. For drying, check the clothing labels and choose a drying cycle. The drying limit is 4.5 kg.', '洗濯は「표준」を選びます。乾燥は衣類の表示を確認して乾燥コースを選びます。乾燥容量は4.5kgです。', '洗衣选择「표준」标准。烘干前确认洗标，再选烘干程序。烘干上限为 4.5 kg。', '洗衣選擇「표준」標準。烘乾前確認洗標，再選烘乾行程。烘乾上限為 4.5 kg。']],
-      washerStart,
+      ['표준 / 표준건조', ['세탁은 표준, 건조는 표준건조를 선택하세요. 옷의 건조 가능 여부를 확인해 주세요. 건조 한도는 4.5kg입니다.', 'Choose 표준 (Normal Wash) for washing or 표준건조 (Normal Dry) for drying. Check clothing care labels before drying. The drying limit is 4.5 kg.', '洗濯は「표준」、乾燥は「표준건조」を選びます。乾燥前に衣類の表示をご確認ください。乾燥容量は4.5kgです。', '洗涤选「표준」，烘干选「표준건조」。烘干前请查看洗标。烘干上限为 4.5 kg。', '洗滌選「표준」標準，烘乾選「표준건조」。烘乾前請查看洗標。烘乾上限為 4.5 kg。']],
+      ['시작/일시정지 · START / PAUSE', ['시작/일시정지를 1초간 눌러 시작하세요. 종료 후 문 잠금 표시가 꺼질 때까지 기다리세요.', 'Hold 시작/일시정지 (Start / Pause) for 1 second to start. When the cycle ends, wait for the door-lock indicator to go out.', '「시작/일시정지」（スタート／一時停止）を1秒押します。終了後、ドアロック表示が消えるまでお待ちください。', '按住「시작/일시정지」（启动／暂停）1 秒。程序结束后，等待门锁灯熄灭。', '按住「시작/일시정지」（啟動／暫停）1 秒。行程結束後，等待門鎖燈熄滅。']],
     ],
     note:laundryHours,
   },
