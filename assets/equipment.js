@@ -83,8 +83,8 @@ export const applianceItems = [
   {
     id:'purifier-3f', area:'kitchen',
     visuals:[
-      guide('purifier-3f',['물 온도 선택 → 컵을 놓고 취수','Choose water temperature → Place a cup and dispense','水温を選択 → コップを置いて注水','选择水温 → 放杯取水','選擇水溫 → 放杯取水']),
-      official('chungho','Chungho WP-30C9460BN',['앞면 취수 버튼과 상단 조작부','Front dispense button and upper controls','前面の注水ボタンと上部操作パネル','前面出水按钮与顶部面板','前面出水按鈕與頂部面板'])
+      official('chungho','Chungho WP-30C9460BN',['앞면의 온도 선택과 취수 버튼','Front temperature and dispense buttons','前面の温度選択と注水ボタン','正面的温度选择与出水按钮','正面的溫度選擇與出水按鈕']),
+      guide('purifier-3f',['물 온도 선택 → 컵을 놓고 취수','Choose water temperature → Place a cup and dispense','水温を選択 → コップを置いて注水','选择水温 → 放杯取水','選擇水溫 → 放杯取水'])
     ],
     title:['3층 냉온정수기','3F hot and cold water dispenser','3階の温冷浄水器','3 楼冷热饮水机','3 樓冷熱飲水機'],
     model:'Chungho WP-30C9460BN',
@@ -96,8 +96,8 @@ export const applianceItems = [
   {
     id:'purifier-4f', area:'kitchen',
     visuals:[
-      guide('purifier-4f',['정수 전용 수전의 손잡이를 돌려 물을 받으세요.','Turn the handle on the dedicated filtered-water tap.','浄水専用の蛇口のハンドルを回します。','转动净水专用龙头的手柄取水。','轉動淨水專用龍頭的把手取水。']),
-      official('cuckoo','Cuckoo CP-AD011UGW',['수전 손잡이를 여는 방향','Which way to open the tap handle','蛇口のハンドルを開く方向','打开龙头手柄的方向','打開龍頭把手的方向'])
+      official('cuckoo','Cuckoo CP-AD011UGW',['수전 손잡이를 여는 방향','Which way to open the tap handle','蛇口のハンドルを開く方向','打开龙头手柄的方向','打開龍頭把手的方向']),
+      guide('purifier-4f',['정수 전용 수전의 손잡이를 돌려 물을 받으세요.','Turn the handle on the dedicated filtered-water tap.','浄水専用の蛇口のハンドルを回します。','转动净水专用龙头的手柄取水。','轉動淨水專用龍頭的把手取水。'])
     ],
     title:['4층 직수 정수기','4F filtered-water tap','4階の浄水専用の蛇口','4 楼净水龙头','4 樓淨水龍頭'],
     model:'Cuckoo CP-AD011UGW',

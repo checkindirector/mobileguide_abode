@@ -395,6 +395,7 @@ main[data-page^="guide"] .guide-detail strong { font-weight: 700; }
 .device-panel-key li > span[lang] { grid-column: 2; font-size: 12px; line-height: 1.35; color: #434343; overflow-wrap: anywhere; }
 .device-panel-key li:only-child { grid-column: 1 / -1; }
 .device-photo-expand { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 32px; height: 32px; background: var(--paper); }
+.device-frame[aria-description] .device-photo-expand { right: auto; left: 8px; }
 .device-photo-expand svg { width: 16px; height: 16px; }
 .device-carousel-controls { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; border-bottom: 1px solid var(--line); }
 .device-carousel-controls > span { display: flex; justify-content: center; align-items: center; gap: 8px; color: #434343; font-size: 12px; font-weight: 600; line-height: 1.35; text-align: center; }

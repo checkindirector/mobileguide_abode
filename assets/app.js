@@ -1,5 +1,5 @@
 import { airportAccessPhoto, airportBus, airportGuide, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
-import { panelLabels } from './equipment-labels.js';
+import { directPanelLabels, panelLabels } from './equipment-labels.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
 import { buildingMaps, faq, guides, parking, wifiNetworks, wifiPasswordNotice } from './operations.js';
@@ -383,7 +383,7 @@ function deviceCarousel(deviceId, title) {
     [kind ? t(kind) : '', description ? localize(description) : title, source].filter(Boolean).join(' · ');
   return `<figure class="device-carousel" data-device-carousel="${deviceId}" role="group" aria-label="${title} · ${t('deviceVisuals')}">
     <div class="device-track">
-      ${slides.map((slide,index) => `<button type="button" class="device-frame" data-action="device-photo" data-value="${index}" data-caption="${slideLabel(slide)}" aria-label="${t('enlarge')} · ${slideLabel(slide)}"${index ? ' tabindex="-1"' : ''}>
+      ${slides.map((slide,index) => `<button type="button" class="device-frame" data-action="device-photo" data-value="${index}" data-caption="${slideLabel(slide)}" aria-label="${t('enlarge')} · ${slideLabel(slide)}"${directPanelLabels[slide.id] ? ` aria-description="${directPanelLabels[slide.id]}"` : ''}${index ? ' tabindex="-1"' : ''}>
         ${image(slide.id,'','')}${photoMarkers(slide.marks ?? [])}${panelPins(panelLabels[slide.id])}<span class="device-photo-expand">${icon('expand')}</span>
       </button>`).join('')}
     </div>
@@ -643,7 +643,7 @@ function displayPhoto(index) {
   lightboxIndex = (index + lightboxPhotos.length) % lightboxPhotos.length;
   const photo = lightboxPhotos[lightboxIndex];
   lightbox.querySelector('img').src = imagePath(photo.id);
-  lightbox.querySelector('img').alt = photo.alt ?? caption(photo.id);
+  lightbox.querySelector('img').alt = [photo.alt ?? caption(photo.id), directPanelLabels[photo.id]].filter(Boolean).join(' · ');
   const labels = panelLabels[photo.id];
   lightbox.querySelector('.lightbox-markers').innerHTML = photoMarkers(photo.marks ?? []) + panelPins(labels);
   lightbox.querySelector('.lightbox-key').innerHTML = panelKey(labels);
