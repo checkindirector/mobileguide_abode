@@ -88,7 +88,6 @@ const strings = {
   deviceGuide:['어보드 사용 도해','ABODE illustrated guide','ABODEの操作イラスト','ABODE 使用图解','ABODE 使用圖解'],
   deviceVisuals:['사진과 사용 도해','Photos and illustrated instructions','写真と操作図','照片与操作图','照片與操作圖'],
   swipePhotos:['좌우로 넘기기','Swipe left or right','左右にスワイプ','左右滑动','左右滑動'],
-  panelButtons:['조작부 버튼 이름','Control panel labels','操作パネルのボタン名','控制面板按钮名称','控制面板按鈕名稱'],
   deviceJump:['기기 바로가기','Jump to a device','機器の案内へ','跳转至设备','跳轉至設備'],
   menuOpen:['메뉴 열기','Open menu','メニューを開く','打开菜单','開啟選單'],
   menuClose:['메뉴 닫기','Close menu','メニューを閉じる','关闭菜单','關閉選單'],

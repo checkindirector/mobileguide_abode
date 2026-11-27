@@ -1,5 +1,5 @@
 import { airportAccessPhoto, airportBus, airportGuide, arrival, address, booking, cover, courses, neighborhoodPhotos, nightBus, photoRooms, photos, places, rooms, timetable } from './content.js';
-import { directPanelLabels, panelLabels } from './equipment-labels.js';
+import { directPanelLabels } from './equipment-labels.js';
 import { applianceAreas, helpTopics, matchHelp, normalize } from './guest-tools.js';
 import { label, languages, translate } from './i18n.js';
 import { buildingMaps, faq, guides, parking, wifiNetworks, wifiPasswordNotice } from './operations.js';
@@ -361,22 +361,6 @@ function photoMarkers(marks) {
   return marks.map(([x,y]) => `<span class="device-photo-marker" style="--x:${x}%;--y:${y}%" aria-hidden="true"></span>`).join('');
 }
 
-function panelPins(labels = []) {
-  return labels.map(([, , position],index) => {
-    const [x,y,dx,dy] = position;
-    const length = Math.hypot(dx,dy);
-    const angle = Math.atan2(dy,dx) * 180 / Math.PI;
-    return `<span class="device-panel-pin" style="--x:${x}%;--y:${y}%;--dx:${dx}px;--dy:${dy}px;--lead:${length}px;--angle:${angle}deg" aria-hidden="true">
-      <span class="device-panel-target"></span><span class="device-panel-number">${index + 1}</span>
-    </span>`;
-  }).join('');
-}
-
-function panelKey(labels = []) {
-  return labels.length ? `<ol class="device-panel-key" aria-label="${t('panelButtons')}">${labels.map(([name,english],index) =>
-    `<li><span aria-hidden="true">${index + 1}</span><strong lang="ko">${name}</strong><span lang="en">${english}</span></li>`).join('')}</ol>` : '';
-}
-
 function deviceCarousel(deviceId, title) {
   const slides = deviceSlides.get(deviceId);
   const slideLabel = ({ caption:description, kind, source }) =>
@@ -384,7 +368,7 @@ function deviceCarousel(deviceId, title) {
   return `<figure class="device-carousel" data-device-carousel="${deviceId}" role="group" aria-label="${title} · ${t('deviceVisuals')}">
     <div class="device-track">
       ${slides.map((slide,index) => `<button type="button" class="device-frame" data-action="device-photo" data-value="${index}" data-caption="${slideLabel(slide)}" aria-label="${t('enlarge')} · ${slideLabel(slide)}"${directPanelLabels[slide.id] ? ` aria-description="${directPanelLabels[slide.id]}"` : ''}${index ? ' tabindex="-1"' : ''}>
-        ${image(slide.id,'','')}${photoMarkers(slide.marks ?? [])}${panelPins(panelLabels[slide.id])}<span class="device-photo-expand">${icon('expand')}</span>
+        ${image(slide.id,'','')}${photoMarkers(slide.marks ?? [])}<span class="device-photo-expand">${icon('expand')}</span>
       </button>`).join('')}
     </div>
     <div class="device-carousel-controls">
@@ -392,7 +376,7 @@ function deviceCarousel(deviceId, title) {
       <span><span>${t('swipePhotos')}</span><span class="device-counter" aria-live="polite">1 / ${slides.length}</span></span>
       ${iconAction('device-slide','right',t('next'),'device-slide','1')}
     </div>
-    <figcaption><span class="device-caption">${slideLabel(slides[0])}</span><div class="device-key-wrap">${panelKey(panelLabels[slides[0].id])}</div></figcaption>
+    <figcaption>${slideLabel(slides[0])}</figcaption>
   </figure>`;
 }
 
@@ -429,9 +413,7 @@ function updateDeviceSlide(track) {
   const counterText = `${index + 1} / ${count}`;
   if (!slide || counter.textContent === counterText) return;
   counter.textContent = counterText;
-  const current = deviceSlides.get(carousel.dataset.deviceCarousel)[index];
-  carousel.querySelector('.device-caption').textContent = slide.dataset.caption;
-  carousel.querySelector('.device-key-wrap').innerHTML = panelKey(panelLabels[current.id]);
+  carousel.querySelector('figcaption').textContent = slide.dataset.caption;
   carousel.querySelector('[data-action="device-slide"][data-value="-1"]').setAttribute('aria-disabled',index === 0);
   carousel.querySelector('[data-action="device-slide"][data-value="1"]').setAttribute('aria-disabled',index === count - 1);
   for (const frame of track.children) frame.tabIndex = frame === slide ? 0 : -1;
@@ -644,9 +626,7 @@ function displayPhoto(index) {
   const photo = lightboxPhotos[lightboxIndex];
   lightbox.querySelector('img').src = imagePath(photo.id);
   lightbox.querySelector('img').alt = [photo.alt ?? caption(photo.id), directPanelLabels[photo.id]].filter(Boolean).join(' · ');
-  const labels = panelLabels[photo.id];
-  lightbox.querySelector('.lightbox-markers').innerHTML = photoMarkers(photo.marks ?? []) + panelPins(labels);
-  lightbox.querySelector('.lightbox-key').innerHTML = panelKey(labels);
+  lightbox.querySelector('.lightbox-markers').innerHTML = photoMarkers(photo.marks ?? []);
   const description = lightbox.querySelector('.lightbox-description');
   description.hidden = !photo.description;
   description.textContent = photo.description ?? '';
@@ -658,8 +638,7 @@ function openPhotoViewer(items, selectedIndex = 0) {
   lightbox.innerHTML = `<div class="lightbox-inner" data-swipe="lightbox"><div class="lightbox-head">${iconAction('close-photo','close',t('close'),'icon-button')}</div>
     <figure><div class="lightbox-image"><img alt=""><div class="lightbox-markers" aria-hidden="true"></div></div>
       <figcaption><span class="lightbox-description" hidden></span><span id="photo-count" aria-live="polite"></span></figcaption></figure>
-    <div class="lightbox-controls"${lightboxPhotos.length === 1 ? ' hidden' : ''}>${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div>
-    <div class="lightbox-key"></div></div>`;
+    <div class="lightbox-controls"${lightboxPhotos.length === 1 ? ' hidden' : ''}>${iconAction('photo-step','left',t('prev'),'icon-button','-1')}${iconAction('photo-step','right',t('next'),'icon-button','1')}</div></div>`;
   displayPhoto(selectedIndex);
   lightbox.showModal();
 }

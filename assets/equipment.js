@@ -27,9 +27,9 @@ export const applianceItems = [
   {
     id:'heating', area:'room',
     visuals:[
-      guide('heating',['바닥난방·온수·전기장판 타이머','Floor heating, hot water and heated-mat timer','床暖房・お湯・電気マットのタイマー','地暖、热水与电热垫定时','地暖、熱水與電熱墊定時']),
       official('rinnai-rc610','Rinnai RC610',['3층 · 난방과 온수 버튼','3F · Heating and hot-water buttons','3階・暖房と給湯ボタン','3 楼 · 暖气与热水按钮','3 樓 · 暖氣與熱水按鈕']),
-      official('rinnai-r324','Rinnai R324',['4층 · 전원과 난방 조절','4F · Power and heating control','4階・電源と暖房調節','4 楼 · 电源与暖气调节','4 樓 · 電源與暖氣調節'])
+      official('rinnai-r324','Rinnai R324',['4층 · 전원과 난방 조절','4F · Power and heating control','4階・電源と暖房調節','4 楼 · 电源与暖气调节','4 樓 · 電源與暖氣調節']),
+      guide('heating',['바닥난방·온수·전기장판 타이머','Floor heating, hot water and heated-mat timer','床暖房・お湯・電気マットのタイマー','地暖、热水与电热垫定时','地暖、熱水與電熱墊定時'])
     ],
     title:['바닥난방·온수·전기장판','Floor heating, hot water and heated mats','床暖房・お湯・電気マット','地暖、热水与电热垫','地暖、熱水與電熱墊'],
     model:'Rinnai · 3F RC610-27KF / 4F R324-25MF',
