@@ -71,14 +71,14 @@ export const applianceItems = [
     id:'cooktop', area:'kitchen',
     visuals:[
       official('induction','Haatz IH-232S',['전원과 오른쪽 인덕션 화력 + / −','Power and the induction heat controls (+ / −) on the right','電源と右側のIH火力調節（+ / −）','电源与右侧火力调节（+ / −）','電源與右側火力調節（+ / −）']),
-      guide('hood',['301호 주방 후드 · 전면 터치 패널과 풍량 버튼','Room 301 range hood · Front touch panel and fan speed button','301号室のレンジフード・前面タッチパネルと風量ボタン','301 号房抽油烟机 · 正面触控面板与风速按钮','301 號房抽油煙機 · 正面觸控面板與風速按鈕'])
+      guide('hood',['301호 주방 후드 · 조명, 풍량, 정지 버튼','Room 301 range hood · Light, fan speed and stop','301号室のレンジフード・照明、風量、停止ボタン','301 号房抽油烟机 · 照明、风速、停止按钮','301 號房抽油煙機 · 照明、風速、停止按鈕'])
     ],
     title:['인덕션과 주방 후드','Induction cooktop and range hood','IH調理器とレンジフード','电磁炉与抽油烟机','電磁爐與抽油煙機'],
     model:'Haatz IH-232S · SIH-30S',
     photo:{ id:'guide-laundry', marks:[[32,56],[29,27]], caption:['301호 실제 사진 · 싱크대 오른쪽 검은 상판이 인덕션이고, 위의 스테인리스 기기가 후드입니다.','Room 301 · The black cooktop is to the right of the sink, with the stainless-steel hood above.','301号室の実物写真・流しの右の黒い面がIH、上のステンレス製の機器がフードです。','301 号房实拍 · 水槽右边的黑色台面是电磁炉，上方为不锈钢油烟机。','301 號房實拍 · 水槽右側的黑色檯面是電磁爐，上方為不鏽鋼抽油煙機。'] },
     controls:[
-      ['FAN', ['조리 전에 후드의 팬 모양 버튼을 터치해 풍량을 1~3단으로 조절하세요. 인덕션용 냄비나 팬은 화구 가운데에 놓으세요.', 'Before cooking, tap the fan symbol on the hood to select speed 1, 2 or 3. Centre an induction-compatible pan on the cooking zone.', '調理前にフードのファンマークをタッチし、風量を1〜3段階で調節します。IH対応の鍋は加熱部の中央に置きます。', '烹饪前，触按油烟机上的风扇图标，将风速调至 1 至 3 档。将电磁炉适用的锅放在炉区中央。', '烹調前，觸按抽油煙機上的風扇圖示，將風速調至 1 至 3 檔。將電磁爐適用的鍋放在爐區中央。']],
-      ['⏻ → INDUCTION + / −', ['전원 버튼을 약 1초간 누른 뒤 오른쪽 Induction + / −로 화력을 조절하세요. 왼쪽 Timer는 작동 시간 설정에 사용합니다.', 'Hold Power for about one second, then use the Induction + / − buttons on the right to adjust the heat. The Timer on the left sets the cooking time.', '電源を約1秒押し、右側のInduction + / −で火力を調節します。左側のTimerは時間設定用です。', '按住电源键约 1 秒，再用右侧 Induction + / − 调节火力。左侧 Timer 用于设置时间。', '按住電源鍵約 1 秒，再用右側 Induction + / − 調整火力。左側 Timer 用於設定時間。']],
+      ['HOOD', ['조리 전에 팬 모양을 눌러 풍량을 1~3단으로 조절하세요. 해 모양으로 조명을 켜고 끄며, 네모 버튼을 누르면 팬이 멈춥니다.', 'Tap the fan symbol to choose speed 1–3 before cooking. The sun toggles the light, and the square stops the fan.', '調理前にファンマークを押し、風量を1〜3から選びます。太陽マークで照明を切り替え、四角いボタンでファンを停止します。', '烹饪前，按风扇图标选择 1 至 3 档。太阳图标开关照明，方形按钮停止风扇。', '烹調前，按風扇圖示選擇 1 至 3 檔。太陽圖示開關照明，方形按鈕停止風扇。']],
+      ['⏻ → INDUCTION + / −', ['인덕션용 냄비나 팬을 화구 가운데에 놓으세요. 전원을 약 1초간 누른 뒤 오른쪽 Induction + / −로 화력을 조절하세요. 왼쪽 Timer는 작동 시간을 설정합니다.', 'Centre an induction-compatible pan on the cooking zone. Hold Power for about one second, then adjust the heat with Induction + / − on the right. Timer on the left sets the cooking time.', 'IH対応の鍋を加熱部の中央に置きます。電源を約1秒押し、右側のInduction + / −で火力を調節します。左側のTimerで時間を設定できます。', '将电磁炉适用的锅放在炉区中央。按住电源键约 1 秒，再用右侧 Induction + / − 调节火力。左侧 Timer 用于设置时间。', '將電磁爐適用的鍋放在爐區中央。按住電源鍵約 1 秒，再用右側 Induction + / − 調整火力。左側 Timer 用於設定時間。']],
       ['H', ['조리를 마치면 전원을 끄세요. H가 표시되면 상판이 아직 뜨거우니 손대지 마세요.', 'Switch off after cooking. The H indicator means the glass is still hot. Keep your hands off it.', '調理後は電源を切ります。Hの表示中は天板が熱いため触れないでください。', '烹饪后请关闭电源。显示 H 表示台面仍热，请勿触摸。', '烹調後請關閉電源。顯示 H 代表檯面仍熱，請勿觸摸。']],
     ],
   },

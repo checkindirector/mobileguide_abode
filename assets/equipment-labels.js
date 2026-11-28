@@ -3,7 +3,7 @@ export const directPanelLabels = {
   'device-ac-wall': '301호 벽면 조작부 (Room 301 wall control). 위쪽 버튼 전원 (Power), 그 아래 두 버튼 온도 + / − (Temp. + / −)',
   'device-ac': '왼쪽 전원 (Power), 오른쪽 모드 (Mode)에서 냉방 선택 (Select Cool), 전원 아래 온도 + / − (Temp. + / −)',
   'device-speaker': '왼쪽부터 이전 곡 (Previous track), 전원 · 재생/일시정지 (Power · Play/Pause), 다음 곡 (Next track), 모드 (Mode)',
-  'device-hood': '후드 전면 터치 패널 (Front touch panel). 팬 모양의 풍량 버튼 (Fan speed), 오른쪽 숫자는 풍량 표시 1–3 (Speed display 1–3)',
+  'device-hood': '전면 터치 패널 (Front touch panel). 왼쪽 위 해 모양은 조명 (Light on/off), 숫자 왼쪽 팬 모양은 풍량 (Fan speed), 숫자 오른쪽 네모는 팬 정지 (Stop fan). 가운데 숫자는 풍량 표시 1–3 (Speed display 1–3).',
   'device-kettle-switch': '손잡이 아래 전원 스위치 (Power switch under the handle). 아래로 눌러 켜기 (Press down to turn on)',
   'device-official-rinnai-rc610': '3층 (3F). 전원 (Power), 난방 (Heating), 난방온도 + / - (Heating temp. + / -), 온수 (Hot water)',
   'device-official-rinnai-r324': '4층 (4F). 전원 (Power), 난방 (Heating dial), 온수 (Hot water)',
